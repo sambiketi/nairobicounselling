@@ -1,0 +1,37 @@
+﻿{% extends "base.njk" %}
+
+{% block title %}Massage Nairobi - Professional Massage Therapy{% endblock %}
+
+{% block content %}
+<section class="hero">
+  <h1>Welcome to Massage Nairobi</h1>
+  <p>Professional massage therapy services in Nairobi</p>
+  <button class="book-now">Book Now</button>
+</section>
+
+<section class="services">
+  <h2>Our Services</h2>
+  <div class="service-grid">
+    <!-- Services will be loaded dynamically -->
+  </div>
+</section>
+
+<section class="booking-modal" id="bookingModal">
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <h2>Book an Appointment</h2>
+    <form id="bookingForm">
+      <input type="text" name="clientName" placeholder="Your Name" required>
+      <input type="tel" name="clientPhone" placeholder="Phone Number (e.g., 254700000000)" required>
+      <input type="email" name="clientEmail" placeholder="Email (optional)">
+      <select name="serviceId" required>
+        <option value="">Select a service</option>
+      </select>
+      <input type="date" name="appointmentDate" required>
+      <input type="time" name="appointmentTime" required>
+      <textarea name="notes" placeholder="Special requests or notes"></textarea>
+      <button type="submit">Book Now</button>
+    </form>
+  </div>
+</section>
+{% endblock %}

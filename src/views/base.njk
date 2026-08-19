@@ -1,0 +1,29 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}Massage Nairobi{% endblock %}</title>
+  <link rel="stylesheet" href="/public/css/style.css">
+  {% block head %}{% endblock %}
+</head>
+<body>
+  <header>
+    <nav>
+      <a href="/">Home</a>
+      <a href="/therapists">Therapists</a>
+      <a href="/about">About</a>
+      <a href="/blog">Blog</a>
+    </nav>
+  </header>
+
+  <main>
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer>
+    <p>&copy; 2026 Massage Nairobi. All rights reserved.</p>
+  </footer>
+  <script src="/public/js/main.js"></script>
+</body>
+</html>

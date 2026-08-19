@@ -1,0 +1,340 @@
+﻿/* Reset and base styles */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { 
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+  line-height: 1.6; 
+  color: #333; 
+  background: #f5f5f5;
+}
+
+/* Gold color palette */
+:root {
+  --gold: #D4AF37;
+  --gold-light: #F4E5B2;
+  --gold-dark: #B8960F;
+  --gold-gradient: linear-gradient(135deg, #D4AF37, #F4E5B2, #D4AF37);
+  --black: #1A1A1A;
+  --black-light: #2D2D2D;
+  --grey: #808080;
+  --grey-light: #E8E8E8;
+  --grey-dark: #4A4A4A;
+  --white: #FFFFFF;
+}
+
+/* Header */
+header { 
+  background: var(--black); 
+  color: var(--white); 
+  padding: 1rem 2rem;
+  border-bottom: 3px solid var(--gold);
+  box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+}
+nav { 
+  display: flex; 
+  justify-content: space-between; 
+  align-items: center; 
+  max-width: 1200px; 
+  margin: 0 auto; 
+}
+nav .logo {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: var(--gold);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+nav a { 
+  color: var(--white); 
+  margin: 0 1rem; 
+  text-decoration: none;
+  transition: color 0.3s ease;
+  font-weight: 500;
+}
+nav a:hover { 
+  color: var(--gold);
+  text-decoration: none;
+}
+
+/* Hero */
+.hero { 
+  background: linear-gradient(135deg, var(--black) 0%, var(--black-light) 50%, var(--black) 100%);
+  color: var(--white); 
+  padding: 5rem 2rem; 
+  text-align: center;
+  border-bottom: 3px solid var(--gold);
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(circle at center, rgba(212, 175, 55, 0.1) 0%, transparent 70%);
+  pointer-events: none;
+}
+.hero h1 { 
+  font-size: 3.5rem; 
+  margin-bottom: 1rem;
+  background: var(--gold-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-shadow: none;
+  position: relative;
+  z-index: 1;
+}
+.hero p { 
+  font-size: 1.3rem; 
+  margin-bottom: 2rem;
+  color: var(--grey-light);
+  position: relative;
+  z-index: 1;
+}
+.book-now { 
+  background: var(--gold-gradient);
+  color: var(--black); 
+  border: none; 
+  padding: 1rem 3rem; 
+  font-size: 1.2rem; 
+  border-radius: 50px; 
+  cursor: pointer; 
+  font-weight: bold;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4);
+  position: relative;
+  z-index: 1;
+}
+.book-now:hover { 
+  transform: translateY(-2px);
+  box-shadow: 0 6px 25px rgba(212, 175, 55, 0.6);
+}
+
+/* Services */
+.services { 
+  padding: 3rem 2rem; 
+  max-width: 1200px; 
+  margin: 0 auto; 
+}
+.services h2 { 
+  text-align: center; 
+  margin-bottom: 2rem;
+  color: var(--black);
+  font-size: 2.5rem;
+}
+.services h2::after {
+  content: '';
+  display: block;
+  width: 60px;
+  height: 4px;
+  background: var(--gold-gradient);
+  margin: 0.5rem auto;
+  border-radius: 2px;
+}
+.service-grid { 
+  display: grid; 
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); 
+  gap: 2rem; 
+  margin-top: 2rem; 
+}
+.service-card { 
+  background: var(--white); 
+  padding: 2rem; 
+  border-radius: 12px; 
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  border-top: 4px solid var(--gold);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.service-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+}
+.service-card h3 { 
+  color: var(--black);
+  margin-bottom: 0.5rem;
+  font-size: 1.3rem;
+}
+.service-card .price { 
+  color: var(--gold-dark); 
+  font-weight: bold; 
+  font-size: 1.4rem;
+}
+.service-card .duration { 
+  color: var(--grey); 
+  font-size: 0.95rem;
+}
+
+/* Booking Modal */
+.booking-modal { 
+  display: none; 
+  position: fixed; 
+  top: 0; 
+  left: 0; 
+  width: 100%; 
+  height: 100%; 
+  background: rgba(0,0,0,0.7); 
+  z-index: 1000; 
+  justify-content: center; 
+  align-items: center; 
+}
+.modal-content { 
+  background: var(--white); 
+  max-width: 500px; 
+  width: 90%; 
+  padding: 2.5rem; 
+  border-radius: 12px; 
+  position: relative;
+  border-top: 5px solid var(--gold);
+  box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+}
+.modal-content h2 {
+  color: var(--black);
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+.close { 
+  position: absolute; 
+  top: 15px; 
+  right: 20px; 
+  font-size: 2rem; 
+  cursor: pointer; 
+  color: var(--grey);
+  transition: color 0.3s ease;
+}
+.close:hover { 
+  color: var(--black); 
+}
+
+/* Form */
+form input, form select, form textarea { 
+  width: 100%; 
+  padding: 0.8rem; 
+  margin: 0.5rem 0; 
+  border: 2px solid var(--grey-light); 
+  border-radius: 8px; 
+  font-size: 1rem;
+  transition: border-color 0.3s ease;
+  background: var(--white);
+  color: var(--black);
+}
+form input:focus, form select:focus, form textarea:focus { 
+  outline: none; 
+  border-color: var(--gold);
+}
+form textarea { 
+  min-height: 100px; 
+  resize: vertical; 
+}
+form button { 
+  background: var(--gold-gradient);
+  color: var(--black); 
+  padding: 1rem; 
+  border: none; 
+  border-radius: 8px; 
+  cursor: pointer; 
+  width: 100%; 
+  font-size: 1.1rem; 
+  font-weight: bold;
+  transition: all 0.3s ease;
+  margin-top: 0.5rem;
+}
+form button:hover { 
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4);
+}
+
+/* Footer */
+footer { 
+  background: var(--black); 
+  color: var(--white); 
+  text-align: center; 
+  padding: 2rem; 
+  margin-top: 3rem;
+  border-top: 3px solid var(--gold);
+}
+footer .footer-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+footer .footer-links a {
+  color: var(--grey-light);
+  text-decoration: none;
+  margin: 0 0.5rem;
+  transition: color 0.3s ease;
+}
+footer .footer-links a:hover {
+  color: var(--gold);
+}
+
+/* Therapists Page */
+.therapists-page, .about-page, .blog-page, .blog-post-page { 
+  max-width: 1200px; 
+  margin: 0 auto; 
+  padding: 2rem; 
+}
+.therapists-page h1, .about-page h1, .blog-page h1, .blog-post-page h1 {
+  color: var(--black);
+  font-size: 2.5rem;
+  text-align: center;
+}
+.therapists-page h1::after, .about-page h1::after, .blog-page h1::after {
+  content: '';
+  display: block;
+  width: 60px;
+  height: 4px;
+  background: var(--gold-gradient);
+  margin: 0.5rem auto;
+  border-radius: 2px;
+}
+.therapists-grid, .blog-grid { 
+  display: grid; 
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); 
+  gap: 2rem; 
+  margin-top: 2rem; 
+}
+.therapist-card, .blog-card { 
+  background: var(--white); 
+  padding: 1.5rem; 
+  border-radius: 12px; 
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  border-top: 4px solid var(--gold);
+  transition: transform 0.3s ease;
+}
+.therapist-card:hover, .blog-card:hover {
+  transform: translateY(-5px);
+}
+.blog-post { 
+  max-width: 800px; 
+  margin: 0 auto; 
+}
+.post-meta { 
+  color: var(--grey); 
+  margin: 1rem 0; 
+}
+.post-image { 
+  max-width: 100%; 
+  height: auto; 
+  border-radius: 12px; 
+  margin: 1rem 0;
+  border: 3px solid var(--gold);
+}
+.post-content { 
+  line-height: 1.8; 
+  color: var(--black);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .hero h1 { font-size: 2.5rem; }
+  nav { flex-direction: column; gap: 1rem; }
+  nav a { margin: 0.3rem 0.5rem; }
+  .hero { padding: 3rem 1rem; }
+  footer .footer-content { flex-direction: column; text-align: center; }
+}
