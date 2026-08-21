@@ -1,9 +1,9 @@
-﻿import { BookingRepository } from '../../db/repositories/booking-repository';
-import { ServiceRepository } from '../../db/repositories/service-repository';
+﻿import { BookingRepository } from '../../db/repositories/booking-repository.js';
+import { ServiceRepository } from '../../db/repositories/service-repository.js';
 import { constants } from '../../config/constants';
-import { WhatsAppService } from '../whatsapp/service';
-import { MpesaService } from '../mpesa/service';
-import { WhatsAppVideoService } from '../whatsapp-video/service';
+import { WhatsAppService } from '../whatsapp/service.js';
+import { MpesaService } from '../mpesa/service.js';
+import { WhatsAppVideoService } from '../whatsapp-video/service.js';
 
 export class BookingService {
   constructor(
@@ -116,3 +116,4 @@ export class BookingService {
     return await this.bookingRepository.findAll(page, limit);
   }
 }
+
