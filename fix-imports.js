@@ -10,20 +10,21 @@ function fixAllImports(dir) {
             fixAllImports(fullPath);
         } else if (extname(file) === '.ts') {
             let content = readFileSync(fullPath, 'utf8');
-            let changed = false;
+            let original = content;
             
-            // Fix all import/from statements without .js extension
-            content = content.replace(/(from\s+['"]\.\.\/[^'"]+)(?<!\.js)(?<!\.json)(['"])/g, (match, p1, p2) => {
-                changed = true;
-                return \.js\;
+            // Fix: from '../../something' -> from '../../something.js'
+            content = content.replace(/from\s+['"]\.\.\/([^'"]+?)(?<!\.js)(?<!\.json)(?<!\.d\.ts)['"]/g, (match, p1) => {
+                if (p1.match(/^[a-zA-Z@]/)) return match;
+                return rom '../.js';
             });
             
-            content = content.replace(/(from\s+['"]\.\/[^'"]+)(?<!\.js)(?<!\.json)(['"])/g, (match, p1, p2) => {
-                changed = true;
-                return \.js\;
+            // Fix: from './something' -> from './something.js'
+            content = content.replace(/from\s+['"]\.\/([^'"]+?)(?<!\.js)(?<!\.json)(?<!\.d\.ts)['"]/g, (match, p1) => {
+                if (p1.match(/^[a-zA-Z@]/)) return match;
+                return rom './.js';
             });
             
-            if (changed) {
+            if (content !== original) {
                 writeFileSync(fullPath, content, 'utf8');
                 console.log(✅ Fixed: );
             }
