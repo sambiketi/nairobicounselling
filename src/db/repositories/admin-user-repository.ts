@@ -1,5 +1,5 @@
 ﻿import { eq } from 'drizzle-orm';
-import { adminUsers } from '../schema';
+import { adminUsers } from '../schema/index.js';
 import { BaseRepository } from './base-repository';
 
 export class AdminUserRepository extends BaseRepository<typeof adminUsers> {
@@ -30,3 +30,4 @@ export class AdminUserRepository extends BaseRepository<typeof adminUsers> {
       .where(eq(this.table.id, id));
   }
 }
+

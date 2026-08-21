@@ -1,5 +1,5 @@
 ﻿import { eq, desc } from 'drizzle-orm';
-import { therapists } from '../schema';
+import { therapists } from '../schema/index.js';
 import { BaseRepository } from './base-repository';
 
 export class TherapistRepository extends BaseRepository<typeof therapists> {
@@ -50,3 +50,4 @@ export class TherapistRepository extends BaseRepository<typeof therapists> {
     await this.db.delete(this.table).where(eq(this.table.id, id));
   }
 }
+

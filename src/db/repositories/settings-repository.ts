@@ -1,5 +1,5 @@
 ﻿import { eq } from 'drizzle-orm';
-import { siteSettings } from '../schema';
+import { siteSettings } from '../schema/index.js';
 import { BaseRepository } from './base-repository';
 
 export class SettingsRepository extends BaseRepository<typeof siteSettings> {
@@ -37,3 +37,4 @@ export class SettingsRepository extends BaseRepository<typeof siteSettings> {
     return result;
   }
 }
+

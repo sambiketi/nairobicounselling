@@ -1,5 +1,5 @@
 ﻿import { eq, desc } from 'drizzle-orm';
-import { galleryImages } from '../schema';
+import { galleryImages } from '../schema/index.js';
 import { BaseRepository } from './base-repository';
 
 export class GalleryRepository extends BaseRepository<typeof galleryImages> {
@@ -50,3 +50,4 @@ export class GalleryRepository extends BaseRepository<typeof galleryImages> {
     await this.db.delete(this.table).where(eq(this.table.id, id));
   }
 }
+
