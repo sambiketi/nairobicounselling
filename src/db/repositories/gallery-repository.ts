@@ -1,4 +1,4 @@
-﻿import { eq, desc } from 'drizzle-orm';
+import { eq, desc } from 'drizzle-orm';
 import { galleryImages } from '../schema/index.js';
 import { BaseRepository } from './base-repository.js';
 

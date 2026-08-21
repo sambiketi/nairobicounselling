@@ -1,5 +1,5 @@
-﻿import { env } from '../../config/env';
-import { Booking } from '../../db/schema/booking';
+import { env } from '../../config/env.js';
+import { Booking } from '../../db/schema/booking.js';
 
 interface MpesaTokenResponse {
   access_token: string;

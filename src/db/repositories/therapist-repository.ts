@@ -1,4 +1,4 @@
-﻿import { eq, desc } from 'drizzle-orm';
+import { eq, desc } from 'drizzle-orm';
 import { therapists } from '../schema/index.js';
 import { BaseRepository } from './base-repository.js';
 

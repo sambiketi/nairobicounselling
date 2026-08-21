@@ -1,6 +1,6 @@
-﻿import { BookingRepository } from '../../db/repositories/booking-repository.js';
+import { BookingRepository } from '../../db/repositories/booking-repository.js';
 import { ServiceRepository } from '../../db/repositories/service-repository.js';
-import { constants } from '../../config/constants';
+import { constants } from '../../config/constants.js';
 import { WhatsAppService } from '../whatsapp/service.js';
 import { MpesaService } from '../mpesa/service.js';
 import { WhatsAppVideoService } from '../whatsapp-video/service.js';

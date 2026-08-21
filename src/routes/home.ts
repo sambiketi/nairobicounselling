@@ -1,4 +1,4 @@
-﻿import { FastifyInstance } from 'fastify';
+import { FastifyInstance } from 'fastify';
 import { SettingsService } from '../modules/settings/service.js';
 import { BlogRepository } from '../db/repositories/blog-repository.js';
 import { TherapistService } from '../modules/therapists/service.js';

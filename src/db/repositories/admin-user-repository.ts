@@ -1,4 +1,4 @@
-﻿import { eq } from 'drizzle-orm';
+import { eq } from 'drizzle-orm';
 import { adminUsers } from '../schema/index.js';
 import { BaseRepository } from './base-repository.js';
 
