@@ -3,17 +3,22 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>{% block title %}Massage Nairobi{% endblock %}</title>
+  <title>{% block title %}Nairobi Counseling Center{% endblock %}</title>
   <link rel="stylesheet" href="/public/css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   {% block head %}{% endblock %}
 </head>
 <body>
   <header>
     <nav>
-      <a href="/">Home</a>
-      <a href="/therapists">Therapists</a>
-      <a href="/about">About</a>
-      <a href="/blog">Blog</a>
+      <div class="logo">Nairobi Counseling Center</div>
+      <div>
+        <a href="/">Home</a>
+        <a href="/counselors">Counselors</a>
+        <a href="/about">About</a>
+        <a href="/blog">Resources</a>
+        <a href="/contact">Contact</a>
+      </div>
     </nav>
   </header>
 
@@ -22,8 +27,26 @@
   </main>
 
   <footer>
-    <p>&copy; 2026 Massage Nairobi. All rights reserved.</p>
+    <div class="footer-content">
+      <div>
+        <strong>Nairobi Counseling Center</strong><br>
+        <span style="color: #ccc;">Your trusted partner in mental wellness</span>
+      </div>
+      <div class="footer-links">
+        <a href="/">Home</a>
+        <a href="/about">About</a>
+        <a href="/blog">Resources</a>
+        <a href="/contact">Contact</a>
+      </div>
+    </div>
   </footer>
+  
+  <!-- Booking Modal -->
+  {% include "partials/booking-modal.njk" %}
+  
   <script src="/public/js/main.js"></script>
 </body>
 </html>
+
+
+

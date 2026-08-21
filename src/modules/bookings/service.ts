@@ -3,13 +3,15 @@ import { ServiceRepository } from '../../db/repositories/service-repository';
 import { constants } from '../../config/constants';
 import { WhatsAppService } from '../whatsapp/service';
 import { MpesaService } from '../mpesa/service';
+import { WhatsAppVideoService } from '../whatsapp-video/service';
 
 export class BookingService {
   constructor(
     private bookingRepository = new BookingRepository(),
     private serviceRepository = new ServiceRepository(),
     private whatsappService = new WhatsAppService(),
-    private mpesaService = new MpesaService()
+    private mpesaService = new MpesaService(),
+    private videoService = new WhatsAppVideoService()
   ) {}
 
   async createBooking(input: any): Promise<any> {
@@ -54,7 +56,39 @@ export class BookingService {
 
     const mpesaInstructions = await this.mpesaService.generatePaymentInstructions(booking);
 
-    return { booking, whatsappLink, mpesaInstructions };
+    // Create video session if session type is 'online'
+    let videoSession = null;
+    if (input.sessionType === 'online') {
+      const sessionDateTime = new Date(appointmentDate);
+      const [hours, minutes] = input.appointmentTime.split(':');
+      sessionDateTime.setHours(parseInt(hours), parseInt(minutes), 0, 0);
+      
+      // Create session 5 minutes before appointment
+      const sessionTime = new Date(sessionDateTime.getTime() - 5 * 60000);
+      
+      videoSession = this.videoService.createClientSession(
+        booking.id,
+        'counselor_default',
+        input.clientName,
+        input.clientPhone,
+        sessionTime
+      );
+
+      // Send reminder via WhatsApp
+      await this.videoService.sendReminder(videoSession);
+    }
+
+    return { 
+      booking, 
+      whatsappLink, 
+      mpesaInstructions,
+      videoSession: videoSession ? {
+        sessionId: videoSession.id,
+        sessionCode: videoSession.sessionCode,
+        whatsappLink: videoSession.whatsappLink,
+        startLink: `/video-call/start/${videoSession.id}`
+      } : null
+    };
   }
 
   async confirmBooking(bookingId: string): Promise<any> {

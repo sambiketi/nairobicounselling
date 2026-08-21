@@ -1,0 +1,52 @@
+﻿{% extends "admin-base.njk" %}
+
+{% block adminTitle %}Dashboard{% endblock %}
+
+{% block adminContent %}
+<div class="stats-grid">
+  <div class="stat-card">
+    <div class="stat-number" id="statBookings">0</div>
+    <div class="stat-label">Total Bookings</div>
+  </div>
+  <div class="stat-card" style="border-left-color: #ffc107;">
+    <div class="stat-number" id="statPending">0</div>
+    <div class="stat-label">Pending Bookings</div>
+  </div>
+  <div class="stat-card" style="border-left-color: #28a745;">
+    <div class="stat-number" id="statCompleted">0</div>
+    <div class="stat-label">Completed</div>
+  </div>
+  <div class="stat-card" style="border-left-color: #17a2b8;">
+    <div class="stat-number" id="statResources">0</div>
+    <div class="stat-label">Resources</div>
+  </div>
+</div>
+
+<div style="background: white; border-radius: 12px; padding: 1.5rem; box-shadow: 0 2px 10px rgba(0,0,0,0.05);">
+  <h3 style="color: #4A3528; margin-bottom: 1rem;">Welcome to Admin Dashboard</h3>
+  <p style="color: #666;">Manage your counseling center from here. Use the sidebar to navigate.</p>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', async function() {
+  try {
+    const response = await fetch('/api/bookings');
+    const data = await response.json();
+    if (data.success) {
+      const bookings = data.data.data || [];
+      document.getElementById('statBookings').textContent = data.data.total || 0;
+      document.getElementById('statPending').textContent = bookings.filter(b => b.status === 'pending').length;
+      document.getElementById('statCompleted').textContent = bookings.filter(b => b.status === 'completed').length;
+    }
+  } catch (e) {}
+  try {
+    const response = await fetch('/api/blog');
+    const data = await response.json();
+    if (data.success) {
+      document.getElementById('statResources').textContent = data.data.length;
+    }
+  } catch (e) {}
+});
+</script>
+{% endblock %}
+

@@ -15,4 +15,16 @@ export class AdminController {
       });
     }
   }
+
+  async getStats(request: FastifyRequest, reply: FastifyReply) {
+    try {
+      const stats = await this.adminService.getDashboardStats();
+      return reply.send({ success: true, data: stats });
+    } catch (error) {
+      return reply.status(500).send({
+        success: false,
+        error: 'Failed to load stats',
+      });
+    }
+  }
 }

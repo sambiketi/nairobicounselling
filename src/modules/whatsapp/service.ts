@@ -46,7 +46,7 @@ CONFIRM ${data.bookingId.slice(0, 8)}
 To cancel, reply:
 CANCEL ${data.bookingId.slice(0, 8)}
 
-Thank you for choosing Massage Nairobi!
+Thank you for choosing Nairobi Counseling Center!
     `.trim();
   }
 
@@ -54,3 +54,4 @@ Thank you for choosing Massage Nairobi!
     console.log(`[WhatsApp] To ${phoneNumber}: ${message}`);
   }
 }
+

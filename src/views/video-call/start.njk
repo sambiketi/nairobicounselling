@@ -1,0 +1,261 @@
+﻿{% extends "base.njk" %}
+
+{% block title %}Live Counseling Session{% endblock %}
+
+{% block head %}
+<style>
+  .session-container {
+    max-width: 600px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    text-align: center;
+  }
+  .session-container .icon {
+    font-size: 4rem;
+    color: #C9A87C;
+    margin-bottom: 1rem;
+  }
+  .session-container h1 {
+    color: #4A3528;
+    margin-bottom: 0.5rem;
+  }
+  .session-container .subtitle {
+    color: #666;
+    margin-bottom: 2rem;
+  }
+  .session-code {
+    background: #f8f9fa;
+    padding: 1rem;
+    border-radius: 8px;
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #4A3528;
+    margin: 1rem 0;
+    letter-spacing: 4px;
+    border: 2px dashed #C9A87C;
+  }
+  .start-btn {
+    display: inline-block;
+    padding: 1rem 3rem;
+    background: linear-gradient(145deg, #25D366, #128C7E);
+    color: white;
+    font-size: 1.2rem;
+    font-weight: bold;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    margin-top: 1rem;
+  }
+  .start-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 30px rgba(37, 211, 102, 0.4);
+  }
+  .start-btn i {
+    margin-right: 0.5rem;
+  }
+  .instructions {
+    text-align: left;
+    margin: 2rem 0;
+    padding: 1.5rem;
+    background: #f8f9fa;
+    border-radius: 8px;
+    border-left: 4px solid #C9A87C;
+  }
+  .instructions li {
+    margin-bottom: 0.5rem;
+    color: #666;
+  }
+  .waiting-message {
+    display: none;
+    padding: 1.5rem;
+    background: #fff8e6;
+    border-radius: 8px;
+    margin: 1rem 0;
+    border-left: 4px solid #C9A87C;
+  }
+  .waiting-message .spinner {
+    display: inline-block;
+    width: 40px;
+    height: 40px;
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid #C9A87C;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+  }
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+  .btn-cancel {
+    display: inline-block;
+    padding: 0.8rem 2rem;
+    background: #dc3545;
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+    margin-top: 1rem;
+    border: none;
+    cursor: pointer;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="session-container">
+  <div class="icon">🎥</div>
+  <h1>Live Counseling Session</h1>
+  <p class="subtitle">You're about to connect with your counselor via WhatsApp video call</p>
+
+  <div class="session-code" id="sessionCode">
+    Session: {{ sessionId }}
+  </div>
+
+  <div class="instructions">
+    <h4 style="color: #4A3528; margin-bottom: 0.5rem;">📋 Before you start:</h4>
+    <ol>
+      <li>Ensure you have <strong>WhatsApp</strong> installed on your phone</li>
+      <li>Make sure you have a stable internet connection</li>
+      <li>Find a quiet, private space for your session</li>
+      <li>Have your phone charged and ready</li>
+      <li>Your counselor will be waiting for you</li>
+    </ol>
+  </div>
+
+  <div class="waiting-message" id="waitingMessage">
+    <div class="spinner"></div>
+    <h4 style="color: #4A3528; margin-top: 1rem;">Connecting...</h4>
+    <p style="color: #666;">Opening WhatsApp video call. Please wait...</p>
+    <p style="color: #999; font-size: 0.9rem; margin-top: 0.5rem;">
+      If WhatsApp doesn't open automatically, 
+      <a href="#" id="manualLink" style="color: #25D366;">click here to try again</a>
+    </p>
+  </div>
+
+  <button class="start-btn" id="startSessionBtn">
+    <i class="fab fa-whatsapp"></i> Start Video Session
+  </button>
+
+  <div style="margin-top: 1.5rem;">
+    <a href="/" class="btn-cancel" onclick="return confirm('Are you sure you want to cancel this session?')">
+      Cancel Session
+    </a>
+  </div>
+
+  <div style="margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid #E8D5B8;">
+    <p style="color: #999; font-size: 0.85rem;">
+      <i class="fas fa-lock"></i> This session is confidential and secure
+    </p>
+    <p style="color: #999; font-size: 0.85rem;">
+      <i class="fas fa-clock"></i> Session duration: ~50 minutes
+    </p>
+  </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const startBtn = document.getElementById('startSessionBtn');
+  const waitingMessage = document.getElementById('waitingMessage');
+  const manualLink = document.getElementById('manualLink');
+  const sessionCode = document.getElementById('sessionCode');
+
+  // Get session ID from URL
+  const sessionId = window.location.pathname.split('/').pop();
+
+  // Function to start the video call
+  async function startVideoSession() {
+    try {
+      // Show waiting message
+      startBtn.style.display = 'none';
+      waitingMessage.style.display = 'block';
+
+      // Call API to start session and get WhatsApp link
+      const response = await fetch(`/api/video/session/${sessionId}/start`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      const result = await response.json();
+
+      if (result.success && result.data.whatsappLink) {
+        // Store the WhatsApp link for manual retry
+        manualLink.href = result.data.whatsappLink;
+        
+        // Open WhatsApp in new window/tab
+        window.open(result.data.whatsappLink, '_blank');
+        
+        // Show success message after a delay
+        setTimeout(() => {
+          waitingMessage.innerHTML = `
+            <div style="color: #25D366; font-size: 3rem;">✅</div>
+            <h4 style="color: #4A3528;">WhatsApp is opening...</h4>
+            <p style="color: #666;">If WhatsApp doesn't open automatically, 
+              <a href="${result.data.whatsappLink}" style="color: #25D366; font-weight: bold;">click here</a>
+            </p>
+          `;
+        }, 3000);
+
+        // Store session info
+        localStorage.setItem('activeVideoSession', JSON.stringify({
+          sessionId: sessionId,
+          startTime: new Date().toISOString(),
+          status: 'active'
+        }));
+
+      } else {
+        throw new Error('Failed to start session');
+      }
+    } catch (error) {
+      console.error('Error starting session:', error);
+      waitingMessage.innerHTML = `
+        <div style="color: #dc3545; font-size: 3rem;">❌</div>
+        <h4 style="color: #dc3545;">Something went wrong</h4>
+        <p>Please try again or contact support.</p>
+        <button onclick="location.reload()" style="margin-top: 1rem; padding: 0.5rem 1.5rem; background: #C9A87C; border: none; border-radius: 8px; color: white; cursor: pointer;">
+          Try Again
+        </button>
+      `;
+      startBtn.style.display = 'block';
+      waitingMessage.style.display = 'none';
+    }
+  }
+
+  // Click handler for start button
+  startBtn.addEventListener('click', startVideoSession);
+
+  // Check if there's an active session
+  const storedSession = localStorage.getItem('activeVideoSession');
+  if (storedSession) {
+    const session = JSON.parse(storedSession);
+    if (session.sessionId === sessionId && session.status === 'active') {
+      startBtn.textContent = '📞 Resume Session';
+      startBtn.style.background = 'linear-gradient(145deg, #128C7E, #075E54)';
+    }
+  }
+
+  // Handle manual link click
+  manualLink.addEventListener('click', function(e) {
+    e.preventDefault();
+    const link = this.getAttribute('href');
+    if (link) {
+      window.open(link, '_blank');
+    }
+  });
+
+  // Warn before leaving the page
+  window.addEventListener('beforeunload', function(e) {
+    const storedSession = localStorage.getItem('activeVideoSession');
+    if (storedSession) {
+      e.preventDefault();
+      e.returnValue = 'You have an active session. Are you sure you want to leave?';
+    }
+  });
+});
+</script>
+{% endblock %}

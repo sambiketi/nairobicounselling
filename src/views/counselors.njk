@@ -1,0 +1,61 @@
+﻿{% extends "base.njk" %}
+
+{% block title %}Our Counselors - Nairobi Counseling Center{% endblock %}
+
+{% block content %}
+<section class="therapists-page">
+  <h1>You Are Not Alone</h1>
+  <p style="text-align:center; color: #666; margin-bottom: 2rem;">Compassionate, licensed professionals who believe in your healing</p>
+  
+  <div class="counselors-message" style="text-align:center; padding: 2rem; background: #f8f9fa; border-radius: 12px; margin-bottom: 2rem; border-left: 4px solid #D4AF37;">
+    <p style="font-size: 1.2rem; color: #333;">"We don't just treat symptoms — we walk with you through your journey to wholeness."</p>
+  </div>
+
+  <div class="therapists-grid">
+      {% endif %}
+    </div>
+    {% endfor %}
+  {% else %}
+    <p style="grid-column: 1/-1; text-align: center; color: #666;">No counselors available at this time. Please check back soon.</p>
+  {% endif %}
+</div>
+      <div class="specialties">
+        <span class="badge">Trauma</span>
+        <span class="badge">Anxiety</span>
+        <span class="badge">Depression</span>
+      </div>
+    </div>
+    <div class="therapist-card">
+      <h3>Michael Ochieng</h3>
+      <p style="color: #D4AF37;">Marriage & Family Therapist</p>
+      <p style="color: #666;">M.A. Counseling Psychology</p>
+      <p>10 years experience in couples therapy and family counseling</p>
+      <div class="hope-message-small">"Relationships can heal when given the right support"</div>
+      <div class="specialties">
+        <span class="badge">Couples</span>
+        <span class="badge">Family</span>
+        <span class="badge">Conflict Resolution</span>
+      </div>
+    </div>
+    <div class="therapist-card">
+      <h3>Sarah Wanjiru</h3>
+      <p style="color: #D4AF37;">Child & Adolescent Therapist</p>
+      <p style="color: #666;">M.Ed. Counseling Psychology</p>
+      <p>8 years experience working with youth and teenagers</p>
+      <div class="hope-message-small">"Every young mind deserves a chance to thrive"</div>
+      <div class="specialties">
+        <span class="badge">Youth</span>
+        <span class="badge">School Issues</span>
+        <span class="badge">Anxiety</span>
+      </div>
+    </div>
+  </div>
+
+  <div style="text-align:center; margin-top: 3rem; padding: 2rem; background: linear-gradient(135deg, #f5f0e1, #fff8f0); border-radius: 12px;">
+    <p style="font-size: 1.1rem; color: #333;">You don't have to face this alone. <strong style="color: #D4AF37;">We're here for you.</strong></p>
+    <button class="book-now" onclick="openBooking()" style="margin-top: 1rem;">Start Your Healing Journey</button>
+  </div>
+</section>
+{% endblock %}
+
+

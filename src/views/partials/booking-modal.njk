@@ -1,0 +1,30 @@
+﻿<div class="booking-modal" id="bookingModal">
+  <div class="modal-content">
+    <span class="close" onclick="closeBooking()">&times;</span>
+    <h2>Take the First Step</h2>
+    <p style="text-align:center; color: #666; margin-bottom: 1.5rem;">Your journey to healing starts here</p>
+    <form id="bookingForm">
+      <input type="text" name="clientName" placeholder="Your Name" required>
+      <input type="tel" name="clientPhone" placeholder="Phone Number (e.g., 254700000000)" required>
+      <input type="email" name="clientEmail" placeholder="Email (optional)">
+      <select name="serviceId" id="serviceSelect" required>
+        <option value="">Loading services...</option>
+      </select>
+      <input type="date" name="appointmentDate" id="appointmentDate" required>
+      <input type="time" name="appointmentTime" id="appointmentTime" required>
+      <select name="sessionType">
+        <option value="in-person">In-Person Session</option>
+        <option value="online">Online Session (Video Call)</option>
+        <option value="phone">Phone Session</option>
+      </select>
+      <textarea name="notes" placeholder="What's on your heart? (Optional)"></textarea>
+      <button type="submit">Begin Your Healing Journey</button>
+    </form>
+    <div class="emergency-contact">
+      <p>
+        <i class="fas fa-exclamation-triangle" style="color: #D4AF37;"></i>
+        <strong>Need Immediate Support?</strong> Call 1190 (Kenya Mental Health Hotline)
+      </p>
+    </div>
+  </div>
+</div>

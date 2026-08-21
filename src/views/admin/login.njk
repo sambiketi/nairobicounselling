@@ -1,0 +1,129 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login</title>
+    <link rel="stylesheet" href="/public/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body { 
+            background: #f8f9fa; 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+        .login-container {
+            max-width: 400px;
+            width: 100%;
+            margin: 2rem;
+            padding: 2.5rem;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+        .login-container .logo {
+            text-align: center;
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: #C9A87C;
+        }
+        .login-container h1 {
+            text-align: center;
+            color: #4A3528;
+            margin-bottom: 0.5rem;
+        }
+        .login-container .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 2rem;
+        }
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        .form-group label {
+            display: block;
+            font-weight: bold;
+            color: #4A3528;
+            margin-bottom: 0.3rem;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 0.8rem;
+            border: 2px solid #E8D5B8;
+            border-radius: 8px;
+            font-size: 1rem;
+            box-sizing: border-box;
+        }
+        .form-group input:focus {
+            outline: none;
+            border-color: #C9A87C;
+            box-shadow: 0 0 0 3px rgba(201, 168, 124, 0.15);
+        }
+        .btn-login {
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(145deg, #C9A87C, #B8966A);
+            color: #4A3528;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 1.1rem;
+        }
+        .btn-login:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(201, 168, 124, 0.4);
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="logo">🔐</div>
+        <h1>Admin Login</h1>
+        <p class="subtitle">Access the admin dashboard</p>
+
+        <form id="loginForm">
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" placeholder="Enter your username" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" placeholder="Enter your password" required>
+            </div>
+            <button type="submit" class="btn-login">Login</button>
+        </form>
+    </div>
+
+    <script>
+    document.getElementById('loginForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        const data = {
+            username: document.getElementById('username').value,
+            password: document.getElementById('password').value,
+        };
+
+        try {
+            const response = await fetch('/api/auth/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data),
+                credentials: 'include'
+            });
+            const result = await response.json();
+            if (result.success) {
+                window.location.href = '/admin';
+            } else {
+                alert('❌ Invalid credentials');
+            }
+        } catch (error) {
+            alert('❌ Login error: ' + error.message);
+        }
+    });
+    </script>
+</body>
+</html>

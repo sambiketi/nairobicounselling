@@ -1,5 +1,6 @@
 ﻿import { FastifyRequest, FastifyReply } from 'fastify';
 import { AuthService } from './service.js';
+import { AdminUserRepository } from '../../db/repositories/admin-user-repository.js';
 import { z } from 'zod';
 
 const loginSchema = z.object({
@@ -8,21 +9,37 @@ const loginSchema = z.object({
 });
 
 export class AuthController {
-  constructor(private authService = new AuthService()) {}
+  constructor(private authService = new AuthService(), private adminUserRepo = new AdminUserRepository()) {}
 
   async login(request: FastifyRequest, reply: FastifyReply) {
     try {
       const body = loginSchema.parse(request.body);
-      // In production, you would check against the database
+      const user = await this.adminUserRepo.findByUsername(body.username);
+      if (!user) {
+        return reply.status(401).send({ success: false, error: 'Invalid credentials' });
+      }
+      const isValid = await this.authService.verifyPassword(user.passwordHash, body.password);
+      if (!isValid) {
+        return reply.status(401).send({ success: false, error: 'Invalid credentials' });
+      }
+      const session = request.session as any;
+      session.set('user', {
+        id: user.id,
+        username: user.username,
+        fullName: user.fullName,
+        role: user.role,
+      });
+      await this.adminUserRepo.updateLastLogin(user.id);
       return reply.send({
         success: true,
         message: 'Login successful',
+        data: { id: user.id, username: user.username, fullName: user.fullName, role: user.role },
       });
     } catch (error) {
-      return reply.status(401).send({
-        success: false,
-        error: 'Invalid credentials',
-      });
+      if (error instanceof z.ZodError) {
+        return reply.status(400).send({ success: false, error: 'Invalid input', details: error.errors });
+      }
+      return reply.status(500).send({ success: false, error: 'Login failed' });
     }
   }
 

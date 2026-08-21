@@ -1,0 +1,88 @@
+﻿{% extends "../admin-base.njk" %}
+
+{% block adminTitle %}Add Gallery Image{% endblock %}
+
+{% block adminContent %}
+<div style="max-width: 800px; margin: 0 auto; background: white; border-radius: 12px; padding: 2rem; box-shadow: 0 2px 10px rgba(0,0,0,0.05);">
+  <h2 style="color: #4A3528; margin-bottom: 1rem;">Add New Image</h2>
+  <p style="color: #666; margin-bottom: 1.5rem;">Upload or add an image URL</p>
+
+  <form id="galleryForm">
+    <div style="margin-bottom: 1rem;">
+      <label style="display: block; font-weight: bold; color: #4A3528; margin-bottom: 0.3rem;">Image URL</label>
+      <input type="url" id="imageUrl" name="imageUrl" placeholder="https://example.com/image.jpg" required style="width: 100%; padding: 0.8rem; border: 2px solid #E8D5B8; border-radius: 8px; font-size: 1rem;">
+      <div style="font-size: 0.85rem; color: #999; margin-top: 0.25rem;">Paste the image URL</div>
+    </div>
+
+    <div style="margin-bottom: 1rem;">
+      <label style="display: block; font-weight: bold; color: #4A3528; margin-bottom: 0.3rem;">Title</label>
+      <input type="text" id="title" name="title" placeholder="Image title" style="width: 100%; padding: 0.8rem; border: 2px solid #E8D5B8; border-radius: 8px; font-size: 1rem;">
+    </div>
+
+    <div style="margin-bottom: 1rem;">
+      <label style="display: block; font-weight: bold; color: #4A3528; margin-bottom: 0.3rem;">Description</label>
+      <textarea id="description" name="description" rows="2" placeholder="Image description" style="width: 100%; padding: 0.8rem; border: 2px solid #E8D5B8; border-radius: 8px; font-size: 1rem;"></textarea>
+    </div>
+
+    <div style="margin-bottom: 1rem;">
+      <label style="display: block; font-weight: bold; color: #4A3528; margin-bottom: 0.3rem;">Category</label>
+      <input type="text" id="category" name="category" placeholder="e.g., Office, Events, Team" style="width: 100%; padding: 0.8rem; border: 2px solid #E8D5B8; border-radius: 8px; font-size: 1rem;">
+    </div>
+
+    <div style="margin-bottom: 1rem;">
+      <label style="display: block; font-weight: bold; color: #4A3528; margin-bottom: 0.3rem;">Display Order</label>
+      <input type="number" id="displayOrder" name="displayOrder" value="0" style="width: 100%; padding: 0.8rem; border: 2px solid #E8D5B8; border-radius: 8px; font-size: 1rem;">
+    </div>
+
+    <div style="margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+      <input type="checkbox" id="isActive" name="isActive" checked style="width: 1.2rem; height: 1.2rem;">
+      <label for="isActive" style="font-weight: bold; color: #4A3528;">Active</label>
+    </div>
+
+    <div style="display: flex; gap: 1rem; margin-top: 2rem;">
+      <button type="submit" class="btn-primary" style="padding: 0.8rem 2rem; background: linear-gradient(145deg, #C9A87C, #B8966A); color: #4A3528; border: none; border-radius: 8px; font-weight: bold; cursor: pointer;">Add Image</button>
+      <a href="/admin/gallery" class="btn-secondary" style="padding: 0.8rem 2rem; background: #f8f9fa; color: #333; border: 2px solid #ddd; border-radius: 8px; font-weight: bold; cursor: pointer; text-decoration: none; display: inline-block; text-align: center;">Cancel</a>
+    </div>
+  </form>
+</div>
+
+<script>
+document.getElementById('galleryForm').addEventListener('submit', async function(e) {
+  e.preventDefault();
+  const formData = new FormData(this);
+  const data = {
+    imageUrl: formData.get('imageUrl'),
+    title: formData.get('title') || null,
+    description: formData.get('description') || null,
+    category: formData.get('category') || null,
+    isActive: formData.get('isActive') === 'on',
+    displayOrder: parseInt(formData.get('displayOrder')) || 0,
+  };
+
+  const submitBtn = this.querySelector('.btn-primary');
+  submitBtn.textContent = 'Adding...';
+  submitBtn.disabled = true;
+
+  try {
+    const response = await fetch('/api/admin/gallery', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+      credentials: 'include',
+    });
+    const result = await response.json();
+    if (result.success) {
+      alert('Image added successfully!');
+      window.location.href = '/admin/gallery';
+    } else {
+      alert('Error: ' + (result.error || 'Failed to add image'));
+    }
+  } catch (error) {
+    alert('Network error: ' + error.message);
+  } finally {
+    submitBtn.textContent = 'Add Image';
+    submitBtn.disabled = false;
+  }
+});
+</script>
+{% endblock %}

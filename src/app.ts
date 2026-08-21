@@ -17,6 +17,8 @@ import { therapistRoutes } from './modules/therapists/routes.js';
 import { serviceRoutes } from './modules/services/routes.js';
 import { galleryRoutes } from './modules/gallery/routes.js';
 import { blogRoutes } from './modules/blog/routes.js';
+import { settingsRoutes } from './modules/settings/routes.js';
+import { videoCallRoutes } from './modules/whatsapp-video/routes.js';
 import { homeRoutes } from './routes/home.js';
 import { errorHandler } from './middleware/error-handler.js';
 
@@ -63,7 +65,7 @@ export async function buildApp() {
   // Setup views
   const viewsDir = path.join(__dirname, 'views');
 
-  // Register view engine with the actual Nunjucks package
+  // Register view engine with Nunjucks
   await app.register(fastifyView, {
     engine: {
       nunjucks: nunjucks,
@@ -77,7 +79,7 @@ export async function buildApp() {
     prefix: '/public/',
   });
 
-  // Register all routes - HOME ROUTES FIRST
+  // Register all routes
   await app.register(homeRoutes);
   await app.register(bookingRoutes);
   await app.register(authRoutes);
@@ -86,6 +88,8 @@ export async function buildApp() {
   await app.register(serviceRoutes);
   await app.register(galleryRoutes);
   await app.register(blogRoutes);
+  await app.register(settingsRoutes);
+  await app.register(videoCallRoutes);
 
   app.setErrorHandler(errorHandler);
 

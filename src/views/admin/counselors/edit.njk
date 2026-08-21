@@ -1,0 +1,127 @@
+﻿{% extends "../admin-base.njk" %}
+
+{% block adminTitle %}Edit Counselor{% endblock %}
+
+{% block adminContent %}
+<div style="max-width: 800px; margin: 0 auto; background: white; border-radius: 12px; padding: 2rem; box-shadow: 0 2px 10px rgba(0,0,0,0.05);">
+  <h2 style="color: #4A3528; margin-bottom: 1rem;">Edit Counselor</h2>
+  <p style="color: #666; margin-bottom: 1.5rem;">Update team member details</p>
+
+  <div id="loading" style="text-align: center; padding: 2rem; color: #666;">
+    <i class="fas fa-spinner fa-spin"></i> Loading counselor...
+  </div>
+
+  <div id="editForm" style="display: none;">
+    <form id="counselorForm">
+      <div style="margin-bottom: 1rem;">
+        <label style="display: block; font-weight: bold; color: #4A3528; margin-bottom: 0.3rem;">Name</label>
+        <input type="text" id="name" name="name" required style="width: 100%; padding: 0.8rem; border: 2px solid #E8D5B8; border-radius: 8px; font-size: 1rem;">
+      </div>
+
+      <div style="margin-bottom: 1rem;">
+        <label style="display: block; font-weight: bold; color: #4A3528; margin-bottom: 0.3rem;">Title</label>
+        <input type="text" id="title" name="title" style="width: 100%; padding: 0.8rem; border: 2px solid #E8D5B8; border-radius: 8px; font-size: 1rem;">
+      </div>
+
+      <div style="margin-bottom: 1rem;">
+        <label style="display: block; font-weight: bold; color: #4A3528; margin-bottom: 0.3rem;">Bio</label>
+        <textarea id="bio" name="bio" rows="3" style="width: 100%; padding: 0.8rem; border: 2px solid #E8D5B8; border-radius: 8px; font-size: 1rem;"></textarea>
+      </div>
+
+      <div style="margin-bottom: 1rem;">
+        <label style="display: block; font-weight: bold; color: #4A3528; margin-bottom: 0.3rem;">Image URL</label>
+        <input type="url" id="imageUrl" name="imageUrl" style="width: 100%; padding: 0.8rem; border: 2px solid #E8D5B8; border-radius: 8px; font-size: 1rem;">
+      </div>
+
+      <div style="margin-bottom: 1rem;">
+        <label style="display: block; font-weight: bold; color: #4A3528; margin-bottom: 0.3rem;">Specialties (comma separated)</label>
+        <input type="text" id="specialties" name="specialties" style="width: 100%; padding: 0.8rem; border: 2px solid #E8D5B8; border-radius: 8px; font-size: 1rem;">
+      </div>
+
+      <div style="margin-bottom: 1rem;">
+        <label style="display: block; font-weight: bold; color: #4A3528; margin-bottom: 0.3rem;">Display Order</label>
+        <input type="number" id="displayOrder" name="displayOrder" style="width: 100%; padding: 0.8rem; border: 2px solid #E8D5B8; border-radius: 8px; font-size: 1rem;">
+      </div>
+
+      <div style="margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+        <input type="checkbox" id="isActive" name="isActive" style="width: 1.2rem; height: 1.2rem;">
+        <label for="isActive" style="font-weight: bold; color: #4A3528;">Active</label>
+      </div>
+
+      <div style="display: flex; gap: 1rem; margin-top: 2rem;">
+        <button type="submit" class="btn-primary" style="padding: 0.8rem 2rem; background: linear-gradient(145deg, #C9A87C, #B8966A); color: #4A3528; border: none; border-radius: 8px; font-weight: bold; cursor: pointer;">Update Counselor</button>
+        <a href="/admin/counselors" class="btn-secondary" style="padding: 0.8rem 2rem; background: #f8f9fa; color: #333; border: 2px solid #ddd; border-radius: 8px; font-weight: bold; cursor: pointer; text-decoration: none; display: inline-block; text-align: center;">Cancel</a>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+const counselorId = window.location.pathname.split('/').pop();
+
+async function loadCounselor() {
+  try {
+    const response = await fetch(/api/therapists/);
+    const result = await response.json();
+    if (result.success && result.data) {
+      const counselor = result.data;
+      document.getElementById('name').value = counselor.name;
+      document.getElementById('title').value = counselor.title || '';
+      document.getElementById('bio').value = counselor.bio || '';
+      document.getElementById('imageUrl').value = counselor.imageUrl || '';
+      document.getElementById('specialties').value = (counselor.specialties || []).join(', ');
+      document.getElementById('displayOrder').value = counselor.displayOrder || 0;
+      document.getElementById('isActive').checked = counselor.isActive;
+      document.getElementById('loading').style.display = 'none';
+      document.getElementById('editForm').style.display = 'block';
+    }
+  } catch (error) {
+    alert('Error loading counselor');
+    window.location.href = '/admin/counselors';
+  }
+}
+
+loadCounselor();
+
+document.getElementById('counselorForm').addEventListener('submit', async function(e) {
+  e.preventDefault();
+  const formData = new FormData(this);
+  const specialties = formData.get('specialties') ? formData.get('specialties').split(',').map(s => s.trim()) : [];
+  const data = {
+    name: formData.get('name'),
+    title: formData.get('title') || null,
+    bio: formData.get('bio') || null,
+    imageUrl: formData.get('imageUrl') || null,
+    specialties: specialties,
+    isActive: formData.get('isActive') === 'on',
+    displayOrder: parseInt(formData.get('displayOrder')) || 0,
+  };
+
+  const submitBtn = this.querySelector('.btn-primary');
+  submitBtn.textContent = 'Updating...';
+  submitBtn.disabled = true;
+
+  try {
+    const response = await fetch(/api/admin/therapists/, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+      credentials: 'include',
+    });
+    const result = await response.json();
+    if (result.success) {
+      alert('Counselor updated successfully!');
+      window.location.href = '/admin/counselors';
+    } else {
+      alert('Error: ' + (result.error || 'Failed to update counselor'));
+    }
+  } catch (error) {
+    alert('Network error: ' + error.message);
+  } finally {
+    submitBtn.textContent = 'Update Counselor';
+    submitBtn.disabled = false;
+  }
+});
+</script>
+{% endblock %}
+

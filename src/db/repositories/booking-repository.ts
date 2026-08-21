@@ -1,4 +1,4 @@
-﻿import { and, eq, gte, lte, desc, SQL } from 'drizzle-orm';
+﻿import { and, eq, ne, gte, lte, desc, SQL } from 'drizzle-orm';
 import { bookings, bookingStatusEnum } from '../schema';
 import { BaseRepository } from './base-repository';
 import { constants } from '../../config/constants';
@@ -36,7 +36,7 @@ export class BookingRepository extends BaseRepository<typeof bookings> {
     ];
 
     if (excludeId) {
-      conditions.push(eq(this.table.id, excludeId) as any);
+      conditions.push(ne(this.table.id, excludeId) as any);
     }
 
     return await this.db
@@ -73,21 +73,32 @@ export class BookingRepository extends BaseRepository<typeof bookings> {
     return result;
   }
 
-  async findAll(page: number = 1, limit: number = 50): Promise<{ data: any[]; total: number }> {
+  async findAll(page: number = 1, limit: number = 50, filters?: { status?: string }): Promise<{ data: any[]; total: number }> {
     const offset = (page - 1) * limit;
-
-    const [data, total] = await Promise.all([
-      this.db
+    
+    let data;
+    
+    if (filters?.status) {
+      data = await this.db
+        .select()
+        .from(this.table)
+        .where(eq(this.table.status, filters.status as any))
+        .orderBy(desc(this.table.appointmentDate))
+        .limit(limit)
+        .offset(offset);
+    } else {
+      data = await this.db
         .select()
         .from(this.table)
         .orderBy(desc(this.table.appointmentDate))
         .limit(limit)
-        .offset(offset),
-      this.db
-        .select({ count: this.table.id })
-        .from(this.table)
-        .then((r: any[]) => r.length)
-    ]);
+        .offset(offset);
+    }
+    
+    const total = await this.db
+      .select({ count: this.table.id })
+      .from(this.table)
+      .then((r: any[]) => r.length);
 
     return { data, total };
   }

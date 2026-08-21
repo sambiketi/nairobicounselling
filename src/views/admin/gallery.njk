@@ -1,0 +1,74 @@
+﻿{% extends "admin-base.njk" %}
+
+{% block adminTitle %}Manage Gallery{% endblock %}
+
+{% block adminContent %}
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+  <p style="color: #666;">Manage gallery images</p>
+  <button class="btn-primary" onclick="window.location.href='/admin/gallery/create'">
+    <i class="fas fa-upload"></i> Upload Image
+  </button>
+</div>
+
+<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1.5rem;">
+  {% if images and images.length > 0 %}
+    {% for image in images %}
+    <div style="background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 10px rgba(0,0,0,0.05);">
+      <div style="height: 150px; background: #f8f9fa; display: flex; align-items: center; justify-content: center; color: #ccc;">
+        <i class="fas fa-image" style="font-size: 3rem;"></i>
+      </div>
+      <div style="padding: 1rem;">
+        <p style="font-weight: bold; margin: 0; font-size: 0.9rem;">{{ image.title or 'Untitled' }}</p>
+        <p style="color: #999; font-size: 0.8rem; margin: 0.3rem 0;">
+          <span class="status-badge {{ 'status-published' if image.isActive else 'status-draft' }}">
+            {{ 'Active' if image.isActive else 'Inactive' }}
+          </span>
+        </p>
+        <div style="display: flex; gap: 0.3rem; margin-top: 0.5rem;">
+          <button class="btn-sm btn-primary" onclick="window.location.href='/admin/gallery/edit/{{ image.id }}'">Edit</button>
+          <button class="btn-sm btn-danger" onclick="deleteImage('{{ image.id }}')">Delete</button>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  {% else %}
+    <div style="grid-column: 1/-1; text-align: center; padding: 3rem; background: white; border-radius: 12px;">
+      <i class="fas fa-images" style="font-size: 3rem; color: #ccc; display: block; margin-bottom: 1rem;"></i>
+      <p style="color: #999;">No images uploaded yet</p>
+    </div>
+  {% endif %}
+</div>
+
+<style>
+  .btn-sm { padding: 0.3rem 0.8rem; border: none; border-radius: 4px; cursor: pointer; font-size: 0.85rem; }
+  .btn-sm.btn-primary { background: #C9A87C; color: #4A3528; }
+  .btn-sm.btn-primary:hover { background: #B8966A; }
+  .btn-sm.btn-danger { background: #dc3545; color: white; }
+  .btn-sm.btn-danger:hover { background: #c82333; }
+  .btn-primary { padding: 0.6rem 1.5rem; background: linear-gradient(145deg, #C9A87C, #B8966A); color: #4A3528; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 4px 15px rgba(201, 168, 124, 0.4); }
+</style>
+<script>
+window.deleteImage = async function(id) {
+  if (!confirm('Are you sure you want to delete this image?')) return;
+  try {
+    const response = await fetch(`/api/admin/gallery/${id}`, {
+      method: 'DELETE',
+      credentials: 'include',
+    });
+    const result = await response.json();
+    if (result.success) {
+      alert('Image deleted successfully');
+      window.location.reload();
+    } else {
+      alert('Failed to delete image');
+    }
+  } catch (error) {
+    alert('Error deleting image');
+  }
+};
+</script>
+{% endblock %}
+
+
+

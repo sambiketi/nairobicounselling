@@ -1,0 +1,86 @@
+﻿{% extends "admin-base.njk" %}
+
+{% block adminTitle %}{{ 'Pending Bookings' if filter == 'pending' else 'All Bookings' }}{% endblock %}
+
+{% block adminContent %}
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+  <p style="color: #666;">Manage all appointments</p>
+  <div style="display: flex; gap: 0.5rem;">
+    <a href="/admin/bookings" class="filter-btn {{ 'active' if not filter else '' }}">All</a>
+    <a href="/admin/bookings/pending" class="filter-btn {{ 'active' if filter == 'pending' else '' }}">Pending</a>
+  </div>
+</div>
+
+<div style="background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 10px rgba(0,0,0,0.05);">
+  <table style="width: 100%; border-collapse: collapse;">
+    <thead>
+      <tr style="background: #f8f9fa;">
+        <th style="padding: 1rem; text-align: left; color: #4A3528;">Client</th>
+        <th style="padding: 1rem; text-align: left; color: #4A3528;">Service</th>
+        <th style="padding: 1rem; text-align: left; color: #4A3528;">Date</th>
+        <th style="padding: 1rem; text-align: left; color: #4A3528;">Status</th>
+        <th style="padding: 1rem; text-align: left; color: #4A3528;">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% if bookings.data and bookings.data.length > 0 %}
+        {% for booking in bookings.data %}
+        <tr style="border-bottom: 1px solid #f0f0f0;">
+          <td style="padding: 1rem;">
+            <strong>{{ booking.clientName }}</strong><br>
+            <span style="color: #999; font-size: 0.85rem;">{{ booking.clientPhone }}</span>
+          </td>
+          <td style="padding: 1rem; color: #666;">{{ booking.serviceId }}</td>
+          <td style="padding: 1rem;">
+            {{ booking.appointmentDate | date('M d, Y') }}<br>
+            <span style="color: #999; font-size: 0.85rem;">{{ booking.appointmentTime }}</span>
+          </td>
+          <td style="padding: 1rem;">
+            <span class="status-badge 
+              {% if booking.status == 'pending' %}status-draft
+              {% elif booking.status == 'confirmed' %}status-published
+              {% elif booking.status == 'completed' %}status-completed
+              {% else %}status-cancelled{% endif %}">
+              {{ booking.status }}
+            </span>
+          </td>
+          <td style="padding: 1rem;">
+            <button class="btn-sm btn-primary" onclick="alert('View booking: {{ booking.id }}')">View</button>
+            {% if booking.status == 'pending' %}
+              <button class="btn-sm btn-success" onclick="alert('Confirm booking: {{ booking.id }}')">Confirm</button>
+            {% endif %}
+          </td>
+        </tr>
+        {% endfor %}
+      {% else %}
+        <tr>
+          <td colspan="5" style="padding: 2rem; text-align: center; color: #999;">
+            <i class="fas fa-calendar-check" style="font-size: 2rem; display: block; margin-bottom: 0.5rem;"></i>
+            No bookings found
+          </td>
+        </tr>
+      {% endif %}
+    </tbody>
+  </table>
+  {% if bookings.total > 0 %}
+  <div style="padding: 1rem; border-top: 1px solid #f0f0f0; display: flex; justify-content: space-between; align-items: center; color: #666;">
+    <span>Total: {{ bookings.total }} bookings</span>
+    <span>Showing {{ bookings.data.length }} entries</span>
+  </div>
+  {% endif %}
+</div>
+
+<style>
+  .filter-btn { padding: 0.4rem 1rem; text-decoration: none; color: #666; border-radius: 4px; border: 1px solid #ddd; }
+  .filter-btn.active { background: #C9A87C; color: #4A3528; border-color: #C9A87C; }
+  .filter-btn:hover { background: #f0f0f0; }
+  .btn-sm { padding: 0.3rem 0.8rem; border: none; border-radius: 4px; cursor: pointer; font-size: 0.85rem; }
+  .btn-sm.btn-primary { background: #C9A87C; color: #4A3528; }
+  .btn-sm.btn-primary:hover { background: #B8966A; }
+  .btn-sm.btn-success { background: #28a745; color: white; }
+  .btn-sm.btn-success:hover { background: #218838; }
+  .status-completed { background: #d4edda; color: #155724; }
+  .status-cancelled { background: #f8d7da; color: #721c24; }
+</style>
+{% endblock %}
+
