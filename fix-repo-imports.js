@@ -12,15 +12,20 @@ function fixRepoImports(dir) {
             let content = readFileSync(fullPath, 'utf8');
             let original = content;
             
-            // Fix imports without .js extension
-            content = content.replace(/from\s+['"]\.\.\/([^'"]+?)(?<!\.js)['"]/g, (match, p1) => {
-                if (p1.match(/^[a-zA-Z@]/)) return match;
-                return rom '../.js';
-            });
+            // Fix: from './base-repository' -> from './base-repository.js'
+            content = content.replace(/from\s+['"]\.\/base-repository['"]/g, "from './base-repository.js'");
+            content = content.replace(/from\s+['"]\.\.\/base-repository['"]/g, "from '../base-repository.js'");
+            content = content.replace(/from\s+['"]\.\.\/\.\.\/base-repository['"]/g, "from '../../base-repository.js'");
             
-            content = content.replace(/from\s+['"]\.\/([^'"]+?)(?<!\.js)['"]/g, (match, p1) => {
+            // Fix any other repository imports without .js
+            content = content.replace(/from\s+['"]\.\/([^'"]+?)(?<!\.js)(?<!\.json)['"]/g, (match, p1) => {
                 if (p1.match(/^[a-zA-Z@]/)) return match;
                 return rom './.js';
+            });
+            
+            content = content.replace(/from\s+['"]\.\.\/([^'"]+?)(?<!\.js)(?<!\.json)['"]/g, (match, p1) => {
+                if (p1.match(/^[a-zA-Z@]/)) return match;
+                return rom '../.js';
             });
             
             if (content !== original) {
@@ -31,6 +36,5 @@ function fixRepoImports(dir) {
     }
 }
 
-fixRepoImports('./src/db/repositories');
-fixRepoImports('./src/modules');
-console.log('✅ All imports fixed!');
+fixRepoImports('./src');
+console.log('✅ All repository imports fixed!');

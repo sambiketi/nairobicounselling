@@ -1,6 +1,6 @@
 ﻿import { eq, desc } from 'drizzle-orm';
 import { services } from '../schema/index.js';
-import { BaseRepository } from './base-repository';
+import { BaseRepository } from './base-repository.js';
 
 export class ServiceRepository extends BaseRepository<typeof services> {
   constructor() {
@@ -50,4 +50,5 @@ export class ServiceRepository extends BaseRepository<typeof services> {
     await this.db.delete(this.table).where(eq(this.table.id, id));
   }
 }
+
 
