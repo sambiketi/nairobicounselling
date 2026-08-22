@@ -18,8 +18,6 @@ import { serviceRoutes } from './modules/services/routes.js';
 import { galleryRoutes } from './modules/gallery/routes.js';
 import { blogRoutes } from './modules/blog/routes.js';
 import { settingsRoutes } from './modules/settings/routes.js';
-
-import { blogRoutes } from './modules/blog/routes.js';
 import { videoCallRoutes } from './modules/whatsapp-video/routes.js';
 import { homeRoutes } from './routes/home.js';
 import { errorHandler } from './middleware/error-handler.js';
@@ -91,7 +89,6 @@ export async function buildApp() {
   await app.register(galleryRoutes);
   await app.register(blogRoutes);
   await app.register(settingsRoutes);
-  await app.register(blogRoutes);
   await app.register(videoCallRoutes);
 
   app.setErrorHandler(errorHandler);
