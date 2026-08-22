@@ -57,6 +57,18 @@ export async function buildApp() {
     },
   });
 
+  // 🔍 Diagnostic route to check session
+  app.get("/debug/session", async (request, reply) => {
+    const user = (request.session as any).user;
+    console.log("🔍 Debug session check - Session ID:", request.session.sessionId);
+    console.log("🔍 Debug session check - User:", user);
+    return reply.send({
+      sessionId: request.session.sessionId,
+      user: user || null,
+      cookies: request.headers.cookie || null,
+    });
+  });
+
   await app.register(fastifyRateLimit, {
     max: 100,
     timeWindow: '1 minute',
