@@ -1,4 +1,4 @@
-﻿import { db } from '../../db/client.js';
+import { db } from '../../db/client.js';
 import { bookings, services, therapists, blogPosts } from '../../db/schema/index.js';
 import { sql, eq, and, gte, lte } from 'drizzle-orm';
 
