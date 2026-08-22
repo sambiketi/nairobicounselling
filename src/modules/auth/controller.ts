@@ -34,21 +34,16 @@ export class AuthController {
       }
       console.log("✅ Password VALID");
 
-      // ✅ CORRECT: Fastify Session API
-      const userData = {
+      // ✅ CORRECT: Fastify Session API - use session.user directly
+      request.session.user = {
         id: user.id,
         username: user.username,
         fullName: user.fullName,
         role: user.role,
       };
       
-      request.session.set("user", userData);
-      console.log("✅ Session SET with data:", userData);
+      console.log("✅ Session SET with data:", request.session.user);
       console.log("🆔 Session ID:", request.session.sessionId);
-      
-      // Verify session was set
-      const verifySession = request.session.get("user");
-      console.log("🔍 Session verification after set:", verifySession);
       
       await this.adminUserRepo.updateLastLogin(user.id);
       
@@ -87,7 +82,7 @@ export class AuthController {
 
   async getCurrentUser(request: FastifyRequest, reply: FastifyReply) {
     try {
-      const user = request.session.get("user");
+      const user = request.session.user;
       console.log("🔍 Current user request, session user:", user);
       if (!user) {
         return reply.status(401).send({ success: false, error: "Not authenticated" });

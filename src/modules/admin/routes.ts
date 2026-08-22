@@ -20,8 +20,8 @@ export async function adminRoutes(fastify: FastifyInstance) {
       return;
     }
 
-    // ✅ CORRECT: Fastify Session API
-    const user = request.session.get("user");
+    // ✅ CORRECT: Fastify Session API - use session.user directly
+    const user = request.session.user;
     console.log("👤 Session user:", user);
     
     if (!user) {
@@ -52,7 +52,7 @@ export async function adminRoutes(fastify: FastifyInstance) {
 
   // Admin pages
   fastify.get("/admin", async (request, reply) => {
-    const user = request.session.get("user");
+    const user = request.session.user;
     console.log("📊 Dashboard requested, user:", user);
     return reply.view("admin/dashboard.njk", {
       activePage: "dashboard",
@@ -61,7 +61,7 @@ export async function adminRoutes(fastify: FastifyInstance) {
   });
 
   fastify.get("/admin/location", async (request, reply) => {
-    const user = request.session.get("user");
+    const user = request.session.user;
     try {
       const { SettingsService } = await import("../settings/service.js");
       const settingsService = new SettingsService();
@@ -81,7 +81,7 @@ export async function adminRoutes(fastify: FastifyInstance) {
   });
 
   fastify.get("/admin/blog", async (request, reply) => {
-    const user = request.session.get("user");
+    const user = request.session.user;
     return reply.view("admin/blog/index.njk", {
       activePage: "blog",
       user: user || { fullName: "Admin" }
@@ -89,7 +89,7 @@ export async function adminRoutes(fastify: FastifyInstance) {
   });
 
   fastify.get("/admin/blog/create", async (request, reply) => {
-    const user = request.session.get("user");
+    const user = request.session.user;
     return reply.view("admin/blog/create.njk", {
       activePage: "blog",
       user: user || { fullName: "Admin" }
@@ -98,7 +98,7 @@ export async function adminRoutes(fastify: FastifyInstance) {
 
   fastify.get("/admin/blog/edit/:id", async (request, reply) => {
     const { id } = request.params as { id: string };
-    const user = request.session.get("user");
+    const user = request.session.user;
     try {
       const { BlogService } = await import("../blog/service.js");
       const blogService = new BlogService();
@@ -114,7 +114,7 @@ export async function adminRoutes(fastify: FastifyInstance) {
   });
 
   fastify.get("/admin/counselors", async (request, reply) => {
-    const user = request.session.get("user");
+    const user = request.session.user;
     try {
       const { TherapistService } = await import("../therapists/service.js");
       const therapistService = new TherapistService();
@@ -134,7 +134,7 @@ export async function adminRoutes(fastify: FastifyInstance) {
   });
 
   fastify.get("/admin/services", async (request, reply) => {
-    const user = request.session.get("user");
+    const user = request.session.user;
     try {
       const { ServiceManagementService } = await import("../services/service.js");
       const serviceService = new ServiceManagementService();
@@ -154,7 +154,7 @@ export async function adminRoutes(fastify: FastifyInstance) {
   });
 
   fastify.get("/admin/gallery", async (request, reply) => {
-    const user = request.session.get("user");
+    const user = request.session.user;
     try {
       const { GalleryService } = await import("../gallery/service.js");
       const galleryService = new GalleryService();
@@ -174,7 +174,7 @@ export async function adminRoutes(fastify: FastifyInstance) {
   });
 
   fastify.get("/admin/bookings", async (request, reply) => {
-    const user = request.session.get("user");
+    const user = request.session.user;
     try {
       const { BookingService } = await import("../bookings/service.js");
       const bookingService = new BookingService();
@@ -194,7 +194,7 @@ export async function adminRoutes(fastify: FastifyInstance) {
   });
 
   fastify.get("/admin/bookings/pending", async (request, reply) => {
-    const user = request.session.get("user");
+    const user = request.session.user;
     try {
       const { BookingService } = await import("../bookings/service.js");
       const bookingService = new BookingService();
@@ -216,7 +216,7 @@ export async function adminRoutes(fastify: FastifyInstance) {
   });
 
   fastify.get("/admin/settings", async (request, reply) => {
-    const user = request.session.get("user");
+    const user = request.session.user;
     return reply.view("admin/settings.njk", {
       activePage: "settings",
       user: user || { fullName: "Admin" }
@@ -224,7 +224,7 @@ export async function adminRoutes(fastify: FastifyInstance) {
   });
 
   fastify.get("/admin/content", async (request, reply) => {
-    const user = request.session.get("user");
+    const user = request.session.user;
     return reply.view("admin/content.njk", {
       activePage: "content",
       user: user || { fullName: "Admin" }
