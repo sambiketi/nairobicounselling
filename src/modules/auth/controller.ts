@@ -43,12 +43,17 @@ export class AuthController {
   }
 
   async logout(request: FastifyRequest, reply: FastifyReply) {
-    request.session.destroy((err) => {
-      if (err) {
-        return reply.status(500).send({ success: false, error: "Failed to logout" });
-      }
+    try {
+      await new Promise<void>((resolve, reject) => {
+        request.session.destroy((err) => {
+          if (err) reject(err);
+          else resolve();
+        });
+      });
       return reply.send({ success: true, message: "Logged out successfully" });
-    });
+    } catch (error) {
+      return reply.status(500).send({ success: false, error: "Failed to logout" });
+    }
   }
 
   async getCurrentUser(request: FastifyRequest, reply: FastifyReply) {
