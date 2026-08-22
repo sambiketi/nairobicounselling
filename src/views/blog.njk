@@ -12,50 +12,25 @@
   </div>
 
   <div class="blog-grid">
-      <a href="/blog/{{ post.slug }}" style="color: #D4AF37; text-decoration: none;">Read More →</a>
-    </div>
-    {% endfor %}
-  {% else %}
-    <div style="grid-column: 1/-1; text-align: center; padding: 3rem; color: #999;">
-      <i class="fas fa-book-open" style="font-size: 3rem; display: block; margin-bottom: 1rem;"></i>
-      <p>No resources available yet. Check back soon!</p>
-    </div>
-  {% endif %}
-</div>
-      <a href="/blog/understanding-anxiety" style="color: #D4AF37; text-decoration: none;">Read More →</a>
-    </div>
-    <div class="blog-card">
-      <h3>Coping with Stress</h3>
-      <p style="color: #666;">Effective techniques for managing stress in daily life...</p>
-      <div class="hope-tag">"Rest is not a luxury — it's a necessity"</div>
-      <a href="/blog/coping-with-stress" style="color: #D4AF37; text-decoration: none;">Read More →</a>
-    </div>
-    <div class="blog-card">
-      <h3>Building Healthy Relationships</h3>
-      <p style="color: #666;">Tips for nurturing strong, healthy connections with others...</p>
-      <div class="hope-tag">"Connection is the antidote to isolation"</div>
-      <a href="/blog/healthy-relationships" style="color: #D4AF37; text-decoration: none;">Read More →</a>
-    </div>
-    <div class="blog-card">
-      <h3>Self-Care for Mental Health</h3>
-      <p style="color: #666;">Practical self-care strategies for better mental well-being...</p>
-      <div class="hope-tag">"Self-care is not selfish — it's survival"</div>
-      <a href="/blog/self-care" style="color: #D4AF37; text-decoration: none;">Read More →</a>
-    </div>
-    <div class="blog-card">
-      <h3>Grief and Loss</h3>
-      <p style="color: #666;">Understanding the grieving process and finding support...</p>
-      <div class="hope-tag">"Grief is love with nowhere to go"</div>
-      <a href="/blog/grief-and-loss" style="color: #D4AF37; text-decoration: none;">Read More →</a>
-    </div>
-    <div class="blog-card">
-      <h3>Child Mental Health</h3>
-      <p style="color: #666;">Supporting children's mental health and emotional development...</p>
-      <div class="hope-tag">"Our children deserve to be heard"</div>
-      <a href="/blog/child-mental-health" style="color: #D4AF37; text-decoration: none;">Read More →</a>
-    </div>
+    {% if posts and posts.length > 0 %}
+      {% for post in posts %}
+        <div class="blog-card">
+          <h3>{{ post.title }}</h3>
+          {% if post.excerpt %}
+            <p style="color: #666;">{{ post.excerpt }}</p>
+          {% else %}
+            <p style="color: #666;">{{ post.content | truncate(120) if post.content else "Read this resource to learn more." }}</p>
+          {% endif %}
+          <div class="hope-tag">"Knowledge is power"</div>
+          <a href="/blog/{{ post.slug }}" style="color: #D4AF37; text-decoration: none;">Read More →</a>
+        </div>
+      {% endfor %}
+    {% else %}
+      <div style="grid-column: 1/-1; text-align: center; padding: 3rem; color: #999;">
+        <i class="fas fa-book-open" style="font-size: 3rem; display: block; margin-bottom: 1rem;"></i>
+        <p>No resources available yet. Check back soon!</p>
+      </div>
+    {% endif %}
   </div>
 </section>
 {% endblock %}
-
-
