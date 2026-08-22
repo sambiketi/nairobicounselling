@@ -104,7 +104,7 @@ export class AdminService {
       const todayResult = await db.select({ count: sql<number>`count(*)` })
         .from(bookings)
         .where(gte(bookings.createdAt, today));
-      const today = Number(todayResult[0]?.count) || 0;
+      const todayCount = Number(todayResult[0]?.count) || 0;
 
       // This week's bookings
       const weekResult = await db.select({ count: sql<number>`count(*)` })
@@ -118,7 +118,7 @@ export class AdminService {
         .where(gte(bookings.createdAt, monthAgo));
       const thisMonth = Number(monthResult[0]?.count) || 0;
 
-      return { today, thisWeek, thisMonth };
+      return { today: todayCount, thisWeek, thisMonth };
     } catch (error) {
       console.error('Error getting booking stats:', error);
       return { today: 0, thisWeek: 0, thisMonth: 0 };
