@@ -1,11 +1,11 @@
-﻿import { FastifyInstance } from 'fastify';
+import { FastifyInstance } from 'fastify';
 import { ServiceController } from './controller.js';
 
 export async function serviceRoutes(fastify: FastifyInstance) {
   const controller = new ServiceController();
 
   // Public routes
-  fastify.get('/api/services', controller.getAllServices.bind(controller));
+  // Removed - use /api/services/active instead
   fastify.get('/api/services/active', controller.getActiveServices.bind(controller));
   fastify.get('/api/services/:id', controller.getService.bind(controller));
 

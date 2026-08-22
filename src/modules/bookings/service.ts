@@ -113,7 +113,7 @@ export class BookingService {
   }
 
   async getAllBookings(page = 1, limit = 50, filters?: { status?: string }) {
-    return await this.bookingRepository.findAll(page, limit);
+    return await this.bookingRepository.findAll(page, limit, filters);
   }
 }
 

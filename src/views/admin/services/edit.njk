@@ -61,7 +61,7 @@ const serviceId = window.location.pathname.split('/').pop();
 
 async function loadService() {
   try {
-    const response = await fetch(/api/services/);
+    const response = await fetch(`/api/services/${serviceId}`);
     const result = await response.json();
     if (result.success && result.data) {
       const service = result.data;
@@ -101,7 +101,7 @@ document.getElementById('serviceForm').addEventListener('submit', async function
   submitBtn.disabled = true;
 
   try {
-    const response = await fetch(/api/admin/services/, {
+    const response = await fetch(`/api/admin/services/${serviceId}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data),

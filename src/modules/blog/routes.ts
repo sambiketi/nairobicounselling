@@ -1,11 +1,11 @@
-﻿import { FastifyInstance } from 'fastify';
+import { FastifyInstance } from 'fastify';
 import { BlogController } from './controller.js';
 
 export async function blogRoutes(fastify: FastifyInstance) {
   const controller = new BlogController();
 
   // Public routes (read-only)
-  fastify.get('/api/blog', controller.getAllPosts.bind(controller));
+  // Removed - use /api/blog/published instead
   fastify.get('/api/blog/published', controller.getPublishedPosts.bind(controller));
   fastify.get('/api/blog/:id', controller.getPost.bind(controller));
   fastify.get('/api/blog/slug/:slug', controller.getPostBySlug.bind(controller));

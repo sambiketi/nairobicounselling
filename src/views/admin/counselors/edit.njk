@@ -61,7 +61,7 @@ const counselorId = window.location.pathname.split('/').pop();
 
 async function loadCounselor() {
   try {
-    const response = await fetch(/api/therapists/);
+    const response = await fetch(`/api/therapists/${counselorId}`);
     const result = await response.json();
     if (result.success && result.data) {
       const counselor = result.data;
@@ -102,7 +102,7 @@ document.getElementById('counselorForm').addEventListener('submit', async functi
   submitBtn.disabled = true;
 
   try {
-    const response = await fetch(/api/admin/therapists/, {
+    const response = await fetch(`/api/admin/therapists/${counselorId}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data),

@@ -1,4 +1,4 @@
-﻿// Main JavaScript file for Nairobi Counseling Center
+// Main JavaScript file for Nairobi Counseling Center
 
 document.addEventListener('DOMContentLoaded', function() {
   const modal = document.getElementById('bookingModal');
@@ -87,17 +87,25 @@ document.addEventListener('DOMContentLoaded', function() {
         const result = await response.json();
         
         if (result.success) {
-          alert('✅ Session booked successfully! We will contact you shortly.');
+          alert('? Session booked successfully! We will contact you shortly.');
           if (result.data.whatsappLink) {
-            window.open(result.data.whatsappLink, '_blank');
+            // Try to open WhatsApp
+            const win = window.open(result.data.whatsappLink, "_blank");
+            if (!win) {
+              // Popup blocked - show link
+              const message = "Please click OK to open WhatsApp, or copy the link manually if it doesn't open.\n\n" + result.data.whatsappLink;
+              if (confirm(message)) {
+                window.open(result.data.whatsappLink, "_blank");
+              }
+            }
           }
           if (modal) modal.style.display = 'none';
           form.reset();
         } else {
-          alert('❌ Booking failed: ' + result.error);
+          alert('? Booking failed: ' + result.error);
         }
       } catch (error) {
-        alert('❌ An error occurred. Please try again or call us directly.');
+        alert('? An error occurred. Please try again or call us directly.');
       } finally {
         submitBtn.textContent = originalText;
         submitBtn.disabled = false;

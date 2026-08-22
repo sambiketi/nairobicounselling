@@ -1,5 +1,5 @@
-import { and, eq, ne, gte, lte, desc, SQL } from 'drizzle-orm';
-import { bookings, bookingStatusEnum } from '../schema/index.js';
+﻿import { and, eq, ne, gte, lte, desc, SQL, sql } from 'drizzle-orm';
+import { bookings } from '../schema/index.js';
 import { BaseRepository } from './base-repository.js';
 import { constants } from '../../config/constants.js';
 
@@ -28,7 +28,7 @@ export class BookingRepository extends BaseRepository<typeof bookings> {
     const end = new Date(date);
     end.setHours(23, 59, 59, 999);
 
-    const conditions = [
+    const conditions: any[] = [
       gte(this.table.appointmentDate, start),
       lte(this.table.appointmentDate, end),
       eq(this.table.appointmentTime, time),
@@ -36,7 +36,7 @@ export class BookingRepository extends BaseRepository<typeof bookings> {
     ];
 
     if (excludeId) {
-      conditions.push(ne(this.table.id, excludeId) as any);
+      conditions.push(ne(this.table.id, excludeId));
     }
 
     return await this.db
@@ -78,6 +78,7 @@ export class BookingRepository extends BaseRepository<typeof bookings> {
     
     let data;
     
+    // ✅ FIX: Use the status filter
     if (filters?.status) {
       data = await this.db
         .select()
@@ -95,13 +96,18 @@ export class BookingRepository extends BaseRepository<typeof bookings> {
         .offset(offset);
     }
     
-    const total = await this.db
-      .select({ count: this.table.id })
-      .from(this.table)
-      .then((r: any[]) => r.length);
+    // ✅ FIX: Use proper COUNT with filters
+    const countQuery = this.db
+      .select({ count: sql<number>`count(*)` })
+      .from(this.table);
+    
+    if (filters?.status) {
+      countQuery.where(eq(this.table.status, filters.status as any));
+    }
+    
+    const totalResult = await countQuery;
+    const total = Number(totalResult[0]?.count) || 0;
 
     return { data, total };
   }
 }
-
-

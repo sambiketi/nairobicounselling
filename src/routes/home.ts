@@ -33,6 +33,7 @@ export async function homeRoutes(fastify: FastifyInstance) {
       return reply.view('index.njk', {
         title: 'Nairobi Counseling Center - Professional Counseling Services',
         location: location,
+        content: content,
         blogPosts: blogPosts
       });
     } catch (error) {
