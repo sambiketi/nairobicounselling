@@ -12,43 +12,28 @@
   </div>
 
   <div class="therapists-grid">
-      {% endif %}
-    </div>
-    {% endfor %}
-  {% else %}
-    <p style="grid-column: 1/-1; text-align: center; color: #666;">No counselors available at this time. Please check back soon.</p>
-  {% endif %}
-</div>
-      <div class="specialties">
-        <span class="badge">Trauma</span>
-        <span class="badge">Anxiety</span>
-        <span class="badge">Depression</span>
-      </div>
-    </div>
-    <div class="therapist-card">
-      <h3>Michael Ochieng</h3>
-      <p style="color: #D4AF37;">Marriage & Family Therapist</p>
-      <p style="color: #666;">M.A. Counseling Psychology</p>
-      <p>10 years experience in couples therapy and family counseling</p>
-      <div class="hope-message-small">"Relationships can heal when given the right support"</div>
-      <div class="specialties">
-        <span class="badge">Couples</span>
-        <span class="badge">Family</span>
-        <span class="badge">Conflict Resolution</span>
-      </div>
-    </div>
-    <div class="therapist-card">
-      <h3>Sarah Wanjiru</h3>
-      <p style="color: #D4AF37;">Child & Adolescent Therapist</p>
-      <p style="color: #666;">M.Ed. Counseling Psychology</p>
-      <p>8 years experience working with youth and teenagers</p>
-      <div class="hope-message-small">"Every young mind deserves a chance to thrive"</div>
-      <div class="specialties">
-        <span class="badge">Youth</span>
-        <span class="badge">School Issues</span>
-        <span class="badge">Anxiety</span>
-      </div>
-    </div>
+    {% if counselors and counselors.length > 0 %}
+      {% for counselor in counselors %}
+        <div class="therapist-card">
+          <h3>{{ counselor.name }}</h3>
+          {% if counselor.title %}
+            <p style="color: #D4AF37;">{{ counselor.title }}</p>
+          {% endif %}
+          {% if counselor.bio %}
+            <p style="color: #666;">{{ counselor.bio }}</p>
+          {% endif %}
+          {% if counselor.specialties and counselor.specialties.length > 0 %}
+            <div class="specialties">
+              {% for specialty in counselor.specialties %}
+                <span class="badge">{{ specialty }}</span>
+              {% endfor %}
+            </div>
+          {% endif %}
+        </div>
+      {% endfor %}
+    {% else %}
+      <p style="grid-column: 1/-1; text-align: center; color: #666;">No counselors available at this time. Please check back soon.</p>
+    {% endif %}
   </div>
 
   <div style="text-align:center; margin-top: 3rem; padding: 2rem; background: linear-gradient(135deg, #f5f0e1, #fff8f0); border-radius: 12px;">
@@ -57,5 +42,3 @@
   </div>
 </section>
 {% endblock %}
-
-
