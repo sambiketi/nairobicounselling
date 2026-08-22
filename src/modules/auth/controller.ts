@@ -1,7 +1,7 @@
-﻿import { FastifyRequest, FastifyReply } from 'fastify';
-import { AuthService } from './service.js';
-import { AdminUserRepository } from '../../db/repositories/admin-user-repository.js';
-import { z } from 'zod';
+﻿import { FastifyRequest, FastifyReply } from "fastify";
+import { AuthService } from "./service.js";
+import { AdminUserRepository } from "../../db/repositories/admin-user-repository.js";
+import { z } from "zod";
 
 const loginSchema = z.object({
   username: z.string().min(3),
@@ -16,67 +16,50 @@ export class AuthController {
       const body = loginSchema.parse(request.body);
       const user = await this.adminUserRepo.findByUsername(body.username);
       if (!user) {
-        return reply.status(401).send({ success: false, error: 'Invalid credentials' });
+        return reply.status(401).send({ success: false, error: "Invalid credentials" });
       }
       const isValid = await this.authService.verifyPassword(user.passwordHash, body.password);
       if (!isValid) {
-        return reply.status(401).send({ success: false, error: 'Invalid credentials' });
+        return reply.status(401).send({ success: false, error: "Invalid credentials" });
       }
-      const session = request.session as any;
-      session.set('user', {
+      request.session.user = {
         id: user.id,
         username: user.username,
         fullName: user.fullName,
         role: user.role,
-      });
+      };
       await this.adminUserRepo.updateLastLogin(user.id);
       return reply.send({
         success: true,
-        message: 'Login successful',
+        message: "Login successful",
         data: { id: user.id, username: user.username, fullName: user.fullName, role: user.role },
       });
     } catch (error) {
       if (error instanceof z.ZodError) {
-        return reply.status(400).send({ success: false, error: 'Invalid input', details: error.errors });
+        return reply.status(400).send({ success: false, error: "Invalid input", details: error.errors });
       }
-      return reply.status(500).send({ success: false, error: 'Login failed' });
+      return reply.status(500).send({ success: false, error: "Login failed" });
     }
   }
 
   async logout(request: FastifyRequest, reply: FastifyReply) {
-    try {
-      const session = request.session as any;
-      if (session && typeof session.destroy === 'function') {
-        session.destroy();
+    request.session.destroy((err) => {
+      if (err) {
+        return reply.status(500).send({ success: false, error: "Failed to logout" });
       }
-      return reply.send({
-        success: true,
-        message: 'Logged out successfully',
-      });
-    } catch (error) {
-      return reply.status(500).send({
-        success: false,
-        error: 'Failed to logout',
-      });
-    }
+      return reply.send({ success: true, message: "Logged out successfully" });
+    });
   }
 
   async getCurrentUser(request: FastifyRequest, reply: FastifyReply) {
     try {
-      const session = request.session as any;
-      const user = session?.get?.('user');
+      const user = request.session.user;
       if (!user) {
-        return reply.status(401).send({
-          success: false,
-          error: 'Not authenticated',
-        });
+        return reply.status(401).send({ success: false, error: "Not authenticated" });
       }
       return reply.send({ success: true, data: user });
     } catch (error) {
-      return reply.status(500).send({
-        success: false,
-        error: 'Failed to get user',
-      });
+      return reply.status(500).send({ success: false, error: "Failed to get user" });
     }
   }
 }
