@@ -1,4 +1,4 @@
-﻿import { FastifyRequest, FastifyReply } from "fastify";
+import { FastifyRequest, FastifyReply } from "fastify";
 import { AuthService } from "./service.js";
 import { AdminUserRepository } from "../../db/repositories/admin-user-repository.js";
 import { z } from "zod";
@@ -22,7 +22,7 @@ export class AuthController {
       if (!isValid) {
         return reply.status(401).send({ success: false, error: "Invalid credentials" });
       }
-      request.session.user = {
+      (request.session as any).user = {
         id: user.id,
         username: user.username,
         fullName: user.fullName,
@@ -58,7 +58,7 @@ export class AuthController {
 
   async getCurrentUser(request: FastifyRequest, reply: FastifyReply) {
     try {
-      const user = request.session.user;
+      const user = (request.session as any).user;
       if (!user) {
         return reply.status(401).send({ success: false, error: "Not authenticated" });
       }

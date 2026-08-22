@@ -1,4 +1,4 @@
-﻿import { FastifyInstance, FastifyRequest, FastifyReply } from "fastify";
+import { FastifyInstance, FastifyRequest, FastifyReply } from "fastify";
 import { AdminController } from "./controller.js";
 
 export async function adminRoutes(fastify: FastifyInstance) {
@@ -7,7 +7,7 @@ export async function adminRoutes(fastify: FastifyInstance) {
   fastify.addHook("preHandler", async (request: FastifyRequest, reply: FastifyReply) => {
     if (request.url === "/admin/login" || request.url === "/api/auth/login") return;
 
-    const user = request.session.user;
+    const user = (request.session as any).user;
     if (!user) {
       if (request.url.startsWith("/api/")) {
         return reply.status(401).send({ success: false, error: "Unauthorized" });
@@ -26,7 +26,7 @@ export async function adminRoutes(fastify: FastifyInstance) {
   fastify.get("/admin", async (request, reply) => {
     return reply.view("admin/dashboard.njk", {
       activePage: "dashboard",
-      user: request.session.user || { fullName: "Admin" }
+      user: (request.session as any).user || { fullName: "Admin" }
     });
   });
 
@@ -37,13 +37,13 @@ export async function adminRoutes(fastify: FastifyInstance) {
       const settings = await settingsService.getLocationSettings();
       return reply.view("admin/location-settings.njk", {
         activePage: "location",
-        user: request.session.user || { fullName: "Admin" },
+        user: (request.session as any).user || { fullName: "Admin" },
         settings: settings
       });
     } catch (error) {
       return reply.view("admin/location-settings.njk", {
         activePage: "location",
-        user: request.session.user || { fullName: "Admin" },
+        user: (request.session as any).user || { fullName: "Admin" },
         settings: { googleMapsEmbed: null, address: "Nairobi, Kenya", googleMapsLink: null }
       });
     }
@@ -52,14 +52,14 @@ export async function adminRoutes(fastify: FastifyInstance) {
   fastify.get("/admin/blog", async (request, reply) => {
     return reply.view("admin/blog/index.njk", {
       activePage: "blog",
-      user: request.session.user || { fullName: "Admin" }
+      user: (request.session as any).user || { fullName: "Admin" }
     });
   });
 
   fastify.get("/admin/blog/create", async (request, reply) => {
     return reply.view("admin/blog/create.njk", {
       activePage: "blog",
-      user: request.session.user || { fullName: "Admin" }
+      user: (request.session as any).user || { fullName: "Admin" }
     });
   });
 
@@ -71,7 +71,7 @@ export async function adminRoutes(fastify: FastifyInstance) {
       const post = await blogService.getPost(id);
       return reply.view("admin/blog/edit.njk", {
         activePage: "blog",
-        user: request.session.user || { fullName: "Admin" },
+        user: (request.session as any).user || { fullName: "Admin" },
         post: post
       });
     } catch (error) {
@@ -86,13 +86,13 @@ export async function adminRoutes(fastify: FastifyInstance) {
       const counselors = await therapistService.getAllTherapists();
       return reply.view("admin/counselors.njk", {
         activePage: "counselors",
-        user: request.session.user || { fullName: "Admin" },
+        user: (request.session as any).user || { fullName: "Admin" },
         counselors: counselors
       });
     } catch (error) {
       return reply.view("admin/counselors.njk", {
         activePage: "counselors",
-        user: request.session.user || { fullName: "Admin" },
+        user: (request.session as any).user || { fullName: "Admin" },
         counselors: []
       });
     }
@@ -105,13 +105,13 @@ export async function adminRoutes(fastify: FastifyInstance) {
       const services = await serviceService.getAllServices();
       return reply.view("admin/services.njk", {
         activePage: "services",
-        user: request.session.user || { fullName: "Admin" },
+        user: (request.session as any).user || { fullName: "Admin" },
         services: services
       });
     } catch (error) {
       return reply.view("admin/services.njk", {
         activePage: "services",
-        user: request.session.user || { fullName: "Admin" },
+        user: (request.session as any).user || { fullName: "Admin" },
         services: []
       });
     }
@@ -124,13 +124,13 @@ export async function adminRoutes(fastify: FastifyInstance) {
       const images = await galleryService.getAllImages();
       return reply.view("admin/gallery.njk", {
         activePage: "gallery",
-        user: request.session.user || { fullName: "Admin" },
+        user: (request.session as any).user || { fullName: "Admin" },
         images: images
       });
     } catch (error) {
       return reply.view("admin/gallery.njk", {
         activePage: "gallery",
-        user: request.session.user || { fullName: "Admin" },
+        user: (request.session as any).user || { fullName: "Admin" },
         images: []
       });
     }
@@ -143,13 +143,13 @@ export async function adminRoutes(fastify: FastifyInstance) {
       const bookings = await bookingService.getAllBookings(1, 100);
       return reply.view("admin/bookings.njk", {
         activePage: "bookings",
-        user: request.session.user || { fullName: "Admin" },
+        user: (request.session as any).user || { fullName: "Admin" },
         bookings: bookings
       });
     } catch (error) {
       return reply.view("admin/bookings.njk", {
         activePage: "bookings",
-        user: request.session.user || { fullName: "Admin" },
+        user: (request.session as any).user || { fullName: "Admin" },
         bookings: { data: [], total: 0 }
       });
     }
@@ -162,14 +162,14 @@ export async function adminRoutes(fastify: FastifyInstance) {
       const bookings = await bookingService.getAllBookings(1, 100, { status: "pending" });
       return reply.view("admin/bookings.njk", {
         activePage: "pending",
-        user: request.session.user || { fullName: "Admin" },
+        user: (request.session as any).user || { fullName: "Admin" },
         bookings: bookings,
         filter: "pending"
       });
     } catch (error) {
       return reply.view("admin/bookings.njk", {
         activePage: "pending",
-        user: request.session.user || { fullName: "Admin" },
+        user: (request.session as any).user || { fullName: "Admin" },
         bookings: { data: [], total: 0 },
         filter: "pending"
       });
@@ -179,14 +179,14 @@ export async function adminRoutes(fastify: FastifyInstance) {
   fastify.get("/admin/settings", async (request, reply) => {
     return reply.view("admin/settings.njk", {
       activePage: "settings",
-      user: request.session.user || { fullName: "Admin" }
+      user: (request.session as any).user || { fullName: "Admin" }
     });
   });
 
   fastify.get("/admin/content", async (request, reply) => {
     return reply.view("admin/content.njk", {
       activePage: "content",
-      user: request.session.user || { fullName: "Admin" }
+      user: (request.session as any).user || { fullName: "Admin" }
     });
   });
 
