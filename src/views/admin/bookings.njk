@@ -1,4 +1,4 @@
-{% extends "./admin-base.njk" %}
+﻿{% extends "admin-base.njk" %}
 
 {% block adminTitle %}{{ 'Pending Bookings' if filter == 'pending' else 'All Bookings' }}{% endblock %}
 
@@ -45,9 +45,9 @@
             </span>
           </td>
           <td style="padding: 1rem;">
-            <button class="btn-sm btn-primary" onclick="alert('View booking: {{ booking.id }}')">View</button>
+            <button class="btn-sm btn-primary" onclick="viewBooking('{{ booking.id }}')">View</button>
             {% if booking.status == 'pending' %}
-              <button class="btn-sm btn-success" onclick="alert('Confirm booking: {{ booking.id }}')">Confirm</button>
+              <button class="btn-sm btn-success" onclick="confirmBooking('{{ booking.id }}')">Confirm</button>
             {% endif %}
           </td>
         </tr>
@@ -82,5 +82,31 @@
   .status-completed { background: #d4edda; color: #155724; }
   .status-cancelled { background: #f8d7da; color: #721c24; }
 </style>
-{% endblock %}
 
+<script>
+function viewBooking(id) {
+  window.location.href = '/admin/bookings/' + id;
+}
+
+function confirmBooking(id) {
+  if (!confirm("Confirm this booking?")) return;
+  fetch('/api/bookings/' + id + '/confirm', {
+    method: 'PUT',
+    credentials: 'include',
+    headers: { 'Content-Type': 'application/json' }
+  })
+  .then(function(res) { return res.json(); })
+  .then(function(data) {
+    if (data.success) {
+      alert('Booking confirmed!');
+      window.location.reload();
+    } else {
+      alert('Failed to confirm: ' + (data.error || 'Unknown error'));
+    }
+  })
+  .catch(function() {
+    alert('Error confirming booking');
+  });
+}
+</script>
+{% endblock %}
