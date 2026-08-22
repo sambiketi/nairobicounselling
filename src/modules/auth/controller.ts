@@ -1,8 +1,9 @@
-import { FastifyRequest, FastifyReply } from "fastify";
+﻿import { FastifyRequest, FastifyReply } from "fastify";
 import { AuthService } from "./service.js";
 import { AdminUserRepository } from "../../db/repositories/admin-user-repository.js";
 import { z } from "zod";
 
+// ✅ Only username and password validation
 const loginSchema = z.object({
   username: z.string().min(3),
   password: z.string().min(8),
@@ -13,30 +14,38 @@ export class AuthController {
 
   async login(request: FastifyRequest, reply: FastifyReply) {
     try {
-      const body = loginSchema.parse(request.body);
-      const user = await this.adminUserRepo.findByUsername(body.username);
+      // ✅ Step 1: Validate username and password
+      const { username, password } = loginSchema.parse(request.body);
+      
+      // ✅ Step 2: Find user in database
+      const user = await this.adminUserRepo.findByUsername(username);
       if (!user) {
         return reply.status(401).send({ success: false, error: "Invalid credentials" });
       }
-      const isValid = await this.authService.verifyPassword(user.passwordHash, body.password);
+      
+      // ✅ Step 3: Verify password
+      const isValid = await this.authService.verifyPassword(user.passwordHash, password);
       if (!isValid) {
         return reply.status(401).send({ success: false, error: "Invalid credentials" });
       }
+      
+      // ✅ Step 4: Store user in session
       (request.session as any).user = {
         id: user.id,
         username: user.username,
         fullName: user.fullName,
         role: user.role,
       };
-      await this.adminUserRepo.updateLastLogin(user.id);
+      
+      // ✅ Step 5: Return only what's needed
       return reply.send({
         success: true,
         message: "Login successful",
-        data: { id: user.id, username: user.username, fullName: user.fullName, role: user.role },
+        username: user.username,  // ← Only username
       });
     } catch (error) {
       if (error instanceof z.ZodError) {
-        return reply.status(400).send({ success: false, error: "Invalid input", details: error.errors });
+        return reply.status(400).send({ success: false, error: "Invalid input" });
       }
       return reply.status(500).send({ success: false, error: "Login failed" });
     }
@@ -62,7 +71,14 @@ export class AuthController {
       if (!user) {
         return reply.status(401).send({ success: false, error: "Not authenticated" });
       }
-      return reply.send({ success: true, data: user });
+      return reply.send({ 
+        success: true, 
+        data: { 
+          username: user.username,
+          fullName: user.fullName,
+          role: user.role 
+        } 
+      });
     } catch (error) {
       return reply.status(500).send({ success: false, error: "Failed to get user" });
     }
