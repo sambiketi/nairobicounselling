@@ -26,27 +26,16 @@ export class AuthController {
         return reply.status(401).send({ success: false, error: "Invalid credentials" });
       }
       
-      // ✅ Use session.set() instead of direct assignment
-      request.session.set("user", {
+      // ✅ Store user data in session
+      (request.session as any).user = {
         id: user.id,
         username: user.username,
         fullName: user.fullName,
         role: user.role,
-      });
+      };
       
       console.log("✅ Session set for:", username);
       console.log("✅ Session ID:", request.session.sessionId);
-      
-      // ✅ Save session explicitly (for some Fastify Session versions)
-      if (request.session.save) {
-        await new Promise<void>((resolve, reject) => {
-          request.session.save((err) => {
-            if (err) reject(err);
-            else resolve();
-          });
-        });
-        console.log("✅ Session saved explicitly");
-      }
       
       await this.adminUserRepo.updateLastLogin(user.id);
       
@@ -79,7 +68,7 @@ export class AuthController {
 
   async getCurrentUser(request: FastifyRequest, reply: FastifyReply) {
     try {
-      const user = request.session.get("user");
+      const user = (request.session as any).user;
       console.log("🔍 Checking session:", user);
       if (!user) {
         return reply.status(401).send({ success: false, error: "Not authenticated" });
