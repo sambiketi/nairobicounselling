@@ -87,6 +87,125 @@ export async function buildApp() {
     includeViewExtension: true,
   });
 
+  // ?? Debug: Check all template files
+  app.get("/debug/templates", async (request, reply) => {
+    const fs = await import("fs");
+    const pathModule = await import("path");
+    
+    const viewsPath = pathModule.join(process.cwd(), "dist", "views");
+    
+    function getAllFiles(dir, baseDir = "") {
+      const results = [];
+      if (!fs.existsSync(dir)) return results;
+      const items = fs.readdirSync(dir);
+      for (const item of items) {
+        const fullPath = pathModule.join(dir, item);
+        const relativePath = pathModule.join(baseDir, item);
+        const stat = fs.statSync(fullPath);
+        if (stat.isDirectory()) {
+          results.push({ type: "directory", path: relativePath });
+          results.push(...getAllFiles(fullPath, relativePath));
+        } else {
+          results.push({ type: "file", path: relativePath });
+        }
+      }
+      return results;
+    }
+    
+    const allFiles = getAllFiles(viewsPath);
+    const njkFiles = allFiles.filter(f => f.type === "file" && f.path.endsWith(".njk"));
+    
+    return reply.send({
+      viewsPath: viewsPath,
+      totalFiles: allFiles.length,
+      njkFiles: njkFiles.map(f => f.path),
+      allFiles: allFiles,
+    });
+  });
+
+  // ?? Debug: Try to render user-facing templates
+  app.get("/debug/render-user", async (request, reply) => {
+    const templates = ["index.njk", "about.njk", "contact.njk", "counselors.njk", "blog.njk"];
+    const results = {};
+    
+    for (const template of templates) {
+      try {
+        await reply.view(template, { title: "Test" });
+        results[template] = { success: true };
+      } catch (error) {
+        results[template] = { 
+          success: false, 
+          error: error.message 
+        };
+      }
+    }
+    
+    return reply.send(results);
+  });
+
+  // ?? Debug: Try to render admin templates
+  app.get("/debug/render-admin", async (request, reply) => {
+    const templates = ["admin/login.njk", "admin/dashboard.njk", "admin/admin-base.njk"];
+    const results = {};
+    
+    for (const template of templates) {
+      try {
+        await reply.view(template, { title: "Test", user: { fullName: "Admin" } });
+        results[template] = { success: true };
+      } catch (error) {
+        results[template] = { 
+          success: false, 
+          error: error.message 
+        };
+      }
+    }
+    
+    return reply.send(results);
+  });
+
+  // ?? Debug: Try to render with absolute paths
+  app.get("/debug/render-absolute", async (request, reply) => {
+    const fs = await import("fs");
+    const pathModule = await import("path");
+    
+    const viewsPath = pathModule.join(process.cwd(), "dist", "views");
+    const templates = {
+      "index": pathModule.join(viewsPath, "index.njk"),
+      "admin-login": pathModule.join(viewsPath, "admin", "login.njk"),
+      "admin-dashboard": pathModule.join(viewsPath, "admin", "dashboard.njk"),
+    };
+    
+    const results = {};
+    
+    for (const [name, fullPath] of Object.entries(templates)) {
+      const exists = fs.existsSync(fullPath);
+      results[name] = { 
+        path: fullPath, 
+        exists: exists,
+        canRender: false
+      };
+      
+      if (exists) {
+        try {
+          // Try to read the file content
+          const content = fs.readFileSync(fullPath, "utf8");
+          results[name].contentLength = content.length;
+          results[name].firstLine = content.split("\n")[0];
+          
+          // Try to render
+          const relativePath = name === "index" ? "index.njk" : `admin/${name.replace("admin-", "")}.njk`;
+          await reply.view(relativePath, { title: "Test", user: { fullName: "Admin" } });
+          results[name].canRender = true;
+        } catch (error) {
+          results[name].canRender = false;
+          results[name].error = error.message;
+        }
+      }
+    }
+    
+    return reply.send(results);
+  });
+
   await app.register(fastifyStatic, {
     root: path.join(__dirname, 'public'),
     prefix: '/public/',
