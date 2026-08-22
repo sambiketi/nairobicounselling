@@ -1,4 +1,4 @@
-﻿{% extends "../admin-base.njk" %}
+{% extends "./admin-base.njk" %}
 
 {% block adminTitle %}Manage Resources{% endblock %}
 
@@ -76,7 +76,7 @@ document.addEventListener('DOMContentLoaded', function() {
             <td style="padding: 1rem;"><strong>${post.title}</strong></td>
             <td style="padding: 1rem;">
               <span class="status-badge ${post.isPublished ? 'status-published' : 'status-draft'}">
-                ${post.isPublished ? '✅ Published' : '📝 Draft'}
+                ${post.isPublished ? '? Published' : '?? Draft'}
               </span>
             </td>
             <td style="padding: 1rem; color: #666;">${new Date(post.createdAt).toLocaleDateString()}</td>
@@ -95,7 +95,7 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     } catch (error) {
       console.error('Error loading posts:', error);
-      document.getElementById('loading').textContent = '❌ Error loading resources';
+      document.getElementById('loading').textContent = '? Error loading resources';
     }
   }
 

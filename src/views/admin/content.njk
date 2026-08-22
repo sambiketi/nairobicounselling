@@ -1,4 +1,4 @@
-﻿{% extends "admin-base.njk" %}
+{% extends "./admin-base.njk" %}
 
 {% block adminTitle %}Site Content Management{% endblock %}
 
@@ -79,11 +79,11 @@
       </div>
       <div style="margin-bottom: 1rem;">
         <label style="display: block; font-weight: bold; color: #4A3528; margin-bottom: 0.3rem;">Copyright Text</label>
-        <input type="text" id="copyright_text" name="copyright_text" placeholder="© 2026 Nairobi Counseling Center" style="width: 100%; padding: 0.8rem; border: 2px solid #E8D5B8; border-radius: 8px; font-size: 1rem;">
+        <input type="text" id="copyright_text" name="copyright_text" placeholder="� 2026 Nairobi Counseling Center" style="width: 100%; padding: 0.8rem; border: 2px solid #E8D5B8; border-radius: 8px; font-size: 1rem;">
       </div>
 
       <button type="submit" class="btn-primary" style="width: 100%; padding: 1rem; margin-top: 1rem; background: linear-gradient(145deg, #C9A87C, #B8966A); color: #4A3528; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 1.1rem;">
-        💾 Save All Content
+        ?? Save All Content
       </button>
     </form>
   </div>
@@ -142,7 +142,7 @@ document.getElementById('contentFormSubmit').addEventListener('submit', async fu
   }
 
   const submitBtn = this.querySelector('.btn-primary');
-  submitBtn.textContent = '⏳ Saving...';
+  submitBtn.textContent = '? Saving...';
   submitBtn.disabled = true;
 
   try {
@@ -156,7 +156,7 @@ document.getElementById('contentFormSubmit').addEventListener('submit', async fu
     
     if (result.success) {
       alert.className = 'alert alert-success';
-      alert.textContent = '✅ Content saved successfully!';
+      alert.textContent = '? Content saved successfully!';
       alert.style.display = 'block';
       alert.style.background = '#d4edda';
       alert.style.color = '#155724';
@@ -166,7 +166,7 @@ document.getElementById('contentFormSubmit').addEventListener('submit', async fu
       alert.style.marginBottom = '1rem';
     } else {
       alert.className = 'alert alert-error';
-      alert.textContent = '❌ Error: ' + (result.error || 'Failed to save content');
+      alert.textContent = '? Error: ' + (result.error || 'Failed to save content');
       alert.style.display = 'block';
       alert.style.background = '#f8d7da';
       alert.style.color = '#721c24';
@@ -177,7 +177,7 @@ document.getElementById('contentFormSubmit').addEventListener('submit', async fu
     }
   } catch (error) {
     alert.className = 'alert alert-error';
-    alert.textContent = '❌ Network error: ' + error.message;
+    alert.textContent = '? Network error: ' + error.message;
     alert.style.display = 'block';
     alert.style.background = '#f8d7da';
     alert.style.color = '#721c24';
@@ -186,7 +186,7 @@ document.getElementById('contentFormSubmit').addEventListener('submit', async fu
     alert.style.borderRadius = '8px';
     alert.style.marginBottom = '1rem';
   } finally {
-    submitBtn.textContent = '💾 Save All Content';
+    submitBtn.textContent = '?? Save All Content';
     submitBtn.disabled = false;
   }
 });

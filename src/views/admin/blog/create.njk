@@ -1,4 +1,4 @@
-﻿{% extends "../admin-base.njk" %}
+{% extends "./admin-base.njk" %}
 
 {% block title %}Create Resource - Admin{% endblock %}
 
@@ -129,7 +129,7 @@
 
 {% block content %}
 <div class="admin-container">
-  <h1>📝 Create New Resource</h1>
+  <h1>?? Create New Resource</h1>
   <p class="subtitle">Share knowledge and insights with your audience</p>
 
   <div id="alert" class="alert"></div>
@@ -145,7 +145,7 @@
       <label for="slug">Slug (URL)</label>
       <input type="text" id="slug" name="slug" placeholder="enter-url-friendly-slug" required>
       <div class="hint">URL-friendly version of the title (e.g., understanding-anxiety)</div>
-      <div class="slug-preview">🔗 Preview: /blog/<span id="slugPreview">your-slug</span></div>
+      <div class="slug-preview">?? Preview: /blog/<span id="slugPreview">your-slug</span></div>
     </div>
 
     <div class="form-group">
@@ -184,7 +184,7 @@
     </div>
 
     <div class="form-actions">
-      <button type="submit" class="btn-primary">💾 Create Resource</button>
+      <button type="submit" class="btn-primary">?? Create Resource</button>
       <a href="/admin/blog" class="btn-secondary">Cancel</a>
     </div>
   </form>
@@ -233,7 +233,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Show loading
     const submitBtn = form.querySelector('.btn-primary');
-    submitBtn.textContent = '⏳ Creating...';
+    submitBtn.textContent = '? Creating...';
     submitBtn.disabled = true;
 
     try {
@@ -250,7 +250,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
       if (result.success) {
         alert.className = 'alert alert-success';
-        alert.textContent = '✅ Resource created successfully!';
+        alert.textContent = '? Resource created successfully!';
         alert.style.display = 'block';
         
         setTimeout(() => {
@@ -258,16 +258,16 @@ document.addEventListener('DOMContentLoaded', function() {
         }, 1500);
       } else {
         alert.className = 'alert alert-error';
-        alert.textContent = '❌ Error: ' + (result.error || 'Failed to create resource');
+        alert.textContent = '? Error: ' + (result.error || 'Failed to create resource');
         alert.style.display = 'block';
-        submitBtn.textContent = '💾 Create Resource';
+        submitBtn.textContent = '?? Create Resource';
         submitBtn.disabled = false;
       }
     } catch (error) {
       alert.className = 'alert alert-error';
-      alert.textContent = '❌ Network error: ' + error.message;
+      alert.textContent = '? Network error: ' + error.message;
       alert.style.display = 'block';
-      submitBtn.textContent = '💾 Create Resource';
+      submitBtn.textContent = '?? Create Resource';
       submitBtn.disabled = false;
     }
   });

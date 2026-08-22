@@ -1,4 +1,4 @@
-﻿{% extends "admin-base.njk" %}
+{% extends "./admin-base.njk" %}
 
 {% block adminTitle %}Location Settings{% endblock %}
 
@@ -9,7 +9,7 @@
     <ol style="margin-top: 0.5rem; padding-left: 1.5rem;">
       <li>Go to <a href="https://maps.google.com" target="_blank">Google Maps</a></li>
       <li>Search for your location</li>
-      <li>Click "Share" → "Embed a map"</li>
+      <li>Click "Share" ? "Embed a map"</li>
       <li>Copy the iframe code</li>
       <li>Paste it below</li>
     </ol>
@@ -52,7 +52,7 @@
     </div>
 
     <button type="submit" id="saveBtn" style="width: 100%; padding: 1rem; margin-top: 1.5rem; background: linear-gradient(145deg, #C9A87C, #B8966A); color: #4A3528; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 1.1rem;">
-      💾 Save Location Settings
+      ?? Save Location Settings
     </button>
   </form>
 </div>
@@ -76,7 +76,7 @@ document.addEventListener('DOMContentLoaded', function() {
     e.preventDefault();
     
     saveBtn.disabled = true;
-    saveBtn.textContent = '⏳ Saving...';
+    saveBtn.textContent = '? Saving...';
     alert.style.display = 'none';
 
     const formData = new FormData(form);
@@ -98,7 +98,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
       if (result.success) {
         alert.className = 'alert alert-success';
-        alert.textContent = '✅ Location settings saved successfully!';
+        alert.textContent = '? Location settings saved successfully!';
         alert.style.display = 'block';
         alert.style.background = '#d4edda';
         alert.style.color = '#155724';
@@ -108,7 +108,7 @@ document.addEventListener('DOMContentLoaded', function() {
         alert.style.marginBottom = '1rem';
       } else {
         alert.className = 'alert alert-error';
-        alert.textContent = '❌ Error: ' + (result.error || 'Failed to save settings');
+        alert.textContent = '? Error: ' + (result.error || 'Failed to save settings');
         alert.style.display = 'block';
         alert.style.background = '#f8d7da';
         alert.style.color = '#721c24';
@@ -119,7 +119,7 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     } catch (error) {
       alert.className = 'alert alert-error';
-      alert.textContent = '❌ Network error: ' + error.message;
+      alert.textContent = '? Network error: ' + error.message;
       alert.style.display = 'block';
       alert.style.background = '#f8d7da';
       alert.style.color = '#721c24';
@@ -129,7 +129,7 @@ document.addEventListener('DOMContentLoaded', function() {
       alert.style.marginBottom = '1rem';
     } finally {
       saveBtn.disabled = false;
-      saveBtn.textContent = '💾 Save Location Settings';
+      saveBtn.textContent = '?? Save Location Settings';
     }
   });
 });

@@ -1,4 +1,4 @@
-﻿{% extends "../admin-base.njk" %}
+{% extends "./admin-base.njk" %}
 
 {% block title %}Edit Resource - Admin{% endblock %}
 
@@ -133,7 +133,7 @@
 
 {% block content %}
 <div class="admin-container">
-  <h1>✏️ Edit Resource</h1>
+  <h1>?? Edit Resource</h1>
   <p class="subtitle">Update your resource content</p>
 
   <div id="loading" class="loading">
@@ -154,7 +154,7 @@
         <label for="slug">Slug (URL)</label>
         <input type="text" id="slug" name="slug" placeholder="enter-url-friendly-slug" required>
         <div class="hint">URL-friendly version of the title</div>
-        <div class="slug-preview">🔗 Preview: /blog/<span id="slugPreview">your-slug</span></div>
+        <div class="slug-preview">?? Preview: /blog/<span id="slugPreview">your-slug</span></div>
       </div>
 
       <div class="form-group">
@@ -193,7 +193,7 @@
       </div>
 
       <div class="form-actions">
-        <button type="submit" class="btn-primary">💾 Update Resource</button>
+        <button type="submit" class="btn-primary">?? Update Resource</button>
         <a href="/admin/blog" class="btn-secondary">Cancel</a>
       </div>
     </form>
@@ -258,7 +258,7 @@ document.addEventListener('DOMContentLoaded', function() {
     };
 
     const submitBtn = form.querySelector('.btn-primary');
-    submitBtn.textContent = '⏳ Updating...';
+    submitBtn.textContent = '? Updating...';
     submitBtn.disabled = true;
 
     try {
@@ -275,7 +275,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
       if (result.success) {
         alert.className = 'alert alert-success';
-        alert.textContent = '✅ Resource updated successfully!';
+        alert.textContent = '? Resource updated successfully!';
         alert.style.display = 'block';
         
         setTimeout(() => {
@@ -283,16 +283,16 @@ document.addEventListener('DOMContentLoaded', function() {
         }, 1500);
       } else {
         alert.className = 'alert alert-error';
-        alert.textContent = '❌ Error: ' + (result.error || 'Failed to update resource');
+        alert.textContent = '? Error: ' + (result.error || 'Failed to update resource');
         alert.style.display = 'block';
-        submitBtn.textContent = '💾 Update Resource';
+        submitBtn.textContent = '?? Update Resource';
         submitBtn.disabled = false;
       }
     } catch (error) {
       alert.className = 'alert alert-error';
-      alert.textContent = '❌ Network error: ' + error.message;
+      alert.textContent = '? Network error: ' + error.message;
       alert.style.display = 'block';
-      submitBtn.textContent = '💾 Update Resource';
+      submitBtn.textContent = '?? Update Resource';
       submitBtn.disabled = false;
     }
   });
