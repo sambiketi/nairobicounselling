@@ -58,6 +58,9 @@ export async function buildApp() {
     path: '/',
     domain: env.NODE_ENV === 'production' ? '.render.com' : undefined,
   },
+  expires: 24 * 60 * 60 * 1000,
+  rolling: true,
+  saveUninitialized: true,
 });
 
   // 🔍 Diagnostic route to check session
@@ -229,4 +232,3 @@ export async function buildApp() {
 
   return app;
 }
-

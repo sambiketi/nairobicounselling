@@ -6,40 +6,39 @@ export async function adminRoutes(fastify: FastifyInstance) {
 
   // ✅ CORRECT: Direct session access
   fastify.addHook("preHandler", async (request: FastifyRequest, reply: FastifyReply) => {
-  console.log("========================================");
-  console.log("🛡️ ADMIN MIDDLEWARE");
-  console.log("========================================");
-  console.log("📍 URL:", request.url);
-  console.log("📍 Method:", request.method);
-  console.log("🆔 Session ID:", request.session.sessionId);
-  console.log("🍪 Has Cookie:", !!request.headers.cookie);
-  console.log("🔍 Session Keys:", Object.keys(request.session));
-  
-  // Skip auth for login page and login API
-  if (request.url === "/admin/login" || request.url === "/api/auth/login") {
-    console.log("⏭️ SKIP auth for:", request.url);
     console.log("========================================");
-    return;
-  }
-
-  const user = request.session.user;
-  console.log("👤 Session user:", user);
-  
-  if (!user) {
-    console.log("❌ NO SESSION - Redirecting to login");
+    console.log("🛡️ ADMIN MIDDLEWARE");
     console.log("========================================");
-    if (request.url.startsWith("/api/")) {
-      return reply.status(401).send({
-        success: false,
-        error: "Unauthorized",
-      });
+    console.log("📍 URL:", request.url);
+    console.log("📍 Method:", request.method);
+    console.log("🆔 Session ID:", request.session.sessionId);
+    
+    // Skip auth for login page and login API
+    if (request.url === "/admin/login" || request.url === "/api/auth/login") {
+      console.log("⏭️ SKIP auth for:", request.url);
+      console.log("========================================");
+      return;
     }
-    return reply.redirect("/admin/login");
-  }
-  
-  console.log("✅ SESSION FOUND - User:", user.username);
-  console.log("========================================");
-});
+
+    // ✅ CORRECT: Direct property access
+    const user = request.session.user;
+    console.log("👤 Session user:", user);
+    
+    if (!user) {
+      console.log("❌ NO SESSION - Redirecting to login");
+      console.log("========================================");
+      if (request.url.startsWith("/api/")) {
+        return reply.status(401).send({
+          success: false,
+          error: "Unauthorized",
+        });
+      }
+      return reply.redirect("/admin/login");
+    }
+    
+    console.log("✅ SESSION FOUND - User:", user.username);
+    console.log("========================================");
+  });
 
   // Login page
   fastify.get("/admin/login", async (request, reply) => {
@@ -207,4 +206,3 @@ export async function adminRoutes(fastify: FastifyInstance) {
     });
   });
 }
-

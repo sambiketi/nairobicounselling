@@ -1,0 +1,766 @@
+﻿{% extends "base.njk" %}
+
+{% block title %}Nairobi Counseling Center - Professional Counseling Services{% endblock %}
+
+{% block head %}
+<style>
+  .contact-section-home {
+    padding: 3rem 2rem;
+    background: linear-gradient(145deg, #FDF8F3, #F5EDE6);
+    border-top: 1px solid #E8D5B8;
+    border-bottom: 1px solid #E8D5B8;
+  }
+  .contact-section-home h2 {
+    text-align: center;
+    color: #4A3528;
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+  }
+  .contact-section-home h2::after {
+    content: '';
+    display: block;
+    width: 60px;
+    height: 4px;
+    background: linear-gradient(90deg, #C9A87C, #E8D5B8);
+    margin: 0.5rem auto;
+    border-radius: 2px;
+  }
+  .contact-section-home .subtitle {
+    text-align: center;
+    color: #666;
+    margin-bottom: 2rem;
+    font-size: 1.1rem;
+  }
+  .contact-home-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  .contact-home-info {
+    background: white;
+    padding: 2rem;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    border-left: 4px solid #C9A87C;
+  }
+  .contact-home-info h3 {
+    color: #4A3528;
+    margin-bottom: 0.5rem;
+  }
+  .contact-home-info p {
+    color: #666;
+    margin-bottom: 0.5rem;
+    line-height: 1.6;
+  }
+  .contact-home-info .contact-item {
+    margin-bottom: 1.5rem;
+  }
+  .contact-home-info .contact-item i {
+    color: #C9A87C;
+    width: 24px;
+    margin-right: 0.5rem;
+  }
+  .contact-home-map {
+    background: white;
+    padding: 0;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    border: 3px solid #C9A87C;
+    height: 100%;
+    min-height: 350px;
+  }
+  .contact-home-map iframe {
+    width: 100%;
+    height: 100%;
+    min-height: 350px;
+    border: 0;
+  }
+  .open-map-btn {
+    display: inline-block;
+    margin-top: 1rem;
+    padding: 0.7rem 1.5rem;
+    background: linear-gradient(145deg, #C9A87C, #B8966A);
+    color: #4A3528;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    font-size: 0.95rem;
+  }
+  .open-map-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(201, 168, 124, 0.4);
+  }
+
+  /* Blog Carousel Styles */
+  .blog-carousel-section {
+    padding: 3rem 2rem;
+    background: white;
+  }
+  .blog-carousel-section h2 {
+    text-align: center;
+    color: #4A3528;
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+  }
+  .blog-carousel-section h2::after {
+    content: '';
+    display: block;
+    width: 60px;
+    height: 4px;
+    background: linear-gradient(90deg, #C9A87C, #E8D5B8);
+    margin: 0.5rem auto;
+    border-radius: 2px;
+  }
+  .blog-carousel-section .subtitle {
+    text-align: center;
+    color: #666;
+    margin-bottom: 2rem;
+    font-size: 1.1rem;
+  }
+  
+  .blog-carousel-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    position: relative;
+    overflow: hidden;
+    padding: 0 40px;
+  }
+  
+  .blog-carousel-track {
+    display: flex;
+    transition: transform 0.5s ease-in-out;
+    gap: 2rem;
+  }
+  
+  .blog-carousel-slide {
+    min-width: calc(33.333% - 1.33rem);
+    flex-shrink: 0;
+    background: #f8f9fa;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    transition: transform 0.3s ease;
+  }
+  
+  .blog-carousel-slide:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+  }
+  
+  .blog-slide-content {
+    padding: 1.5rem;
+  }
+  
+  .blog-slide-content h3 {
+    color: #4A3528;
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    min-height: 3.2rem;
+  }
+  
+  .blog-slide-content .blog-excerpt {
+    color: #666;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    min-height: 4.8rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .blog-slide-content .blog-meta {
+    color: #999;
+    font-size: 0.85rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .blog-slide-content .read-more {
+    display: inline-block;
+    color: #C9A87C;
+    font-weight: bold;
+    text-decoration: none;
+    transition: color 0.3s ease;
+  }
+  
+  .blog-slide-content .read-more:hover {
+    color: #B8966A;
+    text-decoration: underline;
+  }
+  
+  .blog-slide-content .read-more i {
+    transition: transform 0.3s ease;
+    margin-left: 0.3rem;
+  }
+  
+  .blog-slide-content .read-more:hover i {
+    transform: translateX(5px);
+  }
+  
+  /* Carousel Navigation */
+  .carousel-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    background: linear-gradient(145deg, #C9A87C, #B8966A);
+    color: #4A3528;
+    border: none;
+    cursor: pointer;
+    font-size: 1.2rem;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .carousel-btn:hover {
+    transform: translateY(-50%) scale(1.1);
+    box-shadow: 0 4px 20px rgba(201, 168, 124, 0.4);
+  }
+  
+  .carousel-btn.prev {
+    left: -10px;
+  }
+  
+  .carousel-btn.next {
+    right: -10px;
+  }
+  
+  .carousel-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+    transform: translateY(-50%) scale(0.95);
+  }
+  
+  .carousel-dots {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-top: 1.5rem;
+  }
+  
+  .carousel-dots .dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #ddd;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    padding: 0;
+  }
+  
+  .carousel-dots .dot.active {
+    background: #C9A87C;
+    transform: scale(1.2);
+  }
+  
+  .carousel-dots .dot:hover {
+    background: #C9A87C;
+  }
+
+  .cta-section {
+    text-align: center;
+    padding: 3rem 2rem;
+    background: linear-gradient(135deg, #4A3528 0%, #6B4F3A 50%, #4A3528 100%);
+    color: white;
+  }
+  .cta-section h2 {
+    color: #FDF8F3;
+    font-size: 2.5rem;
+  }
+  .cta-section p {
+    color: #E8D5B8;
+    margin-bottom: 1.5rem;
+    font-size: 1.1rem;
+  }
+  .cta-section .book-now {
+    background: linear-gradient(145deg, #C9A87C, #B8966A);
+    color: #4A3528;
+    border: none;
+    padding: 1rem 3rem;
+    font-size: 1.2rem;
+    border-radius: 50px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 20px rgba(201, 168, 124, 0.4);
+  }
+  .cta-section .book-now:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 30px rgba(201, 168, 124, 0.5);
+  }
+
+  /* View All Blog Link */
+  .view-all-blog {
+    text-align: center;
+    margin-top: 2rem;
+  }
+  .view-all-blog a {
+    display: inline-block;
+    padding: 0.8rem 2rem;
+    background: transparent;
+    color: #C9A87C;
+    border: 2px solid #C9A87C;
+    border-radius: 50px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: all 0.3s ease;
+  }
+  .view-all-blog a:hover {
+    background: #C9A87C;
+    color: #4A3528;
+  }
+
+  @media (max-width: 1024px) {
+    .blog-carousel-slide {
+      min-width: calc(50% - 1rem);
+    }
+  }
+
+  @media (max-width: 768px) {
+    .contact-home-grid {
+      grid-template-columns: 1fr;
+    }
+    .contact-home-map {
+      min-height: 250px;
+      order: -1;
+    }
+    .contact-home-map iframe {
+      min-height: 250px;
+    }
+    .blog-carousel-slide {
+      min-width: calc(100%);
+    }
+    .blog-carousel-container {
+      padding: 0 15px;
+    }
+    .carousel-btn {
+      width: 35px;
+      height: 35px;
+      font-size: 1rem;
+    }
+    .carousel-btn.prev {
+      left: -5px;
+    }
+    .carousel-btn.next {
+      right: -5px;
+    }
+    .hero h1 {
+      font-size: 2.5rem;
+    }
+    .cta-section h2 {
+      font-size: 2rem;
+    }
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero">
+  <div class="hero-content">
+    <h1>You Are Not Alone</h1>
+    <p>Professional counseling services in a safe, confidential, and supportive environment</p>
+    <p style="font-size: 1.1rem; margin-bottom: 2rem; color: #F4E5B2;">Hope begins here. Healing starts now.</p>
+    <div class="hero-buttons">
+      <button class="book-now" onclick="openBooking()">Start Your Journey Today</button>
+      <a href="/about" class="learn-more">Learn More →</a>
+    </div>
+  </div>
+</section>
+
+<!-- Services Section -->
+<section class="services">
+  <h2>You Are Stronger Than You Know</h2>
+  <p style="text-align:center; color: #666; margin-bottom: 2rem; font-size: 1.1rem;">We believe in your healing journey. Here's how we can support you:</p>
+  <div class="service-grid">
+    <div class="service-card">
+      <i class="fas fa-heart" style="color: #D4AF37; font-size: 2.5rem; margin-bottom: 1rem;"></i>
+      <h3>Individual Therapy</h3>
+      <p>One-on-one support tailored to your unique journey</p>
+      <div class="hope-message">"You are worthy of healing"</div>
+    </div>
+    <div class="service-card">
+      <i class="fas fa-users" style="color: #D4AF37; font-size: 2.5rem; margin-bottom: 1rem;"></i>
+      <h3>Couples Counseling</h3>
+      <p>Strengthen relationships through guided healing</p>
+      <div class="hope-message">"Together, we can rebuild"</div>
+    </div>
+    <div class="service-card">
+      <i class="fas fa-child" style="color: #D4AF37; font-size: 2.5rem; margin-bottom: 1rem;"></i>
+      <h3>Youth & Teen Therapy</h3>
+      <p>Supporting the next generation of resilient minds</p>
+      <div class="hope-message">"Your voice matters"</div>
+    </div>
+    <div class="service-card">
+      <i class="fas fa-brain" style="color: #D4AF37; font-size: 2.5rem; margin-bottom: 1rem;"></i>
+      <h3>Trauma Counseling</h3>
+      <p>Healing from past experiences in a safe space</p>
+      <div class="hope-message">"Healing is possible"</div>
+    </div>
+    <div class="service-card">
+      <i class="fas fa-hand-holding-heart" style="color: #D4AF37; font-size: 2.5rem; margin-bottom: 1rem;"></i>
+      <h3>Grief Counseling</h3>
+      <p>Compassionate support through loss and bereavement</p>
+      <div class="hope-message">"It's okay to not be okay"</div>
+    </div>
+    <div class="service-card">
+      <i class="fas fa-cloud-sun" style="color: #D4AF37; font-size: 2.5rem; margin-bottom: 1rem;"></i>
+      <h3>Anxiety & Depression</h3>
+      <p>Evidence-based treatment for mood disorders</p>
+      <div class="hope-message">"There is hope beyond the storm"</div>
+    </div>
+  </div>
+</section>
+
+<!-- Testimonials Section -->
+<section class="testimonials">
+  <h2>Real Stories, Real Healing</h2>
+  <div class="testimonials-grid">
+    <div class="testimonial-card">
+      <div class="testimonial-text">
+        "I came here feeling broken and hopeless. Today, I feel like I can breathe again. Thank you for giving me back my life."
+      </div>
+      <div class="testimonial-author">— Sarah, Client</div>
+    </div>
+    <div class="testimonial-card">
+      <div class="testimonial-text">
+        "The counselors here truly care. They listened without judgment and helped me find the strength I didn't know I had."
+      </div>
+      <div class="testimonial-author">— James, Client</div>
+    </div>
+    <div class="testimonial-card">
+      <div class="testimonial-text">
+        "I was skeptical at first, but the support I received transformed my relationship with my family and myself."
+      </div>
+      <div class="testimonial-author">— Mary, Client</div>
+    </div>
+  </div>
+</section>
+
+<!-- Blog Carousel Section -->
+{% if blogPosts and blogPosts.length > 0 %}
+<section class="blog-carousel-section">
+  <h2>Resources & Insights</h2>
+  <p class="subtitle">Articles and tips for your mental wellness journey</p>
+  
+  <div class="blog-carousel-container">
+    <button class="carousel-btn prev" id="prevBtn" aria-label="Previous">
+      <i class="fas fa-chevron-left"></i>
+    </button>
+    
+    <div class="blog-carousel-track" id="blogTrack">
+      {% for post in blogPosts %}
+      <div class="blog-carousel-slide">
+        {% if post.imageUrl %}
+          <div class="blog-slide-image">
+            <img src="{{ post.imageUrl }}" alt="{{ post.title }}" loading="lazy" onerror="this.style.display='none'">
+          </div>
+        {% endif %}
+        <div class="blog-slide-content">
+          <div class="blog-meta">
+            <i class="far fa-calendar-alt"></i> {{ post.publishedAt or "August 2026" }}
+          </div>
+          <h3>{{ post.title }}</h3>
+          <p class="blog-excerpt">{{ post.excerpt or post.content|truncate(120) }}</p>
+          <a href="/blog/{{ post.slug }}" class="read-more">
+            Read More <i class="fas fa-arrow-right"></i>
+          </a>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    
+    <button class="carousel-btn next" id="nextBtn" aria-label="Next">
+      <i class="fas fa-chevron-right"></i>
+    </button>
+  </div>
+  
+  <div class="carousel-dots" id="carouselDots"></div>
+  
+  <div class="view-all-blog">
+    <a href="/blog">View All Resources →</a>
+  </div>
+</section>
+{% endif %}
+        <div class="blog-slide-content">
+          <div class="blog-meta">
+            <i class="far fa-calendar-alt"></i> {{ post.publishedAt or "August 2026" }}
+          </div>
+          <h3>{{ post.title }}</h3>
+          <p class="blog-excerpt">{{ post.excerpt or post.content|truncate(120) }}</p>
+          <a href="/blog/{{ post.slug }}" class="read-more">
+            Read More <i class="fas fa-arrow-right"></i>
+          </a>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    
+    <button class="carousel-btn next" id="nextBtn" aria-label="Next">
+      <i class="fas fa-chevron-right"></i>
+    </button>
+  </div>
+  
+  <div class="carousel-dots" id="carouselDots"></div>
+  
+  <div class="view-all-blog">
+    <a href="/blog">View All Resources →</a>
+  </div>
+</section>
+{% endif %}
+
+<!-- Contact & Map Section on Homepage -->
+<section class="contact-section-home">
+  <h2>Visit Our Location</h2>
+  <p class="subtitle">We're here to support you in person</p>
+  
+  <div class="contact-home-grid">
+    <div class="contact-home-info">
+      <div class="contact-item">
+        <i class="fas fa-map-marker-alt"></i>
+        <strong>Address</strong>
+        <p>{{ location.address or 'Nairobi, Kenya' }}</p>
+      </div>
+      
+      <div class="contact-item">
+        <i class="fas fa-phone"></i>
+        <strong>Phone</strong>
+        <p>+254 700 000 000</p>
+        <p style="font-size: 0.9rem; color: #999;">Crisis Hotline: 1190</p>
+      </div>
+      
+      <div class="contact-item">
+        <i class="fas fa-envelope"></i>
+        <strong>Email</strong>
+        <p>info@nairobiologycounseling.com</p>
+      </div>
+      
+      <div class="contact-item">
+        <i class="fas fa-clock"></i>
+        <strong>Hours</strong>
+        <p>Mon-Fri: 8:00 AM - 8:00 PM</p>
+        <p>Sat: 9:00 AM - 5:00 PM</p>
+        <p style="color: #999;">Sun: Closed</p>
+      </div>
+
+      {% if location.googleMapsLink %}
+        <a href="{{ location.googleMapsLink }}" target="_blank" class="open-map-btn">
+          <i class="fas fa-directions"></i> Get Directions
+        </a>
+      {% endif %}
+      
+      <div style="margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid #E8D5B8;">
+        <a href="/contact" style="color: #C9A87C; text-decoration: none; font-weight: bold;">
+          View Full Contact Page <i class="fas fa-arrow-right"></i>
+        </a>
+      </div>
+    </div>
+    
+    <div class="contact-home-map">
+      {% if location.googleMapsEmbed %}
+        {{ location.googleMapsEmbed | safe }}
+      {% else %}
+        <iframe
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d255282.35853743783!2d36.68219667531816!3d-1.3028611!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x182f1172d84d49a7%3A0xf7cf0254b297924c!2sNairobi%2C%20Kenya!5e0!3m2!1sen!2sus!4v1700000000000!5m2!1sen!2sus"
+          allowfullscreen=""
+          loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade">
+        </iframe>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+<!-- Healing Quote Section -->
+<section class="healing-quote">
+  <div class="quote-container">
+    <blockquote>
+      "The darkest hour has only sixty minutes."
+    </blockquote>
+    <cite>— African Proverb</cite>
+  </div>
+</section>
+
+<!-- Call to Action Section -->
+<section class="cta-section">
+  <h2>Ready to Begin Your Journey?</h2>
+  <p>You don't have to face life's challenges alone. We're here to walk with you.</p>
+  <button class="book-now" onclick="openBooking()">Start Your Healing Journey Today</button>
+</section>
+
+<!-- Booking Modal -->
+
+  </div>
+</div>
+
+<script>
+function openBooking() {
+  document.getElementById('bookingModal').style.display = 'flex';
+}
+function closeBooking() {
+  document.getElementById('bookingModal').style.display = 'none';
+}
+
+// Blog Carousel Logic
+document.addEventListener('DOMContentLoaded', function() {
+  const track = document.getElementById('blogTrack');
+  const slides = track.querySelectorAll('.blog-carousel-slide');
+  const prevBtn = document.getElementById('prevBtn');
+  const nextBtn = document.getElementById('nextBtn');
+  const dotsContainer = document.getElementById('carouselDots');
+  
+  if (!track || slides.length === 0) return;
+  
+  let currentIndex = 0;
+  let slidesPerView = getSlidesPerView();
+  const totalSlides = slides.length;
+  const maxIndex = Math.max(0, totalSlides - slidesPerView);
+  
+  // Create dots
+  const totalDots = Math.ceil(totalSlides / slidesPerView);
+  for (let i = 0; i < totalDots; i++) {
+    const dot = document.createElement('button');
+    dot.className = 'dot' + (i === 0 ? ' active' : '');
+    dot.setAttribute('data-index', i);
+    dot.addEventListener('click', function() {
+      goToSlide(i * slidesPerView);
+    });
+    dotsContainer.appendChild(dot);
+  }
+  
+  function getSlidesPerView() {
+    if (window.innerWidth < 768) return 1;
+    if (window.innerWidth < 1024) return 2;
+    return 3;
+  }
+  
+  function updateCarousel() {
+    const slideWidth = slides[0].offsetWidth + 32; // width + gap
+    const offset = currentIndex * slideWidth;
+    track.style.transform = 'translateX(-' + offset + 'px)';
+    
+    // Update dots
+    const dotIndex = Math.floor(currentIndex / slidesPerView);
+    document.querySelectorAll('.dot').forEach((dot, i) => {
+      dot.classList.toggle('active', i === dotIndex);
+    });
+    
+    // Update buttons
+    prevBtn.disabled = currentIndex === 0;
+    nextBtn.disabled = currentIndex >= maxIndex;
+  }
+  
+  function goToSlide(index) {
+    currentIndex = Math.max(0, Math.min(index, maxIndex));
+    updateCarousel();
+  }
+  
+  function nextSlide() {
+    if (currentIndex < maxIndex) {
+      goToSlide(currentIndex + slidesPerView);
+    }
+  }
+  
+  function prevSlide() {
+    if (currentIndex > 0) {
+      goToSlide(currentIndex - slidesPerView);
+    }
+  }
+  
+  // Event listeners
+  nextBtn.addEventListener('click', nextSlide);
+  prevBtn.addEventListener('click', prevSlide);
+  
+  // Keyboard navigation
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'ArrowRight') nextSlide();
+    if (e.key === 'ArrowLeft') prevSlide();
+  });
+  
+  // Handle window resize
+  let resizeTimeout;
+  window.addEventListener('resize', function() {
+    clearTimeout(resizeTimeout);
+    resizeTimeout = setTimeout(function() {
+      const newSlidesPerView = getSlidesPerView();
+      if (newSlidesPerView !== slidesPerView) {
+        slidesPerView = newSlidesPerView;
+        const newMaxIndex = Math.max(0, totalSlides - slidesPerView);
+        if (currentIndex > newMaxIndex) {
+          currentIndex = newMaxIndex;
+        }
+        updateCarousel();
+      }
+    }, 200);
+  });
+  
+  // Touch support for mobile
+  let touchStartX = 0;
+  let touchEndX = 0;
+  
+  track.addEventListener('touchstart', function(e) {
+    touchStartX = e.changedTouches[0].screenX;
+  }, { passive: true });
+  
+  track.addEventListener('touchend', function(e) {
+    touchEndX = e.changedTouches[0].screenX;
+    const diff = touchStartX - touchEndX;
+    if (Math.abs(diff) > 50) {
+      if (diff > 0) nextSlide();
+      else prevSlide();
+    }
+  }, { passive: true });
+  
+  // Auto-play (pause on hover)
+  let autoplayInterval;
+  
+  function startAutoplay() {
+    if (autoplayInterval) clearInterval(autoplayInterval);
+    autoplayInterval = setInterval(() => {
+      if (currentIndex < maxIndex) {
+        nextSlide();
+      } else {
+        goToSlide(0);
+      }
+    }, 5000);
+  }
+  
+  function stopAutoplay() {
+    if (autoplayInterval) {
+      clearInterval(autoplayInterval);
+      autoplayInterval = null;
+    }
+  }
+  
+  const container = document.querySelector('.blog-carousel-container');
+  container.addEventListener('mouseenter', stopAutoplay);
+  container.addEventListener('mouseleave', startAutoplay);
+  
+  // Start autoplay
+  startAutoplay();
+  
+  // Initial update
+  updateCarousel();
+});
+</script>
+{% endblock %}
+
+
+

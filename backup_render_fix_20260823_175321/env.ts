@@ -11,7 +11,6 @@ const envSchema = z.object({
   SUPABASE_URL: z.string().url(),
   SUPABASE_SERVICE_ROLE_KEY: z.string().min(1),
   SESSION_SECRET: z.string().min(32),
-  SESSION_DOMAIN: z.string().optional(),
   WHATSAPP_NUMBER: z.string().regex(/^254[0-9]{9}$/),
   MPESA_CONSUMER_KEY: z.string().min(1),
   MPESA_CONSUMER_SECRET: z.string().min(1),
@@ -38,4 +37,3 @@ function validateEnv(): Env {
 }
 
 export const env = validateEnv();
-

@@ -1,4 +1,4 @@
-﻿import Fastify from 'fastify';
+import Fastify from 'fastify';
 import fastifyView from '@fastify/view';
 import fastifyStatic from '@fastify/static';
 import fastifyCookie from '@fastify/cookie';
@@ -49,16 +49,14 @@ export async function buildApp() {
   });
   await app.register(fastifyCookie);
   await app.register(fastifySession, {
-  secret: env.SESSION_SECRET,
-  cookie: {
-    secure: env.NODE_ENV === 'production',
-    httpOnly: true,
-    sameSite: 'none',
-    maxAge: 24 * 60 * 60 * 1000,
-    path: '/',
-    domain: env.NODE_ENV === 'production' ? '.render.com' : undefined,
-  },
-});
+    secret: env.SESSION_SECRET,
+    cookie: {
+      secure: env.NODE_ENV === 'production',
+      httpOnly: true,
+      sameSite: 'lax',
+      maxAge: 24 * 60 * 60 * 1000,
+    },
+  });
 
   // 🔍 Diagnostic route to check session
   app.get("/debug/session", async (request, reply) => {
@@ -229,4 +227,3 @@ export async function buildApp() {
 
   return app;
 }
-

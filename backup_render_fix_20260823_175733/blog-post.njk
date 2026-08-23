@@ -1,0 +1,80 @@
+﻿{% extends "base.njk" %}
+
+{% block title %}{{ post.title }} - Nairobi Counseling Center{% endblock %}
+
+{% block head %}
+{% if post.metaDescription %}
+  <meta name="description" content="{{ post.metaDescription }}">
+{% endif %}
+{% if post.metaKeywords %}
+  <meta name="keywords" content="{{ post.metaKeywords }}">
+{% endif %}
+{% if post.imageUrl %}
+  <meta property="og:image" content="{{ post.imageUrl }}">
+  <meta property="og:title" content="{{ post.title }}">
+  <meta property="og:description" content="{{ post.excerpt or post.metaDescription or '' }}">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="{{ post.imageUrl }}">
+{% endif %}
+<style>
+  .post-featured-image-container {
+    margin-bottom: 2rem;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+  }
+  .post-featured-image {
+    width: 100%;
+    max-height: 400px;
+    object-fit: cover;
+    display: block;
+  }
+  .post-footer {
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid #E8D5B8;
+    text-align: center;
+  }
+  .post-footer .book-now {
+    margin-top: 1rem;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="blog-post-page">
+  <article class="blog-post">
+    {% if post.imageUrl %}
+      <div class="post-featured-image-container">
+        <img src="{{ post.imageUrl }}" alt="{{ post.title }}" class="post-featured-image" loading="lazy" onerror="this.style.display='none'">
+      </div>
+    {% endif %}
+    
+    <h1>{{ post.title }}</h1>
+    
+    <div class="post-meta">
+      <span><i class="far fa-calendar-alt"></i> {{ post.publishedAt or "August 2026" }}</span>
+      <span style="margin-left: 1rem;">📚 Mental Health Resource</span>
+      {% if post.authorName %}
+        <span style="margin-left: 1rem;">✍️ {{ post.authorName }}</span>
+      {% endif %}
+    </div>
+    
+    <div class="post-content">
+      {% if post.content %}
+        {{ post.content | safe }}
+      {% else %}
+        <p>This is a mental health resource article from Nairobi Counseling Center.</p>
+        <p>Our counselors provide evidence-based information to support your mental wellness journey.</p>
+        <p>For personalized support, <a href="/contact" style="color: #D4AF37;">contact us</a> to schedule a session.</p>
+      {% endif %}
+    </div>
+    
+    <div class="post-footer">
+      <a href="/blog" style="color: #D4AF37; text-decoration: none;">← Back to Resources</a>
+      <br>
+      <button class="book-now" onclick="openBooking()">Start Your Healing Journey</button>
+    </div>
+  </article>
+</section>
+{% endblock %}
