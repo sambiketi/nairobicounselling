@@ -1,7 +1,7 @@
-import { FastifyInstance } from 'fastify';
+﻿import { FastifyInstance } from 'fastify';
 import { SettingsService } from '../modules/settings/service.js';
 import { BlogRepository } from '../db/repositories/blog-repository.js';
-import { TherapistService } from '../modules/therapists/service.js';
+import { ServiceManagementService } from "../modules/services/service.js";`nimport { TherapistService } from '../modules/therapists/service.js';
 
 export async function homeRoutes(fastify: FastifyInstance) {
   const settingsService = new SettingsService();
@@ -210,3 +210,4 @@ export async function homeRoutes(fastify: FastifyInstance) {
     }
   });
 }
+

@@ -398,47 +398,90 @@
   </div>
 </section>
 
-<!-- Services Section -->
+<!-- Services Section - DYNAMIC -->
 <section class="services">
   <h2>You Are Stronger Than You Know</h2>
   <p style="text-align:center; color: #666; margin-bottom: 2rem; font-size: 1.1rem;">We believe in your healing journey. Here's how we can support you:</p>
+  
   <div class="service-grid">
-    <div class="service-card">
-      <i class="fas fa-heart" style="color: #D4AF37; font-size: 2.5rem; margin-bottom: 1rem;"></i>
-      <h3>Individual Therapy</h3>
-      <p>One-on-one support tailored to your unique journey</p>
-      <div class="hope-message">"You are worthy of healing"</div>
-    </div>
-    <div class="service-card">
-      <i class="fas fa-users" style="color: #D4AF37; font-size: 2.5rem; margin-bottom: 1rem;"></i>
-      <h3>Couples Counseling</h3>
-      <p>Strengthen relationships through guided healing</p>
-      <div class="hope-message">"Together, we can rebuild"</div>
-    </div>
-    <div class="service-card">
-      <i class="fas fa-child" style="color: #D4AF37; font-size: 2.5rem; margin-bottom: 1rem;"></i>
-      <h3>Youth & Teen Therapy</h3>
-      <p>Supporting the next generation of resilient minds</p>
-      <div class="hope-message">"Your voice matters"</div>
-    </div>
-    <div class="service-card">
-      <i class="fas fa-brain" style="color: #D4AF37; font-size: 2.5rem; margin-bottom: 1rem;"></i>
-      <h3>Trauma Counseling</h3>
-      <p>Healing from past experiences in a safe space</p>
-      <div class="hope-message">"Healing is possible"</div>
-    </div>
-    <div class="service-card">
-      <i class="fas fa-hand-holding-heart" style="color: #D4AF37; font-size: 2.5rem; margin-bottom: 1rem;"></i>
-      <h3>Grief Counseling</h3>
-      <p>Compassionate support through loss and bereavement</p>
-      <div class="hope-message">"It's okay to not be okay"</div>
-    </div>
-    <div class="service-card">
-      <i class="fas fa-cloud-sun" style="color: #D4AF37; font-size: 2.5rem; margin-bottom: 1rem;"></i>
-      <h3>Anxiety & Depression</h3>
-      <p>Evidence-based treatment for mood disorders</p>
-      <div class="hope-message">"There is hope beyond the storm"</div>
-    </div>
+    {% if services and services.length > 0 %}
+      {% for service in services %}
+        <div class="service-card">
+          {% if service.imageUrl %}
+            <div class="service-image-wrapper">
+              <img src="{{ service.imageUrl }}" alt="{{ service.name }}" class="service-image" loading="lazy" onerror="this.style.display='none'">
+            </div>
+          {% else %}
+            <div class="service-icon">
+              <i class="fas fa-hand-holding-heart"></i>
+            </div>
+          {% endif %}
+          <h3>{{ service.name }}</h3>
+          <p>{{ service.description or "Professional counseling service tailored to your needs." }}</p>
+          <div class="service-details">
+            <span class="service-duration"><i class="far fa-clock"></i> {{ service.duration }} min</span>
+            <!-- PRICE HIDDEN FROM PUBLIC - Only visible to admins -->
+            {% if session.user and session.user.role == 'admin' %}
+              <span class="service-price" style="display:inline-block; margin-left:0.5rem; background:#e8f5e9; padding:0.2rem 0.8rem; border-radius:20px; color:#2e7d32; font-weight:bold;">
+                KES {{ service.price }}
+              </span>
+            {% endif %}
+          </div>
+          <div class="hope-message">"Healing is possible. You are not alone."</div>
+          <button class="book-service-btn" onclick="openBooking()">Book This Service</button>
+        </div>
+      {% endfor %}
+    {% else %}
+      <!-- Fallback static services -->
+      <div class="service-card">
+        <div class="service-icon">
+          <i class="fas fa-heart"></i>
+        </div>
+        <h3>Individual Therapy</h3>
+        <p>One-on-one support tailored to your unique journey</p>
+        <div class="hope-message">"You are worthy of healing"</div>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">
+          <i class="fas fa-users"></i>
+        </div>
+        <h3>Couples Counseling</h3>
+        <p>Strengthen relationships through guided healing</p>
+        <div class="hope-message">"Together, we can rebuild"</div>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">
+          <i class="fas fa-child"></i>
+        </div>
+        <h3>Youth & Teen Therapy</h3>
+        <p>Supporting the next generation of resilient minds</p>
+        <div class="hope-message">"Your voice matters"</div>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">
+          <i class="fas fa-brain"></i>
+        </div>
+        <h3>Trauma Counseling</h3>
+        <p>Healing from past experiences in a safe space</p>
+        <div class="hope-message">"Healing is possible"</div>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">
+          <i class="fas fa-hand-holding-heart"></i>
+        </div>
+        <h3>Grief Counseling</h3>
+        <p>Compassionate support through loss and bereavement</p>
+        <div class="hope-message">"It's okay to not be okay"</div>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">
+          <i class="fas fa-cloud-sun"></i>
+        </div>
+        <h3>Anxiety & Depression</h3>
+        <p>Evidence-based treatment for mood disorders</p>
+        <div class="hope-message">"There is hope beyond the storm"</div>
+      </div>
+    {% endif %}
   </div>
 </section>
 
@@ -696,3 +739,4 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 </script>
 {% endblock %}
+
