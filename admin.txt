@@ -1,0 +1,2745 @@
+﻿================================================================================
+ADMIN NUNJUCKS TEMPLATES - EXPORT
+Generated: 2026-08-23 18:43:00
+Total Files: 19
+================================================================================
+================================================================================
+FILE: src\views\admin\admin-base.njk
+SIZE: 7.29 KB
+================================================================================
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}Admin Panel - Nairobi Counseling Center{% endblock %}</title>
+  <link rel="stylesheet" href="/public/css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f8f9fa; }
+    
+    .admin-wrapper {
+      display: flex;
+      min-height: 100vh;
+      background: #f8f9fa;
+    }
+    .admin-sidebar {
+      width: 260px;
+      background: linear-gradient(180deg, #4A3528 0%, #2D1F16 100%);
+      color: #FDF8F3;
+      padding: 2rem 0;
+      flex-shrink: 0;
+      min-height: 100vh;
+      box-shadow: 2px 0 15px rgba(0,0,0,0.1);
+    }
+    .admin-sidebar .sidebar-brand {
+      padding: 0 1.5rem 2rem;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      margin-bottom: 1.5rem;
+    }
+    .admin-sidebar .sidebar-brand h2 {
+      color: #C9A87C;
+      font-size: 1.2rem;
+      margin: 0;
+    }
+    .admin-sidebar .sidebar-brand small {
+      color: #B5A69A;
+      font-size: 0.8rem;
+    }
+    .admin-sidebar .nav-item {
+      display: flex;
+      align-items: center;
+      padding: 0.8rem 1.5rem;
+      color: #D4C4B8;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      border-left: 3px solid transparent;
+      cursor: pointer;
+    }
+    .admin-sidebar .nav-item:hover {
+      background: rgba(201, 168, 124, 0.1);
+      color: #FDF8F3;
+      border-left-color: #C9A87C;
+    }
+    .admin-sidebar .nav-item.active {
+      background: rgba(201, 168, 124, 0.15);
+      color: #C9A87C;
+      border-left-color: #C9A87C;
+    }
+    .admin-sidebar .nav-item i {
+      width: 24px;
+      margin-right: 0.8rem;
+      font-size: 1.1rem;
+    }
+    .admin-sidebar .nav-item .badge {
+      margin-left: auto;
+      background: #C9A87C;
+      color: #4A3528;
+      padding: 0.15rem 0.6rem;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: bold;
+    }
+    .admin-sidebar .nav-section {
+      padding: 0.5rem 1.5rem 0.3rem;
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #8B7355;
+      font-weight: bold;
+    }
+    .admin-content {
+      flex: 1;
+      padding: 2rem;
+      background: #f8f9fa;
+    }
+    .admin-content-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+    }
+    .admin-content-header h1 {
+      color: #4A3528;
+      margin: 0;
+    }
+    .admin-content-header .admin-user {
+      color: #666;
+      font-size: 0.9rem;
+    }
+    .admin-content-header .admin-user i {
+      margin-right: 0.3rem;
+      color: #C9A87C;
+    }
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+    .stat-card {
+      background: white;
+      padding: 1.5rem;
+      border-radius: 12px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+      border-left: 4px solid #C9A87C;
+    }
+    .stat-card .stat-number {
+      font-size: 2rem;
+      font-weight: bold;
+      color: #4A3528;
+    }
+    .stat-card .stat-label {
+      color: #999;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .btn-primary {
+      padding: 0.6rem 1.5rem;
+      background: linear-gradient(145deg, #C9A87C, #B8966A);
+      color: #4A3528;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+      text-decoration: none;
+      display: inline-block;
+    }
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 15px rgba(201, 168, 124, 0.4);
+    }
+    .status-badge {
+      padding: 0.2rem 0.6rem;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: bold;
+    }
+    .status-published { background: #d4edda; color: #155724; }
+    .status-draft { background: #fff3cd; color: #856404; }
+    .status-completed { background: #d4edda; color: #155724; }
+    .status-cancelled { background: #f8d7da; color: #721c24; }
+    
+    @media (max-width: 768px) {
+      .admin-wrapper { flex-direction: column; }
+      .admin-sidebar { width: 100%; min-height: auto; }
+      .admin-sidebar .sidebar-brand { display: flex; justify-content: space-between; align-items: center; padding: 1rem 1.5rem; }
+      .admin-sidebar .sidebar-brand h2 { font-size: 1rem; }
+      .admin-sidebar .nav-item { padding: 0.5rem 1rem; }
+      .admin-content { padding: 1rem; }
+      .stats-grid { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 480px) {
+      .stats-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+  {% block head %}{% endblock %}
+</head>
+<body>
+  <div class="admin-wrapper">
+    <!-- Sidebar -->
+    <aside class="admin-sidebar">
+      <div class="sidebar-brand">
+        <div>
+          <h2>Admin Panel</h2>
+          <small>Nairobi Counseling Center</small>
+        </div>
+      </div>
+
+      <div class="nav-section">Main</div>
+      <a href="/admin" class="nav-item {% if activePage == 'dashboard' %}active{% endif %}">
+        <i class="fas fa-chart-pie"></i> Dashboard
+      </a>
+      <a href="/admin/location" class="nav-item {% if activePage == 'location' %}active{% endif %}">
+        <i class="fas fa-map-marker-alt"></i> Location
+      </a>
+
+      <div class="nav-section">Content</div>
+      <a href="/admin/blog" class="nav-item {% if activePage == 'blog' %}active{% endif %}">
+        <i class="fas fa-blog"></i> Resources
+      </a>
+      <a href="/admin/counselors" class="nav-item {% if activePage == 'counselors' %}active{% endif %}">
+        <i class="fas fa-users"></i> Counselors
+      </a>
+      <a href="/admin/services" class="nav-item {% if activePage == 'services' %}active{% endif %}">
+        <i class="fas fa-hand-holding-heart"></i> Services
+      </a>
+      <a href="/admin/gallery" class="nav-item {% if activePage == 'gallery' %}active{% endif %}">
+        <i class="fas fa-images"></i> Gallery
+      </a>
+
+      <div class="nav-section">Bookings</div>
+      <a href="/admin/bookings" class="nav-item {% if activePage == 'bookings' %}active{% endif %}">
+        <i class="fas fa-calendar-check"></i> All Bookings
+      </a>
+      <a href="/admin/bookings/pending" class="nav-item {% if activePage == 'pending' %}active{% endif %}">
+        <i class="fas fa-clock"></i> Pending
+      </a>
+
+      <div class="nav-section">System</div>
+      <a href="/admin/content" class="nav-item {% if activePage == 'content' %}active{% endif %}">
+        <i class="fas fa-edit"></i> Content
+      </a>
+      <a href="/admin/settings" class="nav-item {% if activePage == 'settings' %}active{% endif %}">
+        <i class="fas fa-cog"></i> Settings
+      </a>
+      <a href="/admin/logout" class="nav-item" onclick="return confirm('Logout?')">
+        <i class="fas fa-sign-out-alt"></i> Logout
+      </a>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="admin-content">
+      <div class="admin-content-header">
+        <h1>{% block adminTitle %}Dashboard{% endblock %}</h1>
+        <div class="admin-user">
+          <i class="fas fa-user-circle"></i> {{ user?.fullName or 'Admin' }}
+        </div>
+      </div>
+
+      {% block adminContent %}{% endblock %}
+    </main>
+  </div>
+</body>
+</html>
+
+
+================================================================================
+FILE: src\views\admin\blog\create.njk
+SIZE: 10.5 KB
+================================================================================
+{% extends "admin-base.njk" %}
+
+{% block adminTitle %}Create Resource{% endblock %}
+
+{% block adminContent %}
+<div style="max-width: 800px; margin: 0 auto; background: white; border-radius: 12px; padding: 2rem; box-shadow: 0 2px 10px rgba(0,0,0,0.05);">
+  <h2 style="color: #4A3528; margin-bottom: 0.5rem;">📝 Create New Resource</h2>
+  <p style="color: #666; margin-bottom: 2rem;">Share knowledge and insights with your audience</p>
+
+  <div id="notification" style="display: none; padding: 1rem; border-radius: 8px; margin-bottom: 1rem;"></div>
+
+  <form id="createForm" onsubmit="handleSubmit(event)">
+    <!-- Title -->
+    <div style="margin-bottom: 1.5rem;">
+      <label style="display: block; font-weight: bold; color: #4A3528; margin-bottom: 0.3rem;">Title *</label>
+      <input type="text" id="title" name="title" placeholder="Enter resource title" required 
+             style="width: 100%; padding: 0.8rem; border: 2px solid #E8D5B8; border-radius: 8px; font-size: 1rem;">
+      <div style="font-size: 0.85rem; color: #999; margin-top: 0.25rem;" id="titleCount">0 / 200 characters</div>
+    </div>
+
+    <!-- Slug -->
+    <div style="margin-bottom: 1.5rem;">
+      <label style="display: block; font-weight: bold; color: #4A3528; margin-bottom: 0.3rem;">Slug (URL) *</label>
+      <input type="text" id="slug" name="slug" placeholder="enter-url-friendly-slug" required
+             style="width: 100%; padding: 0.8rem; border: 2px solid #E8D5B8; border-radius: 8px; font-size: 1rem;">
+      <div style="font-size: 0.85rem; color: #999; margin-top: 0.25rem;">URL-friendly version of the title</div>
+      <div style="color: #C9A87C; font-size: 0.9rem; margin-top: 0.3rem;">🔗 Preview: /blog/<span id="slugPreview">your-slug</span></div>
+    </div>
+
+    <!-- Excerpt -->
+    <div style="margin-bottom: 1.5rem;">
+      <label style="display: block; font-weight: bold; color: #4A3528; margin-bottom: 0.3rem;">Excerpt</label>
+      <textarea id="excerpt" name="excerpt" rows="2" placeholder="A brief summary of the resource"
+                style="width: 100%; padding: 0.8rem; border: 2px solid #E8D5B8; border-radius: 8px; font-size: 1rem;"></textarea>
+      <div style="font-size: 0.85rem; color: #999; margin-top: 0.25rem;" id="excerptCount">0 / 500 characters</div>
+    </div>
+
+    <!-- Content -->
+    <div style="margin-bottom: 1.5rem;">
+      <label style="display: block; font-weight: bold; color: #4A3528; margin-bottom: 0.3rem;">Content *</label>
+      <textarea id="content" name="content" rows="10" placeholder="Write your resource content here..." required
+                style="width: 100%; padding: 0.8rem; border: 2px solid #E8D5B8; border-radius: 8px; font-size: 1rem; min-height: 200px; resize: vertical; font-family: inherit;"></textarea>
+      <div style="font-size: 0.85rem; color: #999; margin-top: 0.25rem;" id="contentCount">0 characters</div>
+    </div>
+
+    <!-- Image URL -->
+    <div style="margin-bottom: 1.5rem;">
+      <label style="display: block; font-weight: bold; color: #4A3528; margin-bottom: 0.3rem;">Featured Image URL</label>
+      <input type="url" id="imageUrl" name="imageUrl" placeholder="https://example.com/image.jpg"
+             style="width: 100%; padding: 0.8rem; border: 2px solid #E8D5B8; border-radius: 8px; font-size: 1rem;">
+      <div style="font-size: 0.85rem; color: #999; margin-top: 0.25rem;">URL to a featured image for this resource</div>
+      <div id="imagePreview" style="margin-top: 0.5rem; display: none;">
+        <img id="previewImg" src="" alt="Preview" style="max-width: 200px; max-height: 150px; border-radius: 8px; border: 2px solid #E8D5B8;">
+      </div>
+    </div>
+
+    <!-- Meta Description -->
+    <div style="margin-bottom: 1.5rem;">
+      <label style="display: block; font-weight: bold; color: #4A3528; margin-bottom: 0.3rem;">Meta Description</label>
+      <input type="text" id="metaDescription" name="metaDescription" placeholder="SEO description for search engines"
+             style="width: 100%; padding: 0.8rem; border: 2px solid #E8D5B8; border-radius: 8px; font-size: 1rem;">
+      <div style="font-size: 0.85rem; color: #999; margin-top: 0.25rem;" id="metaDescCount">0 / 200 characters</div>
+    </div>
+
+    <!-- Meta Keywords -->
+    <div style="margin-bottom: 1.5rem;">
+      <label style="display: block; font-weight: bold; color: #4A3528; margin-bottom: 0.3rem;">Meta Keywords</label>
+      <input type="text" id="metaKeywords" name="metaKeywords" placeholder="keyword1, keyword2, keyword3"
+             style="width: 100%; padding: 0.8rem; border: 2px solid #E8D5B8; border-radius: 8px; font-size: 1rem;">
+    </div>
+
+    <!-- Publish -->
+    <div style="margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem;">
+      <input type="checkbox" id="isPublished" name="isPublished" checked style="width: 1.2rem; height: 1.2rem;">
+      <label for="isPublished" style="font-weight: bold; color: #4A3528;">Publish immediately</label>
+    </div>
+
+    <!-- Actions -->
+    <div style="display: flex; gap: 1rem; margin-top: 2rem; flex-wrap: wrap;">
+      <button type="submit" id="submitBtn" class="btn-primary" style="padding: 0.8rem 2rem;">
+        📝 Create Resource
+      </button>
+      <a href="/admin/blog" class="btn-secondary" style="padding: 0.8rem 2rem; background: #f8f9fa; color: #333; border: 2px solid #ddd; border-radius: 8px; font-weight: bold; cursor: pointer; text-decoration: none; display: inline-block; text-align: center;">Cancel</a>
+    </div>
+  </form>
+</div>
+
+<style>
+  .btn-primary {
+    padding: 0.8rem 2rem;
+    background: linear-gradient(145deg, #C9A87C, #B8966A);
+    color: #4A3528;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 4px 15px rgba(201, 168, 124, 0.4); }
+  .btn-primary:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+  .btn-secondary:hover { background: #e8e8e8; }
+  input:focus, textarea:focus {
+    outline: none;
+    border-color: #C9A87C;
+    box-shadow: 0 0 0 3px rgba(201, 168, 124, 0.15);
+  }
+  #notification.success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+  #notification.error { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+  #notification { padding: 1rem; border-radius: 8px; margin-bottom: 1rem; display: none; }
+</style>
+
+<script>
+let slugTimeout;
+
+document.addEventListener('DOMContentLoaded', function() {
+  const titleInput = document.getElementById('title');
+  const slugInput = document.getElementById('slug');
+  const slugPreview = document.getElementById('slugPreview');
+  const imageUrlInput = document.getElementById('imageUrl');
+  const imagePreview = document.getElementById('imagePreview');
+  const previewImg = document.getElementById('previewImg');
+
+  // Title counter
+  titleInput.addEventListener('input', function() {
+    document.getElementById('titleCount').textContent = this.value.length + ' / 200 characters';
+    
+    // Auto-generate slug
+    clearTimeout(slugTimeout);
+    slugTimeout = setTimeout(() => {
+      if (!slugInput.value || slugInput.dataset.autoGenerated !== 'false') {
+        const slug = this.value
+          .toLowerCase()
+          .replace(/[^a-z0-9]+/g, '-')
+          .replace(/^-+|-+$/g, '');
+        slugInput.value = slug;
+        slugInput.dataset.autoGenerated = 'true';
+        slugPreview.textContent = slug || 'your-slug';
+      }
+    }, 300);
+  });
+
+  // Slug manual edit
+  slugInput.addEventListener('input', function() {
+    this.dataset.autoGenerated = 'false';
+    slugPreview.textContent = this.value || 'your-slug';
+  });
+
+  // Excerpt counter
+  document.getElementById('excerpt').addEventListener('input', function() {
+    document.getElementById('excerptCount').textContent = this.value.length + ' / 500 characters';
+  });
+
+  // Content counter
+  document.getElementById('content').addEventListener('input', function() {
+    document.getElementById('contentCount').textContent = this.value.length + ' characters';
+  });
+
+  // Meta description counter
+  document.getElementById('metaDescription').addEventListener('input', function() {
+    document.getElementById('metaDescCount').textContent = this.value.length + ' / 200 characters';
+  });
+
+  // Image preview
+  imageUrlInput.addEventListener('input', function() {
+    const url = this.value.trim();
+    if (url && (url.startsWith('http://') || url.startsWith('https://'))) {
+      previewImg.src = url;
+      imagePreview.style.display = 'block';
+    } else {
+      imagePreview.style.display = 'none';
+    }
+  });
+});
+
+async function handleSubmit(e) {
+  e.preventDefault();
+  
+  const form = document.getElementById('createForm');
+  const submitBtn = document.getElementById('submitBtn');
+  const notification = document.getElementById('notification');
+  
+  const formData = new FormData(form);
+  const data = {
+    title: formData.get('title').trim(),
+    slug: formData.get('slug').trim(),
+    excerpt: formData.get('excerpt') || null,
+    content: formData.get('content').trim(),
+    imageUrl: formData.get('imageUrl') || null,
+    metaDescription: formData.get('metaDescription') || null,
+    metaKeywords: formData.get('metaKeywords') || null,
+    isPublished: formData.get('isPublished') === 'on',
+  };
+
+  // Validation
+  if (!data.title) {
+    showNotification('❌ Title is required', 'error');
+    return;
+  }
+  if (!data.slug) {
+    showNotification('❌ Slug is required', 'error');
+    return;
+  }
+  if (!data.content) {
+    showNotification('❌ Content is required', 'error');
+    return;
+  }
+
+  submitBtn.textContent = '⏳ Creating...';
+  submitBtn.disabled = true;
+  notification.style.display = 'none';
+
+  try {
+    const response = await fetch('/api/admin/blog', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+      credentials: 'include',
+    });
+
+    const result = await response.json();
+
+    if (result.success) {
+      showNotification('✅ Resource created successfully!', 'success');
+      setTimeout(() => {
+        window.location.href = '/admin/blog';
+      }, 1500);
+    } else {
+      showNotification('❌ Error: ' + (result.error || 'Failed to create resource'), 'error');
+      submitBtn.textContent = '📝 Create Resource';
+      submitBtn.disabled = false;
+    }
+  } catch (error) {
+    showNotification('❌ Network error: ' + error.message, 'error');
+    submitBtn.textContent = '📝 Create Resource';
+    submitBtn.disabled = false;
+  }
+}
+
+function showNotification(message, type) {
+  const el = document.getElementById('notification');
+  el.className = type;
+  el.textContent = message;
+  el.style.display = 'block';
+}
+</script>
+{% endblock %}
+
+
+
+================================================================================
+FILE: src\views\admin\blog\edit.njk
+SIZE: 13.03 KB
+================================================================================
+{% extends "admin-base.njk" %}
+
+{% block adminTitle %}Edit Resource{% endblock %}
+
+{% block adminContent %}
+<div style="max-width: 800px; margin: 0 auto; background: white; border-radius: 12px; padding: 2rem; box-shadow: 0 2px 10px rgba(0,0,0,0.05);">
+  <h2 style="color: #4A3528; margin-bottom: 0.5rem;">✏️ Edit Resource</h2>
+  <p style="color: #666; margin-bottom: 2rem;">Update your resource content</p>
+
+  <div id="loading" style="text-align: center; padding: 3rem; color: #666;">
+    <i class="fas fa-spinner fa-spin" style="font-size: 2rem; display: block; margin-bottom: 1rem;"></i>
+    Loading resource...
+  </div>
+
+  <div id="editForm" style="display: none;">
+    <div id="notification" style="display: none; padding: 1rem; border-radius: 8px; margin-bottom: 1rem;"></div>
+
+    <form id="updateForm" onsubmit="handleSubmit(event)">
+      <!-- Title -->
+      <div style="margin-bottom: 1.5rem;">
+        <label style="display: block; font-weight: bold; color: #4A3528; margin-bottom: 0.3rem;">Title *</label>
+        <input type="text" id="title" name="title" required
+               style="width: 100%; padding: 0.8rem; border: 2px solid #E8D5B8; border-radius: 8px; font-size: 1rem;">
+        <div style="font-size: 0.85rem; color: #999; margin-top: 0.25rem;" id="titleCount">0 / 200 characters</div>
+      </div>
+
+      <!-- Slug -->
+      <div style="margin-bottom: 1.5rem;">
+        <label style="display: block; font-weight: bold; color: #4A3528; margin-bottom: 0.3rem;">Slug (URL) *</label>
+        <input type="text" id="slug" name="slug" required
+               style="width: 100%; padding: 0.8rem; border: 2px solid #E8D5B8; border-radius: 8px; font-size: 1rem;">
+        <div style="font-size: 0.85rem; color: #999; margin-top: 0.25rem;">URL-friendly version of the title</div>
+        <div style="color: #C9A87C; font-size: 0.9rem; margin-top: 0.3rem;">🔗 Preview: /blog/<span id="slugPreview">your-slug</span></div>
+      </div>
+
+      <!-- Excerpt -->
+      <div style="margin-bottom: 1.5rem;">
+        <label style="display: block; font-weight: bold; color: #4A3528; margin-bottom: 0.3rem;">Excerpt</label>
+        <textarea id="excerpt" name="excerpt" rows="2"
+                  style="width: 100%; padding: 0.8rem; border: 2px solid #E8D5B8; border-radius: 8px; font-size: 1rem;"></textarea>
+        <div style="font-size: 0.85rem; color: #999; margin-top: 0.25rem;" id="excerptCount">0 / 500 characters</div>
+      </div>
+
+      <!-- Content -->
+      <div style="margin-bottom: 1.5rem;">
+        <label style="display: block; font-weight: bold; color: #4A3528; margin-bottom: 0.3rem;">Content *</label>
+        <textarea id="content" name="content" rows="10" required
+                  style="width: 100%; padding: 0.8rem; border: 2px solid #E8D5B8; border-radius: 8px; font-size: 1rem; min-height: 200px; resize: vertical; font-family: inherit;"></textarea>
+        <div style="font-size: 0.85rem; color: #999; margin-top: 0.25rem;" id="contentCount">0 characters</div>
+      </div>
+
+      <!-- Image URL -->
+      <div style="margin-bottom: 1.5rem;">
+        <label style="display: block; font-weight: bold; color: #4A3528; margin-bottom: 0.3rem;">Featured Image URL</label>
+        <input type="url" id="imageUrl" name="imageUrl" placeholder="https://example.com/image.jpg"
+               style="width: 100%; padding: 0.8rem; border: 2px solid #E8D5B8; border-radius: 8px; font-size: 1rem;">
+        <div id="imagePreview" style="margin-top: 0.5rem; display: none;">
+          <img id="previewImg" src="" alt="Preview" style="max-width: 200px; max-height: 150px; border-radius: 8px; border: 2px solid #E8D5B8;">
+        </div>
+      </div>
+
+      <!-- Meta Description -->
+      <div style="margin-bottom: 1.5rem;">
+        <label style="display: block; font-weight: bold; color: #4A3528; margin-bottom: 0.3rem;">Meta Description</label>
+        <input type="text" id="metaDescription" name="metaDescription" placeholder="SEO description for search engines"
+               style="width: 100%; padding: 0.8rem; border: 2px solid #E8D5B8; border-radius: 8px; font-size: 1rem;">
+        <div style="font-size: 0.85rem; color: #999; margin-top: 0.25rem;" id="metaDescCount">0 / 200 characters</div>
+      </div>
+
+      <!-- Meta Keywords -->
+      <div style="margin-bottom: 1.5rem;">
+        <label style="display: block; font-weight: bold; color: #4A3528; margin-bottom: 0.3rem;">Meta Keywords</label>
+        <input type="text" id="metaKeywords" name="metaKeywords" placeholder="keyword1, keyword2, keyword3"
+               style="width: 100%; padding: 0.8rem; border: 2px solid #E8D5B8; border-radius: 8px; font-size: 1rem;">
+      </div>
+
+      <!-- Publish -->
+      <div style="margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem;">
+        <input type="checkbox" id="isPublished" name="isPublished" style="width: 1.2rem; height: 1.2rem;">
+        <label for="isPublished" style="font-weight: bold; color: #4A3528;">Published</label>
+      </div>
+
+      <!-- Actions -->
+      <div style="display: flex; gap: 1rem; margin-top: 2rem; flex-wrap: wrap;">
+        <button type="submit" id="submitBtn" class="btn-primary" style="padding: 0.8rem 2rem;">
+          💾 Update Resource
+        </button>
+        <a href="/admin/blog" class="btn-secondary" style="padding: 0.8rem 2rem; background: #f8f9fa; color: #333; border: 2px solid #ddd; border-radius: 8px; font-weight: bold; cursor: pointer; text-decoration: none; display: inline-block; text-align: center;">Cancel</a>
+        <button type="button" onclick="deletePost()" class="btn-danger" style="padding: 0.8rem 2rem; background: #dc3545; color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer;">🗑️ Delete</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<style>
+  .btn-primary {
+    padding: 0.8rem 2rem;
+    background: linear-gradient(145deg, #C9A87C, #B8966A);
+    color: #4A3528;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 4px 15px rgba(201, 168, 124, 0.4); }
+  .btn-primary:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+  .btn-secondary:hover { background: #e8e8e8; }
+  .btn-danger:hover { background: #c82333; }
+  input:focus, textarea:focus {
+    outline: none;
+    border-color: #C9A87C;
+    box-shadow: 0 0 0 3px rgba(201, 168, 124, 0.15);
+  }
+  #notification.success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+  #notification.error { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+  #notification { padding: 1rem; border-radius: 8px; margin-bottom: 1rem; display: none; }
+</style>
+
+<script>
+let postId = window.location.pathname.split('/').pop();
+
+async function loadPost() {
+  const loading = document.getElementById('loading');
+  const editForm = document.getElementById('editForm');
+  const notification = document.getElementById('notification');
+
+  loading.style.display = 'block';
+  editForm.style.display = 'none';
+
+  try {
+    const response = await fetch(`/api/blog/${postId}`);
+    const result = await response.json();
+
+    loading.style.display = 'none';
+
+    if (result.success && result.data) {
+      const post = result.data;
+      
+      document.getElementById('title').value = post.title || '';
+      document.getElementById('titleCount').textContent = (post.title || '').length + ' / 200 characters';
+      
+      document.getElementById('slug').value = post.slug || '';
+      document.getElementById('slugPreview').textContent = post.slug || 'your-slug';
+      
+      document.getElementById('excerpt').value = post.excerpt || '';
+      document.getElementById('excerptCount').textContent = (post.excerpt || '').length + ' / 500 characters';
+      
+      document.getElementById('content').value = post.content || '';
+      document.getElementById('contentCount').textContent = (post.content || '').length + ' characters';
+      
+      document.getElementById('imageUrl').value = post.imageUrl || '';
+      if (post.imageUrl) {
+        document.getElementById('previewImg').src = post.imageUrl;
+        document.getElementById('imagePreview').style.display = 'block';
+      }
+      
+      document.getElementById('metaDescription').value = post.metaDescription || '';
+      document.getElementById('metaDescCount').textContent = (post.metaDescription || '').length + ' / 200 characters';
+      
+      document.getElementById('metaKeywords').value = post.metaKeywords || '';
+      document.getElementById('isPublished').checked = post.isPublished || false;
+
+      editForm.style.display = 'block';
+    } else {
+      showNotification('Failed to load resource: ' + (result.error || 'Unknown error'), 'error');
+      setTimeout(() => { window.location.href = '/admin/blog'; }, 2000);
+    }
+  } catch (error) {
+    loading.style.display = 'none';
+    showNotification('Error loading resource: ' + error.message, 'error');
+    setTimeout(() => { window.location.href = '/admin/blog'; }, 2000);
+  }
+}
+
+async function handleSubmit(e) {
+  e.preventDefault();
+  
+  const form = document.getElementById('updateForm');
+  const submitBtn = document.getElementById('submitBtn');
+  const notification = document.getElementById('notification');
+  
+  const formData = new FormData(form);
+  const data = {
+    title: formData.get('title').trim(),
+    slug: formData.get('slug').trim(),
+    excerpt: formData.get('excerpt') || null,
+    content: formData.get('content').trim(),
+    imageUrl: formData.get('imageUrl') || null,
+    metaDescription: formData.get('metaDescription') || null,
+    metaKeywords: formData.get('metaKeywords') || null,
+    isPublished: formData.get('isPublished') === 'on',
+  };
+
+  // Validation
+  if (!data.title) { showNotification('❌ Title is required', 'error'); return; }
+  if (!data.slug) { showNotification('❌ Slug is required', 'error'); return; }
+  if (!data.content) { showNotification('❌ Content is required', 'error'); return; }
+
+  submitBtn.textContent = '⏳ Updating...';
+  submitBtn.disabled = true;
+  notification.style.display = 'none';
+
+  try {
+    const response = await fetch(`/api/admin/blog/${postId}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+      credentials: 'include',
+    });
+
+    const result = await response.json();
+
+    if (result.success) {
+      showNotification('✅ Resource updated successfully!', 'success');
+      setTimeout(() => {
+        window.location.href = '/admin/blog';
+      }, 1500);
+    } else {
+      showNotification('❌ Error: ' + (result.error || 'Failed to update resource'), 'error');
+      submitBtn.textContent = '💾 Update Resource';
+      submitBtn.disabled = false;
+    }
+  } catch (error) {
+    showNotification('❌ Network error: ' + error.message, 'error');
+    submitBtn.textContent = '💾 Update Resource';
+    submitBtn.disabled = false;
+  }
+}
+
+async function deletePost() {
+  if (!confirm('⚠️ Are you sure you want to delete this resource permanently? This cannot be undone.')) return;
+
+  try {
+    const response = await fetch(`/api/admin/blog/${postId}`, {
+      method: 'DELETE',
+      credentials: 'include',
+    });
+    const result = await response.json();
+    
+    if (result.success) {
+      showNotification('✅ Resource deleted successfully!', 'success');
+      setTimeout(() => {
+        window.location.href = '/admin/blog';
+      }, 1500);
+    } else {
+      showNotification('❌ Failed to delete: ' + (result.error || 'Unknown error'), 'error');
+    }
+  } catch (error) {
+    showNotification('❌ Error: ' + error.message, 'error');
+  }
+}
+
+function showNotification(message, type) {
+  const el = document.getElementById('notification');
+  el.className = type;
+  el.textContent = message;
+  el.style.display = 'block';
+}
+
+// Image preview
+document.addEventListener('DOMContentLoaded', function() {
+  const imageUrlInput = document.getElementById('imageUrl');
+  const imagePreview = document.getElementById('imagePreview');
+  const previewImg = document.getElementById('previewImg');
+
+  imageUrlInput.addEventListener('input', function() {
+    const url = this.value.trim();
+    if (url && (url.startsWith('http://') || url.startsWith('https://'))) {
+      previewImg.src = url;
+      imagePreview.style.display = 'block';
+    } else {
+      imagePreview.style.display = 'none';
+    }
+  });
+
+  // Title counter
+  document.getElementById('title').addEventListener('input', function() {
+    document.getElementById('titleCount').textContent = this.value.length + ' / 200 characters';
+  });
+
+  // Excerpt counter
+  document.getElementById('excerpt').addEventListener('input', function() {
+    document.getElementById('excerptCount').textContent = this.value.length + ' / 500 characters';
+  });
+
+  // Content counter
+  document.getElementById('content').addEventListener('input', function() {
+    document.getElementById('contentCount').textContent = this.value.length + ' characters';
+  });
+
+  // Meta description counter
+  document.getElementById('metaDescription').addEventListener('input', function() {
+    document.getElementById('metaDescCount').textContent = this.value.length + ' / 200 characters';
+  });
+
+  // Load post
+  loadPost();
+});
+</script>
+{% endblock %}
+
+
+
+================================================================================
+FILE: src\views\admin\blog\index.njk
+SIZE: 9.8 KB
+================================================================================
+{% extends "admin-base.njk" %}
+
+{% block adminTitle %}Manage Resources{% endblock %}
+
+{% block adminContent %}
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
+  <div>
+    <p style="color: #666; margin: 0;">Manage your blog posts and resources</p>
+  </div>
+  <a href="/admin/blog/create" class="btn-primary">
+    <i class="fas fa-plus"></i> Create Resource
+  </a>
+</div>
+
+<!-- Notification -->
+<div id="notification" style="display: none; padding: 1rem; border-radius: 8px; margin-bottom: 1rem;"></div>
+
+<!-- Filter Bar -->
+<div style="display: flex; gap: 0.5rem; margin-bottom: 1.5rem; flex-wrap: wrap; align-items: center;">
+  <button class="filter-btn active" data-filter="all" onclick="filterPosts('all')">📋 All</button>
+  <button class="filter-btn" data-filter="published" onclick="filterPosts('published')">✅ Published</button>
+  <button class="filter-btn" data-filter="draft" onclick="filterPosts('draft')">📝 Draft</button>
+  <span style="margin-left: auto; color: #666; font-size: 0.9rem;" id="postCount">0 posts</span>
+</div>
+
+<!-- Posts Table -->
+<div style="background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 10px rgba(0,0,0,0.05);">
+  <div id="loading" style="text-align: center; padding: 3rem; color: #666;">
+    <i class="fas fa-spinner fa-spin" style="font-size: 2rem; display: block; margin-bottom: 1rem;"></i>
+    Loading resources...
+  </div>
+
+  <div id="postsList" style="display: none; overflow-x: auto;">
+    <table style="width: 100%; border-collapse: collapse; min-width: 500px;">
+      <thead>
+        <tr style="background: #f8f9fa; border-bottom: 2px solid #E8D5B8;">
+          <th style="padding: 1rem; text-align: left; color: #4A3528; font-weight: 600;">Title</th>
+          <th style="padding: 1rem; text-align: left; color: #4A3528; font-weight: 600;">Status</th>
+          <th style="padding: 1rem; text-align: left; color: #4A3528; font-weight: 600;">Created</th>
+          <th style="padding: 1rem; text-align: center; color: #4A3528; font-weight: 600;">Actions</th>
+        </tr>
+      </thead>
+      <tbody id="postsTableBody"></tbody>
+    </table>
+  </div>
+
+  <div id="emptyState" style="display: none; text-align: center; padding: 3rem; color: #999;">
+    <i class="fas fa-file-alt" style="font-size: 4rem; display: block; margin-bottom: 1rem; color: #C9A87C;"></i>
+    <h3 style="color: #4A3528;">No Resources Yet</h3>
+    <p style="color: #666;">Create your first resource to share with your audience.</p>
+    <a href="/admin/blog/create" class="btn-primary" style="display: inline-block; margin-top: 1rem;">
+      <i class="fas fa-plus"></i> Create Resource
+    </a>
+  </div>
+</div>
+
+<style>
+  .btn-primary {
+    padding: 0.6rem 1.5rem;
+    background: linear-gradient(145deg, #C9A87C, #B8966A);
+    color: #4A3528;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    text-decoration: none;
+    display: inline-block;
+    transition: all 0.3s ease;
+  }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 4px 15px rgba(201, 168, 124, 0.4); }
+  
+  .btn-sm {
+    padding: 0.3rem 0.8rem;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    transition: all 0.2s ease;
+  }
+  .btn-sm:hover { transform: translateY(-1px); }
+  .btn-sm.btn-primary { background: #C9A87C; color: #4A3528; }
+  .btn-sm.btn-primary:hover { background: #B8966A; }
+  .btn-sm.btn-danger { background: #dc3545; color: white; }
+  .btn-sm.btn-danger:hover { background: #c82333; }
+  .btn-sm.btn-success { background: #28a745; color: white; }
+  .btn-sm.btn-success:hover { background: #218838; }
+  .btn-sm.btn-warning { background: #ffc107; color: #212529; }
+  .btn-sm.btn-warning:hover { background: #e0a800; }
+  
+  .filter-btn {
+    padding: 0.4rem 1.2rem;
+    border: 2px solid #E8D5B8;
+    background: white;
+    border-radius: 20px;
+    cursor: pointer;
+    color: #666;
+    font-weight: 500;
+    transition: all 0.3s ease;
+  }
+  .filter-btn:hover { border-color: #C9A87C; color: #4A3528; }
+  .filter-btn.active { background: #C9A87C; border-color: #C9A87C; color: #4A3528; }
+  
+  .status-badge {
+    padding: 0.2rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    display: inline-block;
+  }
+  .status-published { background: #d4edda; color: #155724; }
+  .status-draft { background: #fff3cd; color: #856404; }
+  
+  .action-group { display: flex; gap: 0.3rem; justify-content: center; flex-wrap: wrap; }
+  
+  #notification.success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+  #notification.error { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+  #notification.info { background: #d1ecf1; color: #0c5460; border: 1px solid #bee5eb; }
+  #notification { padding: 1rem; border-radius: 8px; margin-bottom: 1rem; display: none; }
+  
+  .table-row { border-bottom: 1px solid #f0f0f0; }
+  .table-row:hover { background: #faf8f6; }
+</style>
+
+<script>
+let allPosts = [];
+let currentFilter = 'all';
+
+function showNotification(message, type = 'success') {
+  const el = document.getElementById('notification');
+  el.className = type;
+  el.textContent = message;
+  el.style.display = 'block';
+  setTimeout(() => { el.style.display = 'none'; }, 3000);
+}
+
+function filterPosts(filter) {
+  currentFilter = filter;
+  document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.filter === filter);
+  });
+  renderPosts();
+}
+
+function renderPosts() {
+  const filtered = allPosts.filter(post => {
+    if (currentFilter === 'published') return post.isPublished;
+    if (currentFilter === 'draft') return !post.isPublished;
+    return true;
+  });
+
+  const tableBody = document.getElementById('postsTableBody');
+  document.getElementById('postCount').textContent = filtered.length + ' posts';
+
+  if (filtered.length === 0) {
+    tableBody.innerHTML = `
+      <tr><td colspan="4" style="padding: 2rem; text-align: center; color: #999;">
+        ${currentFilter === 'all' ? 'No posts found.' : 'No ' + currentFilter + ' posts found.'}
+      </td></tr>
+    `;
+    return;
+  }
+
+  tableBody.innerHTML = filtered.map(post => `
+    <tr class="table-row">
+      <td style="padding: 1rem;">
+        <strong style="color: #4A3528;">${escapeHtml(post.title)}</strong>
+      </td>
+      <td style="padding: 1rem;">
+        <span class="status-badge ${post.isPublished ? 'status-published' : 'status-draft'}">
+          ${post.isPublished ? '✅ Published' : '📝 Draft'}
+        </span>
+      </td>
+      <td style="padding: 1rem; color: #666; font-size: 0.9rem;">
+        ${formatDate(post.createdAt)}
+      </td>
+      <td style="padding: 0.5rem;">
+        <div class="action-group">
+          ${post.isPublished 
+            ? `<button onclick="togglePublish('${post.id}', false)" class="btn-sm btn-warning" title="Unpublish">📤 Unpublish</button>`
+            : `<button onclick="togglePublish('${post.id}', true)" class="btn-sm btn-success" title="Publish">📢 Publish</button>`
+          }
+          <a href="/admin/blog/edit/${post.id}" class="btn-sm btn-primary" style="text-decoration: none;">✏️ Edit</a>
+          <button onclick="deletePost('${post.id}')" class="btn-sm btn-danger">🗑️ Delete</button>
+        </div>
+      </td>
+    </tr>
+  `).join('');
+}
+
+function escapeHtml(text) {
+  if (!text) return '';
+  const div = document.createElement('div');
+  div.textContent = text;
+  return div.innerHTML;
+}
+
+function formatDate(dateStr) {
+  if (!dateStr) return 'N/A';
+  const d = new Date(dateStr);
+  return d.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+}
+
+async function loadPosts() {
+  const loading = document.getElementById('loading');
+  const postsList = document.getElementById('postsList');
+  const emptyState = document.getElementById('emptyState');
+
+  loading.style.display = 'block';
+  postsList.style.display = 'none';
+  emptyState.style.display = 'none';
+
+  try {
+    const response = await fetch('/api/blog');
+    const result = await response.json();
+
+    loading.style.display = 'none';
+
+    if (result.success && result.data && result.data.length > 0) {
+      allPosts = result.data;
+      postsList.style.display = 'block';
+      renderPosts();
+    } else {
+      emptyState.style.display = 'block';
+    }
+  } catch (error) {
+    loading.style.display = 'none';
+    showNotification('Error loading resources: ' + error.message, 'error');
+  }
+}
+
+window.togglePublish = async function(id, publish) {
+  const action = publish ? 'publish' : 'unpublish';
+  if (!confirm(`Are you sure you want to ${action} this resource?`)) return;
+
+  try {
+    const response = await fetch(`/api/admin/blog/${id}/${action}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+    });
+    const result = await response.json();
+    
+    if (result.success) {
+      showNotification(result.message || `Resource ${action}ed successfully!`, 'success');
+      loadPosts();
+    } else {
+      showNotification('Failed to ' + action + ' resource: ' + (result.error || 'Unknown error'), 'error');
+    }
+  } catch (error) {
+    showNotification('Error: ' + error.message, 'error');
+  }
+};
+
+window.deletePost = async function(id) {
+  if (!confirm('⚠️ Are you sure you want to delete this resource permanently? This cannot be undone.')) return;
+
+  try {
+    const response = await fetch(`/api/admin/blog/${id}`, {
+      method: 'DELETE',
+      credentials: 'include',
+    });
+    const result = await response.json();
+    
+    if (result.success) {
+      showNotification('Resource deleted successfully!', 'success');
+      loadPosts();
+    } else {
+      showNotification('Failed to delete: ' + (result.error || 'Unknown error'), 'error');
+    }
+  } catch (error) {
+    showNotification('Error: ' + error.message, 'error');
+  }
+};
+
+document.addEventListener('DOMContentLoaded', loadPosts);
+</script>
+{% endblock %}
+
+
+
+================================================================================
+FILE: src\views\admin\bookings.njk
+SIZE: 4.63 KB
+================================================================================
+{% extends "admin-base.njk" %}
+
+{% block adminTitle %}{{ 'Pending Bookings' if filter == 'pending' else 'All Bookings' }}{% endblock %}
+
+{% block adminContent %}
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+  <p style="color: #666;">Manage all appointments</p>
+  <div style="display: flex; gap: 0.5rem;">
+    <a href="/admin/bookings" class="filter-btn {{ 'active' if not filter else '' }}">All</a>
+    <a href="/admin/bookings/pending" class="filter-btn {{ 'active' if filter == 'pending' else '' }}">Pending</a>
+  </div>
+</div>
+
+<div style="background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 10px rgba(0,0,0,0.05);">
+  <table style="width: 100%; border-collapse: collapse;">
+    <thead>
+      <tr style="background: #f8f9fa;">
+        <th style="padding: 1rem; text-align: left; color: #4A3528;">Client</th>
+        <th style="padding: 1rem; text-align: left; color: #4A3528;">Service</th>
+        <th style="padding: 1rem; text-align: left; color: #4A3528;">Date</th>
+        <th style="padding: 1rem; text-align: left; color: #4A3528;">Status</th>
+        <th style="padding: 1rem; text-align: left; color: #4A3528;">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% if bookings.data and bookings.data.length > 0 %}
+        {% for booking in bookings.data %}
+        <tr style="border-bottom: 1px solid #f0f0f0;">
+          <td style="padding: 1rem;">
+            <strong>{{ booking.clientName }}</strong><br>
+            <span style="color: #999; font-size: 0.85rem;">{{ booking.clientPhone }}</span>
+          </td>
+          <td style="padding: 1rem; color: #666;">{{ booking.serviceId }}</td>
+          <td style="padding: 1rem;">
+            {{ booking.appointmentDate | date('M d, Y') }}<br>
+            <span style="color: #999; font-size: 0.85rem;">{{ booking.appointmentTime }}</span>
+          </td>
+          <td style="padding: 1rem;">
+            <span class="status-badge 
+              {% if booking.status == 'pending' %}status-draft
+              {% elif booking.status == 'confirmed' %}status-published
+              {% elif booking.status == 'completed' %}status-completed
+              {% else %}status-cancelled{% endif %}">
+              {{ booking.status }}
+            </span>
+          </td>
+          <td style="padding: 1rem;">
+            <button class="btn-sm btn-primary" onclick="viewBooking('{{ booking.id }}')">View</button>
+            {% if booking.status == 'pending' %}
+              <button class="btn-sm btn-success" onclick="confirmBooking('{{ booking.id }}')">Confirm</button>
+            {% endif %}
+          </td>
+        </tr>
+        {% endfor %}
+      {% else %}
+        <tr>
+          <td colspan="5" style="padding: 2rem; text-align: center; color: #999;">
+            <i class="fas fa-calendar-check" style="font-size: 2rem; display: block; margin-bottom: 0.5rem;"></i>
+            No bookings found
+          </td>
+        </tr>
+      {% endif %}
+    </tbody>
+  </table>
+  {% if bookings.total > 0 %}
+  <div style="padding: 1rem; border-top: 1px solid #f0f0f0; display: flex; justify-content: space-between; align-items: center; color: #666;">
+    <span>Total: {{ bookings.total }} bookings</span>
+    <span>Showing {{ bookings.data.length }} entries</span>
+  </div>
+  {% endif %}
+</div>
+
+<style>
+  .filter-btn { padding: 0.4rem 1rem; text-decoration: none; color: #666; border-radius: 4px; border: 1px solid #ddd; }
+  .filter-btn.active { background: #C9A87C; color: #4A3528; border-color: #C9A87C; }
+  .filter-btn:hover { background: #f0f0f0; }
+  .btn-sm { padding: 0.3rem 0.8rem; border: none; border-radius: 4px; cursor: pointer; font-size: 0.85rem; }
+  .btn-sm.btn-primary { background: #C9A87C; color: #4A3528; }
+  .btn-sm.btn-primary:hover { background: #B8966A; }
+  .btn-sm.btn-success { background: #28a745; color: white; }
+  .btn-sm.btn-success:hover { background: #218838; }
+  .status-completed { background: #d4edda; color: #155724; }
+  .status-cancelled { background: #f8d7da; color: #721c24; }
+</style>
+
+<script>
+function viewBooking(id) {
+  window.location.href = '/admin/bookings/' + id;
+}
+
+function confirmBooking(id) {
+  if (!confirm("Confirm this booking?")) return;
+  fetch('/api/bookings/' + id + '/confirm', {
+    method: 'PUT',
+    credentials: 'include',
+    headers: { 'Content-Type': 'application/json' }
+  })
+  .then(function(res) { return res.json(); })
+  .then(function(data) {
+    if (data.success) {
+      alert('Booking confirmed!');
+      window.location.reload();
+    } else {
+      alert('Failed to confirm: ' + (data.error || 'Unknown error'));
+    }
+  })
+  .catch(function() {
+    alert('Error confirming booking');
+  });
+}
+</script>
+{% endblock %}
+
+
+================================================================================
+FILE: src\views\admin\content.njk
+SIZE: 10.27 KB
+================================================================================
+{% extends "admin-base.njk" %}
+
+{% block adminTitle %}Site Content Management{% endblock %}
+
+{% block adminContent %}
+<div style="max-width: 900px; margin: 0 auto;">
+  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+    <p style="color: #666;">Manage all text content displayed on the site</p>
+  </div>
+
+  <div id="alert" style="display: none; padding: 1rem; border-radius: 8px; margin-bottom: 1rem;"></div>
+
+  <div id="loading" style="text-align: center; padding: 2rem; color: #666;">
+    <i class="fas fa-spinner fa-spin"></i> Loading content...
+  </div>
+
+  <div id="contentForm" style="display: none; background: white; border-radius: 12px; padding: 2rem; box-shadow: 0 2px 10px rgba(0,0,0,0.05);">
+    <form id="contentFormSubmit">
+      <h3 style="color: #4A3528; margin-bottom: 1rem;">Branding</h3>
+      <div style="margin-bottom: 1rem;">
+        <label style="display: block; font-weight: bold; color: #4A3528; margin-bottom: 0.3rem;">Business Name</label>
+        <input type="text" id="business_name" name="business_name" style="width: 100%; padding: 0.8rem; border: 2px solid #E8D5B8; border-radius: 8px; font-size: 1rem;">
+      </div>
+      <div style="margin-bottom: 1rem;">
+        <label style="display: block; font-weight: bold; color: #4A3528; margin-bottom: 0.3rem;">Tagline</label>
+        <input type="text" id="tagline" name="tagline" style="width: 100%; padding: 0.8rem; border: 2px solid #E8D5B8; border-radius: 8px; font-size: 1rem;">
+      </div>
+
+      <h3 style="color: #4A3528; margin-top: 2rem; margin-bottom: 1rem;">Hero Section</h3>
+      <div style="margin-bottom: 1rem;">
+        <label style="display: block; font-weight: bold; color: #4A3528; margin-bottom: 0.3rem;">Hero Title</label>
+        <input type="text" id="hero_title" name="hero_title" style="width: 100%; padding: 0.8rem; border: 2px solid #E8D5B8; border-radius: 8px; font-size: 1rem;">
+      </div>
+      <div style="margin-bottom: 1rem;">
+        <label style="display: block; font-weight: bold; color: #4A3528; margin-bottom: 0.3rem;">Hero Subtitle</label>
+        <textarea id="hero_subtitle" name="hero_subtitle" rows="2" style="width: 100%; padding: 0.8rem; border: 2px solid #E8D5B8; border-radius: 8px; font-size: 1rem;"></textarea>
+      </div>
+
+      <h3 style="color: #4A3528; margin-top: 2rem; margin-bottom: 1rem;">Contact Information</h3>
+      <div style="margin-bottom: 1rem;">
+        <label style="display: block; font-weight: bold; color: #4A3528; margin-bottom: 0.3rem;">Phone</label>
+        <input type="text" id="phone" name="phone" style="width: 100%; padding: 0.8rem; border: 2px solid #E8D5B8; border-radius: 8px; font-size: 1rem;">
+      </div>
+      <div style="margin-bottom: 1rem;">
+        <label style="display: block; font-weight: bold; color: #4A3528; margin-bottom: 0.3rem;">Email</label>
+        <input type="email" id="email" name="email" style="width: 100%; padding: 0.8rem; border: 2px solid #E8D5B8; border-radius: 8px; font-size: 1rem;">
+      </div>
+      <div style="margin-bottom: 1rem;">
+        <label style="display: block; font-weight: bold; color: #4A3528; margin-bottom: 0.3rem;">Support Email</label>
+        <input type="email" id="support_email" name="support_email" style="width: 100%; padding: 0.8rem; border: 2px solid #E8D5B8; border-radius: 8px; font-size: 1rem;">
+      </div>
+      <div style="margin-bottom: 1rem;">
+        <label style="display: block; font-weight: bold; color: #4A3528; margin-bottom: 0.3rem;">Crisis Hotline</label>
+        <input type="text" id="crisis_hotline" name="crisis_hotline" style="width: 100%; padding: 0.8rem; border: 2px solid #E8D5B8; border-radius: 8px; font-size: 1rem;">
+      </div>
+      <div style="margin-bottom: 1rem;">
+        <label style="display: block; font-weight: bold; color: #4A3528; margin-bottom: 0.3rem;">WhatsApp Number</label>
+        <input type="text" id="whatsapp_number" name="whatsapp_number" style="width: 100%; padding: 0.8rem; border: 2px solid #E8D5B8; border-radius: 8px; font-size: 1rem;">
+      </div>
+
+      <h3 style="color: #4A3528; margin-top: 2rem; margin-bottom: 1rem;">Hours</h3>
+      <div style="margin-bottom: 1rem;">
+        <label style="display: block; font-weight: bold; color: #4A3528; margin-bottom: 0.3rem;">Weekday Hours</label>
+        <input type="text" id="hours_weekday" name="hours_weekday" placeholder="Mon-Fri: 8:00 AM - 8:00 PM" style="width: 100%; padding: 0.8rem; border: 2px solid #E8D5B8; border-radius: 8px; font-size: 1rem;">
+      </div>
+      <div style="margin-bottom: 1rem;">
+        <label style="display: block; font-weight: bold; color: #4A3528; margin-bottom: 0.3rem;">Saturday Hours</label>
+        <input type="text" id="hours_saturday" name="hours_saturday" placeholder="Sat: 9:00 AM - 5:00 PM" style="width: 100%; padding: 0.8rem; border: 2px solid #E8D5B8; border-radius: 8px; font-size: 1rem;">
+      </div>
+      <div style="margin-bottom: 1rem;">
+        <label style="display: block; font-weight: bold; color: #4A3528; margin-bottom: 0.3rem;">Sunday Hours</label>
+        <input type="text" id="hours_sunday" name="hours_sunday" placeholder="Sun: Closed" style="width: 100%; padding: 0.8rem; border: 2px solid #E8D5B8; border-radius: 8px; font-size: 1rem;">
+      </div>
+
+      <h3 style="color: #4A3528; margin-top: 2rem; margin-bottom: 1rem;">Footer</h3>
+      <div style="margin-bottom: 1rem;">
+        <label style="display: block; font-weight: bold; color: #4A3528; margin-bottom: 0.3rem;">Footer Text</label>
+        <input type="text" id="footer_text" name="footer_text" placeholder="Your trusted partner in mental wellness" style="width: 100%; padding: 0.8rem; border: 2px solid #E8D5B8; border-radius: 8px; font-size: 1rem;">
+      </div>
+      <div style="margin-bottom: 1rem;">
+        <label style="display: block; font-weight: bold; color: #4A3528; margin-bottom: 0.3rem;">Copyright Text</label>
+        <input type="text" id="copyright_text" name="copyright_text" placeholder="� 2026 Nairobi Counseling Center" style="width: 100%; padding: 0.8rem; border: 2px solid #E8D5B8; border-radius: 8px; font-size: 1rem;">
+      </div>
+
+      <button type="submit" class="btn-primary" style="width: 100%; padding: 1rem; margin-top: 1rem; background: linear-gradient(145deg, #C9A87C, #B8966A); color: #4A3528; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 1.1rem;">
+        ?? Save All Content
+      </button>
+    </form>
+  </div>
+</div>
+
+<script>
+const alert = document.getElementById('alert');
+
+async function loadContent() {
+  try {
+    const response = await fetch('/api/settings/content');
+    const result = await response.json();
+    if (result.success && result.data) {
+      const content = result.data;
+      // Populate all fields
+      document.getElementById('business_name').value = content.business_name || '';
+      document.getElementById('tagline').value = content.tagline || '';
+      document.getElementById('hero_title').value = content.hero_title || '';
+      document.getElementById('hero_subtitle').value = content.hero_subtitle || '';
+      document.getElementById('phone').value = content.phone || '';
+      document.getElementById('email').value = content.email || '';
+      document.getElementById('support_email').value = content.support_email || '';
+      document.getElementById('crisis_hotline').value = content.crisis_hotline || '';
+      document.getElementById('whatsapp_number').value = content.whatsapp_number || '';
+      document.getElementById('hours_weekday').value = content.hours_weekday || '';
+      document.getElementById('hours_saturday').value = content.hours_saturday || '';
+      document.getElementById('hours_sunday').value = content.hours_sunday || '';
+      document.getElementById('footer_text').value = content.footer_text || '';
+      document.getElementById('copyright_text').value = content.copyright_text || '';
+      
+      document.getElementById('loading').style.display = 'none';
+      document.getElementById('contentForm').style.display = 'block';
+    }
+  } catch (error) {
+    alert.className = 'alert alert-error';
+    alert.textContent = 'Error loading content';
+    alert.style.display = 'block';
+    alert.style.background = '#f8d7da';
+    alert.style.color = '#721c24';
+    alert.style.border = '1px solid #f5c6cb';
+    alert.style.padding = '1rem';
+    alert.style.borderRadius = '8px';
+    alert.style.marginBottom = '1rem';
+  }
+}
+
+loadContent();
+
+document.getElementById('contentFormSubmit').addEventListener('submit', async function(e) {
+  e.preventDefault();
+  
+  const formData = new FormData(this);
+  const data = {};
+  for (let [key, value] of formData.entries()) {
+    data[key] = value;
+  }
+
+  const submitBtn = this.querySelector('.btn-primary');
+  submitBtn.textContent = '? Saving...';
+  submitBtn.disabled = true;
+
+  try {
+    const response = await fetch('/api/admin/settings/content', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+      credentials: 'include',
+    });
+    const result = await response.json();
+    
+    if (result.success) {
+      alert.className = 'alert alert-success';
+      alert.textContent = '? Content saved successfully!';
+      alert.style.display = 'block';
+      alert.style.background = '#d4edda';
+      alert.style.color = '#155724';
+      alert.style.border = '1px solid #c3e6cb';
+      alert.style.padding = '1rem';
+      alert.style.borderRadius = '8px';
+      alert.style.marginBottom = '1rem';
+    } else {
+      alert.className = 'alert alert-error';
+      alert.textContent = '? Error: ' + (result.error || 'Failed to save content');
+      alert.style.display = 'block';
+      alert.style.background = '#f8d7da';
+      alert.style.color = '#721c24';
+      alert.style.border = '1px solid #f5c6cb';
+      alert.style.padding = '1rem';
+      alert.style.borderRadius = '8px';
+      alert.style.marginBottom = '1rem';
+    }
+  } catch (error) {
+    alert.className = 'alert alert-error';
+    alert.textContent = '? Network error: ' + error.message;
+    alert.style.display = 'block';
+    alert.style.background = '#f8d7da';
+    alert.style.color = '#721c24';
+    alert.style.border = '1px solid #f5c6cb';
+    alert.style.padding = '1rem';
+    alert.style.borderRadius = '8px';
+    alert.style.marginBottom = '1rem';
+  } finally {
+    submitBtn.textContent = '?? Save All Content';
+    submitBtn.disabled = false;
+  }
+});
+</script>
+{% endblock %}
+
+
+================================================================================
+FILE: src\views\admin\counselors.njk
+SIZE: 3.4 KB
+================================================================================
+{% extends "admin-base.njk" %}
+
+{% block adminTitle %}Manage Counselors{% endblock %}
+
+{% block adminContent %}
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+  <p style="color: #666;">Manage your counseling team members</p>
+  <button class="btn-primary" onclick="window.location.href='/admin/counselors/create'">
+    <i class="fas fa-plus"></i> Add Counselor
+  </button>
+</div>
+
+<div style="background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 10px rgba(0,0,0,0.05);">
+  <table style="width: 100%; border-collapse: collapse;">
+    <thead>
+      <tr style="background: #f8f9fa;">
+        <th style="padding: 1rem; text-align: left; color: #4A3528;">Name</th>
+        <th style="padding: 1rem; text-align: left; color: #4A3528;">Title</th>
+        <th style="padding: 1rem; text-align: left; color: #4A3528;">Status</th>
+        <th style="padding: 1rem; text-align: left; color: #4A3528;">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% if counselors and counselors.length > 0 %}
+        {% for counselor in counselors %}
+        <tr style="border-bottom: 1px solid #f0f0f0;">
+          <td style="padding: 1rem;"><strong>{{ counselor.name }}</strong></td>
+          <td style="padding: 1rem; color: #666;">{{ counselor.title or 'Counselor' }}</td>
+          <td style="padding: 1rem;">
+            <span class="status-badge {{ 'status-published' if counselor.isActive else 'status-draft' }}">
+              {{ 'Active' if counselor.isActive else 'Inactive' }}
+            </span>
+          </td>
+          <td style="padding: 1rem;">
+            <button class="btn-sm btn-primary" onclick="window.location.href='/admin/counselors/edit/{{ counselor.id }}'">Edit</button>
+            <button class="btn-sm btn-danger" onclick="deleteCounselor('{{ counselor.id }}')">Delete</button>
+          </td>
+        </tr>
+        {% endfor %}
+      {% else %}
+        <tr>
+          <td colspan="4" style="padding: 2rem; text-align: center; color: #999;">
+            <i class="fas fa-users" style="font-size: 2rem; display: block; margin-bottom: 0.5rem;"></i>
+            No counselors added yet
+          </td>
+        </tr>
+      {% endif %}
+    </tbody>
+  </table>
+</div>
+
+<style>
+  .btn-sm { padding: 0.3rem 0.8rem; border: none; border-radius: 4px; cursor: pointer; font-size: 0.85rem; }
+  .btn-sm.btn-primary { background: #C9A87C; color: #4A3528; }
+  .btn-sm.btn-primary:hover { background: #B8966A; }
+  .btn-sm.btn-danger { background: #dc3545; color: white; }
+  .btn-sm.btn-danger:hover { background: #c82333; }
+  .btn-primary { padding: 0.6rem 1.5rem; background: linear-gradient(145deg, #C9A87C, #B8966A); color: #4A3528; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 4px 15px rgba(201, 168, 124, 0.4); }
+</style>
+<script>
+window.deleteCounselor = async function(id) {
+  if (!confirm('Are you sure you want to delete this counselor?')) return;
+  try {
+    const response = await fetch(`/api/admin/therapists/${id}`, {
+      method: 'DELETE',
+      credentials: 'include',
+    });
+    const result = await response.json();
+    if (result.success) {
+      alert('Counselor deleted successfully');
+      window.location.reload();
+    } else {
+      alert('Failed to delete counselor');
+    }
+  } catch (error) {
+    alert('Error deleting counselor');
+  }
+};
+</script>
+{% endblock %}
+
+
+
+
+
+================================================================================
+FILE: src\views\admin\counselors\create.njk
+SIZE: 4.71 KB
+================================================================================
+{% extends "admin-base.njk" %}
+
+{% block adminTitle %}Create Counselor{% endblock %}
+
+{% block adminContent %}
+<div style="max-width: 800px; margin: 0 auto; background: white; border-radius: 12px; padding: 2rem; box-shadow: 0 2px 10px rgba(0,0,0,0.05);">
+  <h2 style="color: #4A3528; margin-bottom: 1rem;">Add New Counselor</h2>
+  <p style="color: #666; margin-bottom: 1.5rem;">Add a new team member</p>
+
+  <form id="counselorForm">
+    <div style="margin-bottom: 1rem;">
+      <label style="display: block; font-weight: bold; color: #4A3528; margin-bottom: 0.3rem;">Name</label>
+      <input type="text" id="name" name="name" required style="width: 100%; padding: 0.8rem; border: 2px solid #E8D5B8; border-radius: 8px; font-size: 1rem;">
+    </div>
+
+    <div style="margin-bottom: 1rem;">
+      <label style="display: block; font-weight: bold; color: #4A3528; margin-bottom: 0.3rem;">Title</label>
+      <input type="text" id="title" name="title" placeholder="e.g., Clinical Psychologist" style="width: 100%; padding: 0.8rem; border: 2px solid #E8D5B8; border-radius: 8px; font-size: 1rem;">
+    </div>
+
+    <div style="margin-bottom: 1rem;">
+      <label style="display: block; font-weight: bold; color: #4A3528; margin-bottom: 0.3rem;">Bio</label>
+      <textarea id="bio" name="bio" rows="3" style="width: 100%; padding: 0.8rem; border: 2px solid #E8D5B8; border-radius: 8px; font-size: 1rem;"></textarea>
+    </div>
+
+    <div style="margin-bottom: 1rem;">
+      <label style="display: block; font-weight: bold; color: #4A3528; margin-bottom: 0.3rem;">Image URL</label>
+      <input type="url" id="imageUrl" name="imageUrl" placeholder="https://example.com/photo.jpg" style="width: 100%; padding: 0.8rem; border: 2px solid #E8D5B8; border-radius: 8px; font-size: 1rem;">
+    </div>
+
+    <div style="margin-bottom: 1rem;">
+      <label style="display: block; font-weight: bold; color: #4A3528; margin-bottom: 0.3rem;">Specialties (comma separated)</label>
+      <input type="text" id="specialties" name="specialties" placeholder="Trauma, Anxiety, Depression" style="width: 100%; padding: 0.8rem; border: 2px solid #E8D5B8; border-radius: 8px; font-size: 1rem;">
+    </div>
+
+    <div style="margin-bottom: 1rem;">
+      <label style="display: block; font-weight: bold; color: #4A3528; margin-bottom: 0.3rem;">Display Order</label>
+      <input type="number" id="displayOrder" name="displayOrder" value="0" style="width: 100%; padding: 0.8rem; border: 2px solid #E8D5B8; border-radius: 8px; font-size: 1rem;">
+    </div>
+
+    <div style="margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+      <input type="checkbox" id="isActive" name="isActive" checked style="width: 1.2rem; height: 1.2rem;">
+      <label for="isActive" style="font-weight: bold; color: #4A3528;">Active</label>
+    </div>
+
+    <div style="display: flex; gap: 1rem; margin-top: 2rem;">
+      <button type="submit" class="btn-primary" style="padding: 0.8rem 2rem; background: linear-gradient(145deg, #C9A87C, #B8966A); color: #4A3528; border: none; border-radius: 8px; font-weight: bold; cursor: pointer;">Add Counselor</button>
+      <a href="/admin/counselors" class="btn-secondary" style="padding: 0.8rem 2rem; background: #f8f9fa; color: #333; border: 2px solid #ddd; border-radius: 8px; font-weight: bold; cursor: pointer; text-decoration: none; display: inline-block; text-align: center;">Cancel</a>
+    </div>
+  </form>
+</div>
+
+<script>
+document.getElementById('counselorForm').addEventListener('submit', async function(e) {
+  e.preventDefault();
+  const formData = new FormData(this);
+  const specialties = formData.get('specialties') ? formData.get('specialties').split(',').map(s => s.trim()) : [];
+  const data = {
+    name: formData.get('name'),
+    title: formData.get('title') || null,
+    bio: formData.get('bio') || null,
+    imageUrl: formData.get('imageUrl') || null,
+    specialties: specialties,
+    isActive: formData.get('isActive') === 'on',
+    displayOrder: parseInt(formData.get('displayOrder')) || 0,
+  };
+
+  const submitBtn = this.querySelector('.btn-primary');
+  submitBtn.textContent = 'Adding...';
+  submitBtn.disabled = true;
+
+  try {
+    const response = await fetch('/api/admin/therapists', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+      credentials: 'include',
+    });
+    const result = await response.json();
+    if (result.success) {
+      alert('Counselor added successfully!');
+      window.location.href = '/admin/counselors';
+    } else {
+      alert('Error: ' + (result.error || 'Failed to add counselor'));
+    }
+  } catch (error) {
+    alert('Network error: ' + error.message);
+  } finally {
+    submitBtn.textContent = 'Add Counselor';
+    submitBtn.disabled = false;
+  }
+});
+</script>
+{% endblock %}
+
+
+
+================================================================================
+FILE: src\views\admin\counselors\edit.njk
+SIZE: 5.92 KB
+================================================================================
+{% extends "admin-base.njk" %}
+
+{% block adminTitle %}Edit Counselor{% endblock %}
+
+{% block adminContent %}
+<div style="max-width: 800px; margin: 0 auto; background: white; border-radius: 12px; padding: 2rem; box-shadow: 0 2px 10px rgba(0,0,0,0.05);">
+  <h2 style="color: #4A3528; margin-bottom: 1rem;">Edit Counselor</h2>
+  <p style="color: #666; margin-bottom: 1.5rem;">Update team member details</p>
+
+  <div id="loading" style="text-align: center; padding: 2rem; color: #666;">
+    <i class="fas fa-spinner fa-spin"></i> Loading counselor...
+  </div>
+
+  <div id="editForm" style="display: none;">
+    <form id="counselorForm">
+      <div style="margin-bottom: 1rem;">
+        <label style="display: block; font-weight: bold; color: #4A3528; margin-bottom: 0.3rem;">Name</label>
+        <input type="text" id="name" name="name" required style="width: 100%; padding: 0.8rem; border: 2px solid #E8D5B8; border-radius: 8px; font-size: 1rem;">
+      </div>
+
+      <div style="margin-bottom: 1rem;">
+        <label style="display: block; font-weight: bold; color: #4A3528; margin-bottom: 0.3rem;">Title</label>
+        <input type="text" id="title" name="title" style="width: 100%; padding: 0.8rem; border: 2px solid #E8D5B8; border-radius: 8px; font-size: 1rem;">
+      </div>
+
+      <div style="margin-bottom: 1rem;">
+        <label style="display: block; font-weight: bold; color: #4A3528; margin-bottom: 0.3rem;">Bio</label>
+        <textarea id="bio" name="bio" rows="3" style="width: 100%; padding: 0.8rem; border: 2px solid #E8D5B8; border-radius: 8px; font-size: 1rem;"></textarea>
+      </div>
+
+      <div style="margin-bottom: 1rem;">
+        <label style="display: block; font-weight: bold; color: #4A3528; margin-bottom: 0.3rem;">Image URL</label>
+        <input type="url" id="imageUrl" name="imageUrl" style="width: 100%; padding: 0.8rem; border: 2px solid #E8D5B8; border-radius: 8px; font-size: 1rem;">
+      </div>
+
+      <div style="margin-bottom: 1rem;">
+        <label style="display: block; font-weight: bold; color: #4A3528; margin-bottom: 0.3rem;">Specialties (comma separated)</label>
+        <input type="text" id="specialties" name="specialties" style="width: 100%; padding: 0.8rem; border: 2px solid #E8D5B8; border-radius: 8px; font-size: 1rem;">
+      </div>
+
+      <div style="margin-bottom: 1rem;">
+        <label style="display: block; font-weight: bold; color: #4A3528; margin-bottom: 0.3rem;">Display Order</label>
+        <input type="number" id="displayOrder" name="displayOrder" style="width: 100%; padding: 0.8rem; border: 2px solid #E8D5B8; border-radius: 8px; font-size: 1rem;">
+      </div>
+
+      <div style="margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+        <input type="checkbox" id="isActive" name="isActive" style="width: 1.2rem; height: 1.2rem;">
+        <label for="isActive" style="font-weight: bold; color: #4A3528;">Active</label>
+      </div>
+
+      <div style="display: flex; gap: 1rem; margin-top: 2rem;">
+        <button type="submit" class="btn-primary" style="padding: 0.8rem 2rem; background: linear-gradient(145deg, #C9A87C, #B8966A); color: #4A3528; border: none; border-radius: 8px; font-weight: bold; cursor: pointer;">Update Counselor</button>
+        <a href="/admin/counselors" class="btn-secondary" style="padding: 0.8rem 2rem; background: #f8f9fa; color: #333; border: 2px solid #ddd; border-radius: 8px; font-weight: bold; cursor: pointer; text-decoration: none; display: inline-block; text-align: center;">Cancel</a>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+const counselorId = window.location.pathname.split('/').pop();
+
+async function loadCounselor() {
+  try {
+    const response = await fetch(`/api/therapists/${counselorId}`);
+    const result = await response.json();
+    if (result.success && result.data) {
+      const counselor = result.data;
+      document.getElementById('name').value = counselor.name;
+      document.getElementById('title').value = counselor.title || '';
+      document.getElementById('bio').value = counselor.bio || '';
+      document.getElementById('imageUrl').value = counselor.imageUrl || '';
+      document.getElementById('specialties').value = (counselor.specialties || []).join(', ');
+      document.getElementById('displayOrder').value = counselor.displayOrder || 0;
+      document.getElementById('isActive').checked = counselor.isActive;
+      document.getElementById('loading').style.display = 'none';
+      document.getElementById('editForm').style.display = 'block';
+    }
+  } catch (error) {
+    alert('Error loading counselor');
+    window.location.href = '/admin/counselors';
+  }
+}
+
+loadCounselor();
+
+document.getElementById('counselorForm').addEventListener('submit', async function(e) {
+  e.preventDefault();
+  const formData = new FormData(this);
+  const specialties = formData.get('specialties') ? formData.get('specialties').split(',').map(s => s.trim()) : [];
+  const data = {
+    name: formData.get('name'),
+    title: formData.get('title') || null,
+    bio: formData.get('bio') || null,
+    imageUrl: formData.get('imageUrl') || null,
+    specialties: specialties,
+    isActive: formData.get('isActive') === 'on',
+    displayOrder: parseInt(formData.get('displayOrder')) || 0,
+  };
+
+  const submitBtn = this.querySelector('.btn-primary');
+  submitBtn.textContent = 'Updating...';
+  submitBtn.disabled = true;
+
+  try {
+    const response = await fetch(`/api/admin/therapists/${counselorId}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+      credentials: 'include',
+    });
+    const result = await response.json();
+    if (result.success) {
+      alert('Counselor updated successfully!');
+      window.location.href = '/admin/counselors';
+    } else {
+      alert('Error: ' + (result.error || 'Failed to update counselor'));
+    }
+  } catch (error) {
+    alert('Network error: ' + error.message);
+  } finally {
+    submitBtn.textContent = 'Update Counselor';
+    submitBtn.disabled = false;
+  }
+});
+</script>
+{% endblock %}
+
+
+
+
+================================================================================
+FILE: src\views\admin\dashboard.njk
+SIZE: 1.88 KB
+================================================================================
+{% extends "admin-base.njk" %}
+
+{% block adminTitle %}Dashboard{% endblock %}
+
+{% block adminContent %}
+<div class="stats-grid">
+  <div class="stat-card">
+    <div class="stat-number" id="statBookings">0</div>
+    <div class="stat-label">Total Bookings</div>
+  </div>
+  <div class="stat-card" style="border-left-color: #ffc107;">
+    <div class="stat-number" id="statPending">0</div>
+    <div class="stat-label">Pending Bookings</div>
+  </div>
+  <div class="stat-card" style="border-left-color: #28a745;">
+    <div class="stat-number" id="statCompleted">0</div>
+    <div class="stat-label">Completed</div>
+  </div>
+  <div class="stat-card" style="border-left-color: #17a2b8;">
+    <div class="stat-number" id="statResources">0</div>
+    <div class="stat-label">Resources</div>
+  </div>
+</div>
+
+<div style="background: white; border-radius: 12px; padding: 1.5rem; box-shadow: 0 2px 10px rgba(0,0,0,0.05);">
+  <h3 style="color: #4A3528; margin-bottom: 1rem;">Welcome to Admin Dashboard</h3>
+  <p style="color: #666;">Manage your counseling center from here. Use the sidebar to navigate.</p>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', async function() {
+  try {
+    const response = await fetch('/api/bookings');
+    const data = await response.json();
+    if (data.success) {
+      const bookings = data.data.data || [];
+      document.getElementById('statBookings').textContent = data.data.total || 0;
+      document.getElementById('statPending').textContent = bookings.filter(b => b.status === 'pending').length;
+      document.getElementById('statCompleted').textContent = bookings.filter(b => b.status === 'completed').length;
+    }
+  } catch (e) {}
+  try {
+    const response = await fetch('/api/blog');
+    const data = await response.json();
+    if (data.success) {
+      document.getElementById('statResources').textContent = data.data.length;
+    }
+  } catch (e) {}
+});
+</script>
+{% endblock %}
+
+
+
+================================================================================
+FILE: src\views\admin\gallery.njk
+SIZE: 3.12 KB
+================================================================================
+{% extends "admin-base.njk" %}
+
+{% block adminTitle %}Manage Gallery{% endblock %}
+
+{% block adminContent %}
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+  <p style="color: #666;">Manage gallery images</p>
+  <button class="btn-primary" onclick="window.location.href='/admin/gallery/create'">
+    <i class="fas fa-upload"></i> Upload Image
+  </button>
+</div>
+
+<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1.5rem;">
+  {% if images and images.length > 0 %}
+    {% for image in images %}
+    <div style="background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 10px rgba(0,0,0,0.05);">
+      <div style="height: 150px; background: #f8f9fa; display: flex; align-items: center; justify-content: center; color: #ccc;">
+        <i class="fas fa-image" style="font-size: 3rem;"></i>
+      </div>
+      <div style="padding: 1rem;">
+        <p style="font-weight: bold; margin: 0; font-size: 0.9rem;">{{ image.title or 'Untitled' }}</p>
+        <p style="color: #999; font-size: 0.8rem; margin: 0.3rem 0;">
+          <span class="status-badge {{ 'status-published' if image.isActive else 'status-draft' }}">
+            {{ 'Active' if image.isActive else 'Inactive' }}
+          </span>
+        </p>
+        <div style="display: flex; gap: 0.3rem; margin-top: 0.5rem;">
+          <button class="btn-sm btn-primary" onclick="window.location.href='/admin/gallery/edit/{{ image.id }}'">Edit</button>
+          <button class="btn-sm btn-danger" onclick="deleteImage('{{ image.id }}')">Delete</button>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  {% else %}
+    <div style="grid-column: 1/-1; text-align: center; padding: 3rem; background: white; border-radius: 12px;">
+      <i class="fas fa-images" style="font-size: 3rem; color: #ccc; display: block; margin-bottom: 1rem;"></i>
+      <p style="color: #999;">No images uploaded yet</p>
+    </div>
+  {% endif %}
+</div>
+
+<style>
+  .btn-sm { padding: 0.3rem 0.8rem; border: none; border-radius: 4px; cursor: pointer; font-size: 0.85rem; }
+  .btn-sm.btn-primary { background: #C9A87C; color: #4A3528; }
+  .btn-sm.btn-primary:hover { background: #B8966A; }
+  .btn-sm.btn-danger { background: #dc3545; color: white; }
+  .btn-sm.btn-danger:hover { background: #c82333; }
+  .btn-primary { padding: 0.6rem 1.5rem; background: linear-gradient(145deg, #C9A87C, #B8966A); color: #4A3528; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 4px 15px rgba(201, 168, 124, 0.4); }
+</style>
+<script>
+window.deleteImage = async function(id) {
+  if (!confirm('Are you sure you want to delete this image?')) return;
+  try {
+    const response = await fetch(`/api/admin/gallery/${id}`, {
+      method: 'DELETE',
+      credentials: 'include',
+    });
+    const result = await response.json();
+    if (result.success) {
+      alert('Image deleted successfully');
+      window.location.reload();
+    } else {
+      alert('Failed to delete image');
+    }
+  } catch (error) {
+    alert('Error deleting image');
+  }
+};
+</script>
+{% endblock %}
+
+
+
+
+
+
+================================================================================
+FILE: src\views\admin\gallery\create.njk
+SIZE: 4.37 KB
+================================================================================
+{% extends "admin-base.njk" %}
+
+{% block adminTitle %}Add Gallery Image{% endblock %}
+
+{% block adminContent %}
+<div style="max-width: 800px; margin: 0 auto; background: white; border-radius: 12px; padding: 2rem; box-shadow: 0 2px 10px rgba(0,0,0,0.05);">
+  <h2 style="color: #4A3528; margin-bottom: 1rem;">Add New Image</h2>
+  <p style="color: #666; margin-bottom: 1.5rem;">Upload or add an image URL</p>
+
+  <form id="galleryForm">
+    <div style="margin-bottom: 1rem;">
+      <label style="display: block; font-weight: bold; color: #4A3528; margin-bottom: 0.3rem;">Image URL</label>
+      <input type="url" id="imageUrl" name="imageUrl" placeholder="https://example.com/image.jpg" required style="width: 100%; padding: 0.8rem; border: 2px solid #E8D5B8; border-radius: 8px; font-size: 1rem;">
+      <div style="font-size: 0.85rem; color: #999; margin-top: 0.25rem;">Paste the image URL</div>
+    </div>
+
+    <div style="margin-bottom: 1rem;">
+      <label style="display: block; font-weight: bold; color: #4A3528; margin-bottom: 0.3rem;">Title</label>
+      <input type="text" id="title" name="title" placeholder="Image title" style="width: 100%; padding: 0.8rem; border: 2px solid #E8D5B8; border-radius: 8px; font-size: 1rem;">
+    </div>
+
+    <div style="margin-bottom: 1rem;">
+      <label style="display: block; font-weight: bold; color: #4A3528; margin-bottom: 0.3rem;">Description</label>
+      <textarea id="description" name="description" rows="2" placeholder="Image description" style="width: 100%; padding: 0.8rem; border: 2px solid #E8D5B8; border-radius: 8px; font-size: 1rem;"></textarea>
+    </div>
+
+    <div style="margin-bottom: 1rem;">
+      <label style="display: block; font-weight: bold; color: #4A3528; margin-bottom: 0.3rem;">Category</label>
+      <input type="text" id="category" name="category" placeholder="e.g., Office, Events, Team" style="width: 100%; padding: 0.8rem; border: 2px solid #E8D5B8; border-radius: 8px; font-size: 1rem;">
+    </div>
+
+    <div style="margin-bottom: 1rem;">
+      <label style="display: block; font-weight: bold; color: #4A3528; margin-bottom: 0.3rem;">Display Order</label>
+      <input type="number" id="displayOrder" name="displayOrder" value="0" style="width: 100%; padding: 0.8rem; border: 2px solid #E8D5B8; border-radius: 8px; font-size: 1rem;">
+    </div>
+
+    <div style="margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+      <input type="checkbox" id="isActive" name="isActive" checked style="width: 1.2rem; height: 1.2rem;">
+      <label for="isActive" style="font-weight: bold; color: #4A3528;">Active</label>
+    </div>
+
+    <div style="display: flex; gap: 1rem; margin-top: 2rem;">
+      <button type="submit" class="btn-primary" style="padding: 0.8rem 2rem; background: linear-gradient(145deg, #C9A87C, #B8966A); color: #4A3528; border: none; border-radius: 8px; font-weight: bold; cursor: pointer;">Add Image</button>
+      <a href="/admin/gallery" class="btn-secondary" style="padding: 0.8rem 2rem; background: #f8f9fa; color: #333; border: 2px solid #ddd; border-radius: 8px; font-weight: bold; cursor: pointer; text-decoration: none; display: inline-block; text-align: center;">Cancel</a>
+    </div>
+  </form>
+</div>
+
+<script>
+document.getElementById('galleryForm').addEventListener('submit', async function(e) {
+  e.preventDefault();
+  const formData = new FormData(this);
+  const data = {
+    imageUrl: formData.get('imageUrl'),
+    title: formData.get('title') || null,
+    description: formData.get('description') || null,
+    category: formData.get('category') || null,
+    isActive: formData.get('isActive') === 'on',
+    displayOrder: parseInt(formData.get('displayOrder')) || 0,
+  };
+
+  const submitBtn = this.querySelector('.btn-primary');
+  submitBtn.textContent = 'Adding...';
+  submitBtn.disabled = true;
+
+  try {
+    const response = await fetch('/api/admin/gallery', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+      credentials: 'include',
+    });
+    const result = await response.json();
+    if (result.success) {
+      alert('Image added successfully!');
+      window.location.href = '/admin/gallery';
+    } else {
+      alert('Error: ' + (result.error || 'Failed to add image'));
+    }
+  } catch (error) {
+    alert('Network error: ' + error.message);
+  } finally {
+    submitBtn.textContent = 'Add Image';
+    submitBtn.disabled = false;
+  }
+});
+</script>
+{% endblock %}
+
+
+
+================================================================================
+FILE: src\views\admin\gallery\edit.njk
+SIZE: 5.32 KB
+================================================================================
+{% extends "admin-base.njk" %}
+
+{% block adminTitle %}Edit Gallery Image{% endblock %}
+
+{% block adminContent %}
+<div style="max-width: 800px; margin: 0 auto; background: white; border-radius: 12px; padding: 2rem; box-shadow: 0 2px 10px rgba(0,0,0,0.05);">
+  <h2 style="color: #4A3528; margin-bottom: 1rem;">Edit Image</h2>
+  <p style="color: #666; margin-bottom: 1.5rem;">Update image details</p>
+
+  <div id="loading" style="text-align: center; padding: 2rem; color: #666;">
+    <i class="fas fa-spinner fa-spin"></i> Loading image...
+  </div>
+
+  <div id="editForm" style="display: none;">
+    <form id="galleryForm">
+      <div style="margin-bottom: 1rem;">
+        <label style="display: block; font-weight: bold; color: #4A3528; margin-bottom: 0.3rem;">Image URL</label>
+        <input type="url" id="imageUrl" name="imageUrl" required style="width: 100%; padding: 0.8rem; border: 2px solid #E8D5B8; border-radius: 8px; font-size: 1rem;">
+      </div>
+
+      <div style="margin-bottom: 1rem;">
+        <label style="display: block; font-weight: bold; color: #4A3528; margin-bottom: 0.3rem;">Title</label>
+        <input type="text" id="title" name="title" style="width: 100%; padding: 0.8rem; border: 2px solid #E8D5B8; border-radius: 8px; font-size: 1rem;">
+      </div>
+
+      <div style="margin-bottom: 1rem;">
+        <label style="display: block; font-weight: bold; color: #4A3528; margin-bottom: 0.3rem;">Description</label>
+        <textarea id="description" name="description" rows="2" style="width: 100%; padding: 0.8rem; border: 2px solid #E8D5B8; border-radius: 8px; font-size: 1rem;"></textarea>
+      </div>
+
+      <div style="margin-bottom: 1rem;">
+        <label style="display: block; font-weight: bold; color: #4A3528; margin-bottom: 0.3rem;">Category</label>
+        <input type="text" id="category" name="category" style="width: 100%; padding: 0.8rem; border: 2px solid #E8D5B8; border-radius: 8px; font-size: 1rem;">
+      </div>
+
+      <div style="margin-bottom: 1rem;">
+        <label style="display: block; font-weight: bold; color: #4A3528; margin-bottom: 0.3rem;">Display Order</label>
+        <input type="number" id="displayOrder" name="displayOrder" style="width: 100%; padding: 0.8rem; border: 2px solid #E8D5B8; border-radius: 8px; font-size: 1rem;">
+      </div>
+
+      <div style="margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+        <input type="checkbox" id="isActive" name="isActive" style="width: 1.2rem; height: 1.2rem;">
+        <label for="isActive" style="font-weight: bold; color: #4A3528;">Active</label>
+      </div>
+
+      <div style="display: flex; gap: 1rem; margin-top: 2rem;">
+        <button type="submit" class="btn-primary" style="padding: 0.8rem 2rem; background: linear-gradient(145deg, #C9A87C, #B8966A); color: #4A3528; border: none; border-radius: 8px; font-weight: bold; cursor: pointer;">Update Image</button>
+        <a href="/admin/gallery" class="btn-secondary" style="padding: 0.8rem 2rem; background: #f8f9fa; color: #333; border: 2px solid #ddd; border-radius: 8px; font-weight: bold; cursor: pointer; text-decoration: none; display: inline-block; text-align: center;">Cancel</a>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+const imageId = window.location.pathname.split('/').pop();
+
+async function loadImage() {
+  try {
+    const response = await fetch(`/api/gallery/${imageId}`);
+    const result = await response.json();
+    if (result.success && result.data) {
+      const image = result.data;
+      document.getElementById('imageUrl').value = image.imageUrl;
+      document.getElementById('title').value = image.title || '';
+      document.getElementById('description').value = image.description || '';
+      document.getElementById('category').value = image.category || '';
+      document.getElementById('displayOrder').value = image.displayOrder || 0;
+      document.getElementById('isActive').checked = image.isActive;
+      document.getElementById('loading').style.display = 'none';
+      document.getElementById('editForm').style.display = 'block';
+    }
+  } catch (error) {
+    alert('Error loading image');
+    window.location.href = '/admin/gallery';
+  }
+}
+
+loadImage();
+
+document.getElementById('galleryForm').addEventListener('submit', async function(e) {
+  e.preventDefault();
+  const formData = new FormData(this);
+  const data = {
+    imageUrl: formData.get('imageUrl'),
+    title: formData.get('title') || null,
+    description: formData.get('description') || null,
+    category: formData.get('category') || null,
+    isActive: formData.get('isActive') === 'on',
+    displayOrder: parseInt(formData.get('displayOrder')) || 0,
+  };
+
+  const submitBtn = this.querySelector('.btn-primary');
+  submitBtn.textContent = 'Updating...';
+  submitBtn.disabled = true;
+
+  try {
+    const response = await fetch(`/api/admin/gallery/${imageId}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+      credentials: 'include',
+    });
+    const result = await response.json();
+    if (result.success) {
+      alert('Image updated successfully!');
+      window.location.href = '/admin/gallery';
+    } else {
+      alert('Error: ' + (result.error || 'Failed to update image'));
+    }
+  } catch (error) {
+    alert('Network error: ' + error.message);
+  } finally {
+    submitBtn.textContent = 'Update Image';
+    submitBtn.disabled = false;
+  }
+});
+</script>
+{% endblock %}
+
+
+
+
+================================================================================
+FILE: src\views\admin\location-settings.njk
+SIZE: 6.53 KB
+================================================================================
+{% extends "admin-base.njk" %}
+
+{% block adminTitle %}Location Settings{% endblock %}
+
+{% block adminContent %}
+<div style="max-width: 800px; margin: 0 auto;">
+  <div class="how-to" style="background: #fff8e6; padding: 1rem; border-radius: 8px; border-left: 4px solid #C9A87C; margin-bottom: 2rem;">
+    <strong>How to get Google Maps embed code:</strong>
+    <ol style="margin-top: 0.5rem; padding-left: 1.5rem;">
+      <li>Go to <a href="https://maps.google.com" target="_blank">Google Maps</a></li>
+      <li>Search for your location</li>
+      <li>Click "Share" ? "Embed a map"</li>
+      <li>Copy the iframe code</li>
+      <li>Paste it below</li>
+    </ol>
+    <p style="margin-top: 0.5rem; font-size: 0.9rem; color: #666;">
+      <i class="fas fa-info-circle"></i> 
+      Example: <code>&lt;iframe src="https://www.google.com/maps/embed?pb=..."&gt;&lt;/iframe&gt;</code>
+    </p>
+  </div>
+
+  <div id="alert" class="alert" style="display: none; padding: 1rem; border-radius: 8px; margin-bottom: 1rem;"></div>
+
+  <form id="locationForm" style="background: white; border-radius: 12px; padding: 2rem; box-shadow: 0 2px 10px rgba(0,0,0,0.05);">
+    <div style="margin-bottom: 1.5rem;">
+      <label style="display: block; font-weight: bold; color: #4A3528; margin-bottom: 0.5rem;">Google Maps Embed Code</label>
+      <textarea id="googleMapsEmbed" name="googleMapsEmbed" placeholder='<iframe src="https://www.google.com/maps/embed?pb=..."></iframe>' style="width: 100%; padding: 0.8rem; border: 2px solid #E8D5B8; border-radius: 8px; font-size: 1rem; font-family: monospace; min-height: 120px; resize: vertical;">{{ settings.googleMapsEmbed or '' }}</textarea>
+      <div style="font-size: 0.85rem; color: #999; margin-top: 0.25rem;">Paste the full iframe code from Google Maps</div>
+    </div>
+
+    <div style="margin-bottom: 1.5rem;">
+      <label style="display: block; font-weight: bold; color: #4A3528; margin-bottom: 0.5rem;">Address</label>
+      <input type="text" id="address" name="address" placeholder="e.g., Westlands, 4th Floor, Nairobi, Kenya" value="{{ settings.address or 'Nairobi, Kenya' }}" style="width: 100%; padding: 0.8rem; border: 2px solid #E8D5B8; border-radius: 8px; font-size: 1rem;">
+      <div style="font-size: 0.85rem; color: #999; margin-top: 0.25rem;">Your physical address shown on the contact page</div>
+    </div>
+
+    <div style="margin-bottom: 1.5rem;">
+      <label style="display: block; font-weight: bold; color: #4A3528; margin-bottom: 0.5rem;">Google Maps Link</label>
+      <input type="url" id="googleMapsLink" name="googleMapsLink" placeholder="https://maps.google.com/?q=..." value="{{ settings.googleMapsLink or '' }}" style="width: 100%; padding: 0.8rem; border: 2px solid #E8D5B8; border-radius: 8px; font-size: 1rem;">
+      <div style="font-size: 0.85rem; color: #999; margin-top: 0.25rem;">Full URL for "Get Directions" button</div>
+    </div>
+
+    <div style="margin-top: 2rem; padding: 1rem; background: #f8f9fa; border-radius: 8px;">
+      <h4>Preview</h4>
+      <div id="mapPreview" style="width: 100%; height: 300px; border-radius: 8px; overflow: hidden; border: 2px solid #E8D5B8;">
+        {% if settings.googleMapsEmbed %}
+          {{ settings.googleMapsEmbed | safe }}
+        {% else %}
+          <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d255282.35853743783!2d36.68219667531816!3d-1.3028611!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x182f1172d84d49a7%3A0xf7cf0254b297924c!2sNairobi%2C%20Kenya!5e0!3m2!1sen!2sus!4v1700000000000!5m2!1sen!2sus" allowfullscreen="" loading="lazy" style="width: 100%; height: 100%; border: 0;"></iframe>
+        {% endif %}
+      </div>
+    </div>
+
+    <button type="submit" id="saveBtn" style="width: 100%; padding: 1rem; margin-top: 1.5rem; background: linear-gradient(145deg, #C9A87C, #B8966A); color: #4A3528; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 1.1rem;">
+      ?? Save Location Settings
+    </button>
+  </form>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const form = document.getElementById('locationForm');
+  const alert = document.getElementById('alert');
+  const saveBtn = document.getElementById('saveBtn');
+  const mapPreview = document.getElementById('mapPreview');
+
+  const embedTextarea = document.getElementById('googleMapsEmbed');
+  embedTextarea.addEventListener('input', function() {
+    const embedCode = this.value;
+    if (embedCode.includes('<iframe')) {
+      mapPreview.innerHTML = embedCode;
+    }
+  });
+
+  form.addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
+    saveBtn.disabled = true;
+    saveBtn.textContent = '? Saving...';
+    alert.style.display = 'none';
+
+    const formData = new FormData(form);
+    const data = {
+      googleMapsEmbed: formData.get('googleMapsEmbed'),
+      address: formData.get('address'),
+      googleMapsLink: formData.get('googleMapsLink')
+    };
+
+    try {
+      const response = await fetch('/api/admin/settings/location', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+        credentials: 'include'
+      });
+
+      const result = await response.json();
+
+      if (result.success) {
+        alert.className = 'alert alert-success';
+        alert.textContent = '? Location settings saved successfully!';
+        alert.style.display = 'block';
+        alert.style.background = '#d4edda';
+        alert.style.color = '#155724';
+        alert.style.border = '1px solid #c3e6cb';
+        alert.style.padding = '1rem';
+        alert.style.borderRadius = '8px';
+        alert.style.marginBottom = '1rem';
+      } else {
+        alert.className = 'alert alert-error';
+        alert.textContent = '? Error: ' + (result.error || 'Failed to save settings');
+        alert.style.display = 'block';
+        alert.style.background = '#f8d7da';
+        alert.style.color = '#721c24';
+        alert.style.border = '1px solid #f5c6cb';
+        alert.style.padding = '1rem';
+        alert.style.borderRadius = '8px';
+        alert.style.marginBottom = '1rem';
+      }
+    } catch (error) {
+      alert.className = 'alert alert-error';
+      alert.textContent = '? Network error: ' + error.message;
+      alert.style.display = 'block';
+      alert.style.background = '#f8d7da';
+      alert.style.color = '#721c24';
+      alert.style.border = '1px solid #f5c6cb';
+      alert.style.padding = '1rem';
+      alert.style.borderRadius = '8px';
+      alert.style.marginBottom = '1rem';
+    } finally {
+      saveBtn.disabled = false;
+      saveBtn.textContent = '?? Save Location Settings';
+    }
+  });
+});
+</script>
+{% endblock %}
+
+
+
+================================================================================
+FILE: src\views\admin\login.njk
+SIZE: 4 KB
+================================================================================
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login</title>
+    <link rel="stylesheet" href="/public/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body { 
+            background: #f8f9fa; 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+        .login-container {
+            max-width: 400px;
+            width: 100%;
+            margin: 2rem;
+            padding: 2.5rem;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+        .login-container .logo {
+            text-align: center;
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: #C9A87C;
+        }
+        .login-container h1 {
+            text-align: center;
+            color: #4A3528;
+            margin-bottom: 0.5rem;
+        }
+        .login-container .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 2rem;
+        }
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        .form-group label {
+            display: block;
+            font-weight: bold;
+            color: #4A3528;
+            margin-bottom: 0.3rem;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 0.8rem;
+            border: 2px solid #E8D5B8;
+            border-radius: 8px;
+            font-size: 1rem;
+            box-sizing: border-box;
+        }
+        .form-group input:focus {
+            outline: none;
+            border-color: #C9A87C;
+            box-shadow: 0 0 0 3px rgba(201, 168, 124, 0.15);
+        }
+        .btn-login {
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(145deg, #C9A87C, #B8966A);
+            color: #4A3528;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 1.1rem;
+        }
+        .btn-login:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(201, 168, 124, 0.4);
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="logo">🔐</div>
+        <h1>Admin Login</h1>
+        <p class="subtitle">Access the admin dashboard</p>
+
+        <form id="loginForm">
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" placeholder="Enter your username" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" placeholder="Enter your password" required>
+            </div>
+            <button type="submit" class="btn-login">Login</button>
+        </form>
+    </div>
+
+    <script>
+    document.getElementById('loginForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        const data = {
+            username: document.getElementById('username').value,
+            password: document.getElementById('password').value,
+        };
+
+        try {
+            const response = await fetch('/api/auth/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data),
+                credentials: 'include'
+            });
+            const result = await response.json();
+            if (result.success) {
+                window.location.href = '/admin';
+            } else {
+                alert('❌ Invalid credentials');
+            }
+        } catch (error) {
+            alert('❌ Login error: ' + error.message);
+        }
+    });
+    </script>
+</body>
+</html>
+
+
+================================================================================
+FILE: src\views\admin\services.njk
+SIZE: 3.36 KB
+================================================================================
+{% extends "admin-base.njk" %}
+
+{% block adminTitle %}Manage Services{% endblock %}
+
+{% block adminContent %}
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+  <p style="color: #666;">Manage your counseling services</p>
+  <button class="btn-primary" onclick="window.location.href='/admin/services/create'">
+    <i class="fas fa-plus"></i> Add Service
+  </button>
+</div>
+
+<div style="background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 10px rgba(0,0,0,0.05);">
+  <table style="width: 100%; border-collapse: collapse;">
+    <thead>
+      <tr style="background: #f8f9fa;">
+        <th style="padding: 1rem; text-align: left; color: #4A3528;">Name</th>
+        <th style="padding: 1rem; text-align: left; color: #4A3528;">Duration</th>
+        <th style="padding: 1rem; text-align: left; color: #4A3528;">Status</th>
+        <th style="padding: 1rem; text-align: left; color: #4A3528;">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% if services and services.length > 0 %}
+        {% for service in services %}
+        <tr style="border-bottom: 1px solid #f0f0f0;">
+          <td style="padding: 1rem;"><strong>{{ service.name }}</strong></td>
+          <td style="padding: 1rem; color: #666;">{{ service.duration }} min</td>
+          <td style="padding: 1rem;">
+            <span class="status-badge {{ 'status-published' if service.isActive else 'status-draft' }}">
+              {{ 'Active' if service.isActive else 'Inactive' }}
+            </span>
+          </td>
+          <td style="padding: 1rem;">
+            <button class="btn-sm btn-primary" onclick="window.location.href='/admin/services/edit/{{ service.id }}'">Edit</button>
+            <button class="btn-sm btn-danger" onclick="deleteService('{{ service.id }}')">Delete</button>
+          </td>
+        </tr>
+        {% endfor %}
+      {% else %}
+        <tr>
+          <td colspan="4" style="padding: 2rem; text-align: center; color: #999;">
+            <i class="fas fa-hand-holding-heart" style="font-size: 2rem; display: block; margin-bottom: 0.5rem;"></i>
+            No services added yet
+          </td>
+        </tr>
+      {% endif %}
+    </tbody>
+  </table>
+</div>
+
+<style>
+  .btn-sm { padding: 0.3rem 0.8rem; border: none; border-radius: 4px; cursor: pointer; font-size: 0.85rem; }
+  .btn-sm.btn-primary { background: #C9A87C; color: #4A3528; }
+  .btn-sm.btn-primary:hover { background: #B8966A; }
+  .btn-sm.btn-danger { background: #dc3545; color: white; }
+  .btn-sm.btn-danger:hover { background: #c82333; }
+  .btn-primary { padding: 0.6rem 1.5rem; background: linear-gradient(145deg, #C9A87C, #B8966A); color: #4A3528; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 4px 15px rgba(201, 168, 124, 0.4); }
+</style>
+<script>
+window.deleteService = async function(id) {
+  if (!confirm('Are you sure you want to delete this service?')) return;
+  try {
+    const response = await fetch(`/api/admin/services/${id}`, {
+      method: 'DELETE',
+      credentials: 'include',
+    });
+    const result = await response.json();
+    if (result.success) {
+      alert('Service deleted successfully');
+      window.location.reload();
+    } else {
+      alert('Failed to delete service');
+    }
+  } catch (error) {
+    alert('Error deleting service');
+  }
+};
+</script>
+{% endblock %}
+
+
+
+
+
+
+================================================================================
+FILE: src\views\admin\services\create.njk
+SIZE: 4.76 KB
+================================================================================
+{% extends "admin-base.njk" %}
+
+{% block adminTitle %}Create Service{% endblock %}
+
+{% block adminContent %}
+<div style="max-width: 800px; margin: 0 auto; background: white; border-radius: 12px; padding: 2rem; box-shadow: 0 2px 10px rgba(0,0,0,0.05);">
+  <h2 style="color: #4A3528; margin-bottom: 1rem;">Create New Service</h2>
+  <p style="color: #666; margin-bottom: 1.5rem;">Add a new counseling service</p>
+
+  <div id="alert" style="display: none; padding: 1rem; border-radius: 8px; margin-bottom: 1rem;"></div>
+
+  <form id="serviceForm">
+    <div style="margin-bottom: 1rem;">
+      <label style="display: block; font-weight: bold; color: #4A3528; margin-bottom: 0.3rem;">Name</label>
+      <input type="text" id="name" name="name" placeholder="Enter service name" required style="width: 100%; padding: 0.8rem; border: 2px solid #E8D5B8; border-radius: 8px; font-size: 1rem;">
+    </div>
+
+    <div style="margin-bottom: 1rem;">
+      <label style="display: block; font-weight: bold; color: #4A3528; margin-bottom: 0.3rem;">Description</label>
+      <textarea id="description" name="description" rows="3" placeholder="Describe the service" style="width: 100%; padding: 0.8rem; border: 2px solid #E8D5B8; border-radius: 8px; font-size: 1rem;"></textarea>
+    </div>
+
+    <div style="margin-bottom: 1rem;">
+      <label style="display: block; font-weight: bold; color: #4A3528; margin-bottom: 0.3rem;">Price</label>
+      <input type="text" id="price" name="price" placeholder="0.00" required style="width: 100%; padding: 0.8rem; border: 2px solid #E8D5B8; border-radius: 8px; font-size: 1rem;">
+    </div>
+
+    <div style="margin-bottom: 1rem;">
+      <label style="display: block; font-weight: bold; color: #4A3528; margin-bottom: 0.3rem;">Duration (minutes)</label>
+      <input type="number" id="duration" name="duration" placeholder="60" required style="width: 100%; padding: 0.8rem; border: 2px solid #E8D5B8; border-radius: 8px; font-size: 1rem;">
+    </div>
+
+    <div style="margin-bottom: 1rem;">
+      <label style="display: block; font-weight: bold; color: #4A3528; margin-bottom: 0.3rem;">Image URL</label>
+      <input type="url" id="imageUrl" name="imageUrl" placeholder="https://example.com/image.jpg" style="width: 100%; padding: 0.8rem; border: 2px solid #E8D5B8; border-radius: 8px; font-size: 1rem;">
+    </div>
+
+    <div style="margin-bottom: 1rem;">
+      <label style="display: block; font-weight: bold; color: #4A3528; margin-bottom: 0.3rem;">Display Order</label>
+      <input type="number" id="displayOrder" name="displayOrder" value="0" style="width: 100%; padding: 0.8rem; border: 2px solid #E8D5B8; border-radius: 8px; font-size: 1rem;">
+    </div>
+
+    <div style="margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+      <input type="checkbox" id="isActive" name="isActive" checked style="width: 1.2rem; height: 1.2rem;">
+      <label for="isActive" style="font-weight: bold; color: #4A3528;">Active</label>
+    </div>
+
+    <div style="display: flex; gap: 1rem; margin-top: 2rem;">
+      <button type="submit" class="btn-primary" style="padding: 0.8rem 2rem; background: linear-gradient(145deg, #C9A87C, #B8966A); color: #4A3528; border: none; border-radius: 8px; font-weight: bold; cursor: pointer;">Create Service</button>
+      <a href="/admin/services" class="btn-secondary" style="padding: 0.8rem 2rem; background: #f8f9fa; color: #333; border: 2px solid #ddd; border-radius: 8px; font-weight: bold; cursor: pointer; text-decoration: none; display: inline-block; text-align: center;">Cancel</a>
+    </div>
+  </form>
+</div>
+
+<script>
+document.getElementById('serviceForm').addEventListener('submit', async function(e) {
+  e.preventDefault();
+  const formData = new FormData(this);
+  const data = {
+    name: formData.get('name'),
+    description: formData.get('description'),
+    price: formData.get('price'),
+    duration: parseInt(formData.get('duration')),
+    imageUrl: formData.get('imageUrl') || null,
+    isActive: formData.get('isActive') === 'on',
+    displayOrder: parseInt(formData.get('displayOrder')) || 0,
+  };
+
+  const submitBtn = this.querySelector('.btn-primary');
+  submitBtn.textContent = 'Creating...';
+  submitBtn.disabled = true;
+
+  try {
+    const response = await fetch('/api/admin/services', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+      credentials: 'include',
+    });
+    const result = await response.json();
+    if (result.success) {
+      alert('Service created successfully!');
+      window.location.href = '/admin/services';
+    } else {
+      alert('Error: ' + (result.error || 'Failed to create service'));
+    }
+  } catch (error) {
+    alert('Network error: ' + error.message);
+  } finally {
+    submitBtn.textContent = 'Create Service';
+    submitBtn.disabled = false;
+  }
+});
+</script>
+{% endblock %}
+
+
+
+================================================================================
+FILE: src\views\admin\services\edit.njk
+SIZE: 5.78 KB
+================================================================================
+{% extends "admin-base.njk" %}
+
+{% block adminTitle %}Edit Service{% endblock %}
+
+{% block adminContent %}
+<div style="max-width: 800px; margin: 0 auto; background: white; border-radius: 12px; padding: 2rem; box-shadow: 0 2px 10px rgba(0,0,0,0.05);">
+  <h2 style="color: #4A3528; margin-bottom: 1rem;">Edit Service</h2>
+  <p style="color: #666; margin-bottom: 1.5rem;">Update service details</p>
+
+  <div id="loading" style="text-align: center; padding: 2rem; color: #666;">
+    <i class="fas fa-spinner fa-spin"></i> Loading service...
+  </div>
+
+  <div id="editForm" style="display: none;">
+    <form id="serviceForm">
+      <div style="margin-bottom: 1rem;">
+        <label style="display: block; font-weight: bold; color: #4A3528; margin-bottom: 0.3rem;">Name</label>
+        <input type="text" id="name" name="name" required style="width: 100%; padding: 0.8rem; border: 2px solid #E8D5B8; border-radius: 8px; font-size: 1rem;">
+      </div>
+
+      <div style="margin-bottom: 1rem;">
+        <label style="display: block; font-weight: bold; color: #4A3528; margin-bottom: 0.3rem;">Description</label>
+        <textarea id="description" name="description" rows="3" style="width: 100%; padding: 0.8rem; border: 2px solid #E8D5B8; border-radius: 8px; font-size: 1rem;"></textarea>
+      </div>
+
+      <div style="margin-bottom: 1rem;">
+        <label style="display: block; font-weight: bold; color: #4A3528; margin-bottom: 0.3rem;">Price</label>
+        <input type="text" id="price" name="price" required style="width: 100%; padding: 0.8rem; border: 2px solid #E8D5B8; border-radius: 8px; font-size: 1rem;">
+      </div>
+
+      <div style="margin-bottom: 1rem;">
+        <label style="display: block; font-weight: bold; color: #4A3528; margin-bottom: 0.3rem;">Duration (minutes)</label>
+        <input type="number" id="duration" name="duration" required style="width: 100%; padding: 0.8rem; border: 2px solid #E8D5B8; border-radius: 8px; font-size: 1rem;">
+      </div>
+
+      <div style="margin-bottom: 1rem;">
+        <label style="display: block; font-weight: bold; color: #4A3528; margin-bottom: 0.3rem;">Image URL</label>
+        <input type="url" id="imageUrl" name="imageUrl" style="width: 100%; padding: 0.8rem; border: 2px solid #E8D5B8; border-radius: 8px; font-size: 1rem;">
+      </div>
+
+      <div style="margin-bottom: 1rem;">
+        <label style="display: block; font-weight: bold; color: #4A3528; margin-bottom: 0.3rem;">Display Order</label>
+        <input type="number" id="displayOrder" name="displayOrder" style="width: 100%; padding: 0.8rem; border: 2px solid #E8D5B8; border-radius: 8px; font-size: 1rem;">
+      </div>
+
+      <div style="margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+        <input type="checkbox" id="isActive" name="isActive" style="width: 1.2rem; height: 1.2rem;">
+        <label for="isActive" style="font-weight: bold; color: #4A3528;">Active</label>
+      </div>
+
+      <div style="display: flex; gap: 1rem; margin-top: 2rem;">
+        <button type="submit" class="btn-primary" style="padding: 0.8rem 2rem; background: linear-gradient(145deg, #C9A87C, #B8966A); color: #4A3528; border: none; border-radius: 8px; font-weight: bold; cursor: pointer;">Update Service</button>
+        <a href="/admin/services" class="btn-secondary" style="padding: 0.8rem 2rem; background: #f8f9fa; color: #333; border: 2px solid #ddd; border-radius: 8px; font-weight: bold; cursor: pointer; text-decoration: none; display: inline-block; text-align: center;">Cancel</a>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+const serviceId = window.location.pathname.split('/').pop();
+
+async function loadService() {
+  try {
+    const response = await fetch(`/api/services/${serviceId}`);
+    const result = await response.json();
+    if (result.success && result.data) {
+      const service = result.data;
+      document.getElementById('name').value = service.name;
+      document.getElementById('description').value = service.description || '';
+      document.getElementById('price').value = service.price;
+      document.getElementById('duration').value = service.duration;
+      document.getElementById('imageUrl').value = service.imageUrl || '';
+      document.getElementById('displayOrder').value = service.displayOrder || 0;
+      document.getElementById('isActive').checked = service.isActive;
+      document.getElementById('loading').style.display = 'none';
+      document.getElementById('editForm').style.display = 'block';
+    }
+  } catch (error) {
+    alert('Error loading service');
+    window.location.href = '/admin/services';
+  }
+}
+
+loadService();
+
+document.getElementById('serviceForm').addEventListener('submit', async function(e) {
+  e.preventDefault();
+  const formData = new FormData(this);
+  const data = {
+    name: formData.get('name'),
+    description: formData.get('description'),
+    price: formData.get('price'),
+    duration: parseInt(formData.get('duration')),
+    imageUrl: formData.get('imageUrl') || null,
+    isActive: formData.get('isActive') === 'on',
+    displayOrder: parseInt(formData.get('displayOrder')) || 0,
+  };
+
+  const submitBtn = this.querySelector('.btn-primary');
+  submitBtn.textContent = 'Updating...';
+  submitBtn.disabled = true;
+
+  try {
+    const response = await fetch(`/api/admin/services/${serviceId}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+      credentials: 'include',
+    });
+    const result = await response.json();
+    if (result.success) {
+      alert('Service updated successfully!');
+      window.location.href = '/admin/services';
+    } else {
+      alert('Error: ' + (result.error || 'Failed to update service'));
+    }
+  } catch (error) {
+    alert('Network error: ' + error.message);
+  } finally {
+    submitBtn.textContent = 'Update Service';
+    submitBtn.disabled = false;
+  }
+});
+</script>
+{% endblock %}
+
+
+
+
+================================================================================
+FILE: src\views\admin\settings.njk
+SIZE: 2.14 KB
+================================================================================
+{% extends "admin-base.njk" %}
+
+{% block adminTitle %}Settings{% endblock %}
+
+{% block adminContent %}
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+  <div style="background: white; border-radius: 12px; padding: 1.5rem; box-shadow: 0 2px 10px rgba(0,0,0,0.05);">
+    <h3 style="color: #4A3528; margin-bottom: 1rem;"><i class="fas fa-map-marker-alt" style="color: #C9A87C;"></i> Location</h3>
+    <p style="color: #666; margin-bottom: 1rem;">Manage your business location and map</p>
+    <a href="/admin/location" class="btn-link">Manage Location ?</a>
+  </div>
+
+  <div style="background: white; border-radius: 12px; padding: 1.5rem; box-shadow: 0 2px 10px rgba(0,0,0,0.05);">
+    <h3 style="color: #4A3528; margin-bottom: 1rem;"><i class="fas fa-palette" style="color: #C9A87C;"></i> Appearance</h3>
+    <p style="color: #666; margin-bottom: 1rem;">Customize the look and feel of your site</p>
+    <button class="btn-link" onclick="alert('Appearance settings coming soon')">Manage Appearance ?</button>
+  </div>
+
+  <div style="background: white; border-radius: 12px; padding: 1.5rem; box-shadow: 0 2px 10px rgba(0,0,0,0.05);">
+    <h3 style="color: #4A3528; margin-bottom: 1rem;"><i class="fas fa-whatsapp" style="color: #25D366;"></i> WhatsApp</h3>
+    <p style="color: #666; margin-bottom: 1rem;">Configure WhatsApp integration</p>
+    <button class="btn-link" onclick="alert('WhatsApp settings coming soon')">Manage WhatsApp ?</button>
+  </div>
+
+  <div style="background: white; border-radius: 12px; padding: 1.5rem; box-shadow: 0 2px 10px rgba(0,0,0,0.05);">
+    <h3 style="color: #4A3528; margin-bottom: 1rem;"><i class="fas fa-money-bill-wave" style="color: #28a745;"></i> M-Pesa</h3>
+    <p style="color: #666; margin-bottom: 1rem;">Configure M-Pesa payment settings</p>
+    <button class="btn-link" onclick="alert('M-Pesa settings coming soon')">Manage M-Pesa ?</button>
+  </div>
+</div>
+
+<style>
+  .btn-link { display: inline-block; padding: 0.5rem 1rem; background: #f8f9fa; color: #4A3528; text-decoration: none; border-radius: 8px; border: 1px solid #ddd; cursor: pointer; }
+  .btn-link:hover { background: #e8e8e8; }
+</style>
+{% endblock %}
+
+
+
+
