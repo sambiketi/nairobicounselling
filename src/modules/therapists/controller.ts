@@ -15,6 +15,10 @@ const createTherapistSchema = z.object({
 const updateTherapistSchema = createTherapistSchema.partial();
 
 export class TherapistController {
+  // Helper for view routes - gets therapist by ID without reply wrapper
+  async getTherapistById(id: string): Promise<any> {
+    return await this.therapistService.getTherapist(id);
+  }
   constructor(private therapistService = new TherapistService()) {}
 
   async getAllTherapists(request: FastifyRequest, reply: FastifyReply) {
@@ -145,4 +149,5 @@ export class TherapistController {
     }
   }
 }
+
 
