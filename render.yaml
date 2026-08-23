@@ -2,7 +2,15 @@
   - type: web
     name: nairobi-counseling-center
     runtime: node
-    buildCommand: npm install && npm run build
+    buildCommand: |
+      npm install
+      npm run build
+      mkdir -p dist/views
+      cp -r src/views/* dist/views/ 2>/dev/null || true
+      mkdir -p dist/public
+      cp -r src/public/* dist/public/ 2>/dev/null || true
+      echo "✅ Files copied during build"
+      ls -la dist/views/admin/ 2>/dev/null || echo "⚠️ Admin folder not found"
     startCommand: node dist/server.js
     envVars:
       - key: NODE_ENV

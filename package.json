@@ -6,7 +6,7 @@
     "scripts":  {
                     "dev":  "cross-env NODE_ENV=development tsx watch src/server.ts",
                     "build":  "tsc \u0026\u0026 npm run copy:views",
-                    "copy:views":  "node copy-views.js",
+                    "copy:views":  "node copy-views.js || (mkdir -p dist/views \u0026\u0026 cp -r src/views/* dist/views/) || true",
                     "start":  "node dist/server.js",
                     "typecheck":  "tsc --noEmit",
                     "lint":  "eslint src --ext .ts",
