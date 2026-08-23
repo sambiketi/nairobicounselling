@@ -8,5 +8,8 @@ declare module "fastify" {
       fullName: string;
       role: string;
     };
+    sessionId?: string;
+    save(): Promise<void>;
+    destroy(callback?: (err?: Error) => void): void;
   }
 }

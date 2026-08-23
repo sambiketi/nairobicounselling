@@ -37,24 +37,27 @@ export class AuthController {
       }
       console.log("✅ Password VALID");
 
-      // ✅ CORRECT: Direct property assignment for @fastify/session
-      request.session.user = {
+      // ✅ Set session user data
+      const userData = {
         id: user.id,
         username: user.username,
         fullName: user.fullName,
         role: user.role,
       };
       
-      console.log("✅ Session SET with data");
+      request.session.user = userData;
+      console.log("✅ Session SET with data:", JSON.stringify(userData));
       console.log("🆔 Session ID:", request.session.sessionId);
       
-      // ✅ Explicitly save the session
+      // ✅ Save session explicitly
       await request.session.save();
       console.log("✅ Session saved explicitly");
       
-      // Verify the session was set
-      console.log("🔍 Verification - Session user after set:", request.session.user);
+      // ✅ Verify session was set
+      const verifyUser = request.session.user;
+      console.log("🔍 Verification - Session user after set:", JSON.stringify(verifyUser));
       
+      // ✅ Update last login
       await this.adminUserRepo.updateLastLogin(user.id);
       
       console.log("✅ Login SUCCESS for:", body.username);
@@ -96,7 +99,6 @@ export class AuthController {
 
   async getCurrentUser(request: FastifyRequest, reply: FastifyReply) {
     try {
-      // ✅ CORRECT: Direct property access
       const user = request.session.user;
       console.log("🔍 Current user request, session user:", user);
       if (!user) {

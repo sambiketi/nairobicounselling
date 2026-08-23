@@ -53,11 +53,12 @@ export async function buildApp() {
   cookie: {
     secure: env.NODE_ENV === 'production',
     httpOnly: true,
-    sameSite: 'none',
+    sameSite: 'lax',
     maxAge: 24 * 60 * 60 * 1000,
     path: '/',
-    domain: env.NODE_ENV === 'production' ? '.render.com' : undefined,
   },
+  saveUninitialized: false,
+  rolling: true,
 });
 
   // 🔍 Diagnostic route to check session
@@ -229,4 +230,5 @@ export async function buildApp() {
 
   return app;
 }
+
 
