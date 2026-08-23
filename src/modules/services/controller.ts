@@ -15,6 +15,10 @@ const createServiceSchema = z.object({
 const updateServiceSchema = createServiceSchema.partial();
 
 export class ServiceController {
+  // Helper for view routes - gets service by ID without reply wrapper
+  async getServiceById(id: string): Promise<any> {
+    return await this.serviceService.getService(id);
+  }
   constructor(private serviceService = new ServiceManagementService()) {}
 
   async getAllServices(request: FastifyRequest, reply: FastifyReply) {
@@ -145,4 +149,5 @@ export class ServiceController {
     }
   }
 }
+
 
