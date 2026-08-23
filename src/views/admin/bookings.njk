@@ -1,4 +1,4 @@
-﻿{% extends "admin-base.njk" %}
+﻿{% extends "admin/admin-base.njk" %}
 
 {% block adminTitle %}{{ 'Pending Bookings' if filter == 'pending' else 'All Bookings' }}{% endblock %}
 
@@ -110,4 +110,5 @@ function confirmBooking(id) {
 }
 </script>
 {% endblock %}
+
 
