@@ -618,63 +618,6 @@
   </div>
 </section>
 
-
-<!-- Counselors Section - Trust Feature -->
-<section class="counselors-home-section">
-  <h2>Meet Our Trusted Counselors</h2>
-  <p class="subtitle">Compassionate, licensed professionals dedicated to your healing journey</p>
-  
-  <div class="counselors-home-grid">
-    {% if counselors and counselors.length > 0 %}
-      {% for counselor in counselors %}
-        <div class="counselor-home-card">
-          {% if counselor.imageUrl %}
-            <div class="counselor-home-image-wrapper">
-              <img src="{{ counselor.imageUrl }}" alt="{{ counselor.name }}" class="counselor-home-image" loading="lazy" onerror="this.style.display='none'">
-            </div>
-          {% else %}
-            <div class="counselor-home-image-placeholder">
-              <i class="fas fa-user-circle"></i>
-            </div>
-          {% endif %}
-          <h3>{{ counselor.name }}</h3>
-          <p class="counselor-title">{{ counselor.title or 'Licensed Counselor' }}</p>
-          <p class="counselor-bio">{{ counselor.bio | truncate(120) if counselor.bio else "Providing compassionate care and professional guidance." }}</p>
-          <div class="counselor-trust-badge">
-            <i class="fas fa-check-circle"></i> Verified Professional
-          </div>
-          {% if counselor.specialties and counselor.specialties.length > 0 %}
-            <div class="counselor-specialties">
-              {% for specialty in counselor.specialties %}
-                <span class="specialty-tag">{{ specialty }}</span>
-              {% endfor %}
-            </div>
-          {% endif %}
-          <a href="/counselors" class="counselor-learn-more">Learn More →</a>
-        </div>
-      {% endfor %}
-    {% else %}
-      <div class="counselor-home-card">
-        <div class="counselor-home-image-placeholder">
-          <i class="fas fa-user-circle"></i>
-        </div>
-        <h3>Our Team</h3>
-        <p class="counselor-title">Licensed Professionals</p>
-        <p class="counselor-bio">Meet our team of compassionate counselors dedicated to your healing.</p>
-        <div class="counselor-trust-badge">
-          <i class="fas fa-check-circle"></i> Verified Professionals
-        </div>
-        <a href="/counselors" class="counselor-learn-more">Meet All Counselors →</a>
-      </div>
-    {% endif %}
-  </div>
-  
-  <div class="counselors-home-cta">
-    <p>All our counselors are licensed, experienced, and committed to your well-being.</p>
-    <a href="/counselors" class="btn-primary">View All Counselors</a>
-  </div>
-</section>
-
 <!-- Healing Quote Section -->
 <section class="healing-quote">
   <div class="quote-container">
@@ -796,5 +739,4 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 </script>
 {% endblock %}
-
 

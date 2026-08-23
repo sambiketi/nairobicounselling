@@ -225,3 +225,4 @@ export async function homeRoutes(fastify: FastifyInstance) {
     }
   });
 }
+
