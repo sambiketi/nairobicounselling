@@ -15,11 +15,6 @@
     {% if counselors and counselors.length > 0 %}
       {% for counselor in counselors %}
         <div class="therapist-card">
-          {% if counselor.imageUrl %}
-            <div class="therapist-image-wrapper">
-              <img src="{{ counselor.imageUrl }}" alt="{{ counselor.name }}" class="therapist-image" loading="lazy" onerror="this.style.display='none'">
-            </div>
-          {% endif %}
           <h3>{{ counselor.name }}</h3>
           {% if counselor.title %}
             <p style="color: #D4AF37;">{{ counselor.title }}</p>

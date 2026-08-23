@@ -874,3 +874,49 @@ footer .footer-links a:hover {
     gap: 0.3rem;
   }
 }
+
+/* ==========================================
+   COUNSELOR IMAGES
+   ========================================== */
+.therapist-card {
+  background: var(--warm-white);
+  padding: 1.5rem;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px var(--warm-shadow);
+  border-top: 4px solid var(--warm-gold);
+  transition: transform 0.3s ease;
+  overflow: hidden;
+  text-align: center;
+}
+
+.therapist-card:hover {
+  transform: translateY(-5px);
+}
+
+.therapist-image-wrapper {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  overflow: hidden;
+  margin: 0 auto 1rem auto;
+  border: 4px solid var(--warm-gold);
+  background: #f8f9fa;
+}
+
+.therapist-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.therapist-card:hover .therapist-image {
+  transform: scale(1.05);
+}
+
+@media (max-width: 768px) {
+  .therapist-image-wrapper {
+    width: 120px;
+    height: 120px;
+  }
+}
