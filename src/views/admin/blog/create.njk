@@ -1,68 +1,91 @@
-{% extends "../admin-base.njk" %}
+﻿{% extends "../admin-base.njk" %}
 
+{% block adminTitle %}Create Resource{% endblock %}
 
+{% block adminContent %}
+<div style="max-width: 800px; margin: 0 auto; background: white; border-radius: 12px; padding: 2rem; box-shadow: 0 2px 10px rgba(0,0,0,0.05);">
+  <h2 style="color: #4A3528; margin-bottom: 0.5rem;">📝 Create New Resource</h2>
+  <p style="color: #666; margin-bottom: 2rem;">Share knowledge and insights with your audience</p>
 
-{% block title %}Create Resource - Admin{% endblock %}
+  <div id="notification" style="display: none; padding: 1rem; border-radius: 8px; margin-bottom: 1rem;"></div>
 
-{% block head %}
+  <form id="createForm" onsubmit="handleSubmit(event)">
+    <!-- Title -->
+    <div style="margin-bottom: 1.5rem;">
+      <label style="display: block; font-weight: bold; color: #4A3528; margin-bottom: 0.3rem;">Title *</label>
+      <input type="text" id="title" name="title" placeholder="Enter resource title" required 
+             style="width: 100%; padding: 0.8rem; border: 2px solid #E8D5B8; border-radius: 8px; font-size: 1rem;">
+      <div style="font-size: 0.85rem; color: #999; margin-top: 0.25rem;" id="titleCount">0 / 200 characters</div>
+    </div>
+
+    <!-- Slug -->
+    <div style="margin-bottom: 1.5rem;">
+      <label style="display: block; font-weight: bold; color: #4A3528; margin-bottom: 0.3rem;">Slug (URL) *</label>
+      <input type="text" id="slug" name="slug" placeholder="enter-url-friendly-slug" required
+             style="width: 100%; padding: 0.8rem; border: 2px solid #E8D5B8; border-radius: 8px; font-size: 1rem;">
+      <div style="font-size: 0.85rem; color: #999; margin-top: 0.25rem;">URL-friendly version of the title</div>
+      <div style="color: #C9A87C; font-size: 0.9rem; margin-top: 0.3rem;">🔗 Preview: /blog/<span id="slugPreview">your-slug</span></div>
+    </div>
+
+    <!-- Excerpt -->
+    <div style="margin-bottom: 1.5rem;">
+      <label style="display: block; font-weight: bold; color: #4A3528; margin-bottom: 0.3rem;">Excerpt</label>
+      <textarea id="excerpt" name="excerpt" rows="2" placeholder="A brief summary of the resource"
+                style="width: 100%; padding: 0.8rem; border: 2px solid #E8D5B8; border-radius: 8px; font-size: 1rem;"></textarea>
+      <div style="font-size: 0.85rem; color: #999; margin-top: 0.25rem;" id="excerptCount">0 / 500 characters</div>
+    </div>
+
+    <!-- Content -->
+    <div style="margin-bottom: 1.5rem;">
+      <label style="display: block; font-weight: bold; color: #4A3528; margin-bottom: 0.3rem;">Content *</label>
+      <textarea id="content" name="content" rows="10" placeholder="Write your resource content here..." required
+                style="width: 100%; padding: 0.8rem; border: 2px solid #E8D5B8; border-radius: 8px; font-size: 1rem; min-height: 200px; resize: vertical; font-family: inherit;"></textarea>
+      <div style="font-size: 0.85rem; color: #999; margin-top: 0.25rem;" id="contentCount">0 characters</div>
+    </div>
+
+    <!-- Image URL -->
+    <div style="margin-bottom: 1.5rem;">
+      <label style="display: block; font-weight: bold; color: #4A3528; margin-bottom: 0.3rem;">Featured Image URL</label>
+      <input type="url" id="imageUrl" name="imageUrl" placeholder="https://example.com/image.jpg"
+             style="width: 100%; padding: 0.8rem; border: 2px solid #E8D5B8; border-radius: 8px; font-size: 1rem;">
+      <div style="font-size: 0.85rem; color: #999; margin-top: 0.25rem;">URL to a featured image for this resource</div>
+      <div id="imagePreview" style="margin-top: 0.5rem; display: none;">
+        <img id="previewImg" src="" alt="Preview" style="max-width: 200px; max-height: 150px; border-radius: 8px; border: 2px solid #E8D5B8;">
+      </div>
+    </div>
+
+    <!-- Meta Description -->
+    <div style="margin-bottom: 1.5rem;">
+      <label style="display: block; font-weight: bold; color: #4A3528; margin-bottom: 0.3rem;">Meta Description</label>
+      <input type="text" id="metaDescription" name="metaDescription" placeholder="SEO description for search engines"
+             style="width: 100%; padding: 0.8rem; border: 2px solid #E8D5B8; border-radius: 8px; font-size: 1rem;">
+      <div style="font-size: 0.85rem; color: #999; margin-top: 0.25rem;" id="metaDescCount">0 / 200 characters</div>
+    </div>
+
+    <!-- Meta Keywords -->
+    <div style="margin-bottom: 1.5rem;">
+      <label style="display: block; font-weight: bold; color: #4A3528; margin-bottom: 0.3rem;">Meta Keywords</label>
+      <input type="text" id="metaKeywords" name="metaKeywords" placeholder="keyword1, keyword2, keyword3"
+             style="width: 100%; padding: 0.8rem; border: 2px solid #E8D5B8; border-radius: 8px; font-size: 1rem;">
+    </div>
+
+    <!-- Publish -->
+    <div style="margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem;">
+      <input type="checkbox" id="isPublished" name="isPublished" checked style="width: 1.2rem; height: 1.2rem;">
+      <label for="isPublished" style="font-weight: bold; color: #4A3528;">Publish immediately</label>
+    </div>
+
+    <!-- Actions -->
+    <div style="display: flex; gap: 1rem; margin-top: 2rem; flex-wrap: wrap;">
+      <button type="submit" id="submitBtn" class="btn-primary" style="padding: 0.8rem 2rem;">
+        📝 Create Resource
+      </button>
+      <a href="/admin/blog" class="btn-secondary" style="padding: 0.8rem 2rem; background: #f8f9fa; color: #333; border: 2px solid #ddd; border-radius: 8px; font-weight: bold; cursor: pointer; text-decoration: none; display: inline-block; text-align: center;">Cancel</a>
+    </div>
+  </form>
+</div>
+
 <style>
-  .admin-container {
-    max-width: 800px;
-    margin: 2rem auto;
-    padding: 2rem;
-    background: white;
-    border-radius: 12px;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-  }
-  .admin-container h1 {
-    color: #4A3528;
-    margin-bottom: 0.5rem;
-  }
-  .admin-container .subtitle {
-    color: #666;
-    margin-bottom: 2rem;
-  }
-  .form-group {
-    margin-bottom: 1.5rem;
-  }
-  .form-group label {
-    display: block;
-    font-weight: bold;
-    color: #4A3528;
-    margin-bottom: 0.5rem;
-  }
-  .form-group .hint {
-    font-size: 0.85rem;
-    color: #999;
-    margin-top: 0.25rem;
-  }
-  .form-group input,
-  .form-group textarea,
-  .form-group select {
-    width: 100%;
-    padding: 0.8rem;
-    border: 2px solid #E8D5B8;
-    border-radius: 8px;
-    font-size: 1rem;
-    transition: border-color 0.3s ease;
-  }
-  .form-group input:focus,
-  .form-group textarea:focus,
-  .form-group select:focus {
-    outline: none;
-    border-color: #C9A87C;
-    box-shadow: 0 0 0 3px rgba(201, 168, 124, 0.15);
-  }
-  .form-group textarea {
-    min-height: 200px;
-    resize: vertical;
-    font-family: inherit;
-  }
-  .form-actions {
-    display: flex;
-    gap: 1rem;
-    margin-top: 2rem;
-  }
   .btn-primary {
     padding: 0.8rem 2rem;
     background: linear-gradient(145deg, #C9A87C, #B8966A);
@@ -73,207 +96,151 @@
     cursor: pointer;
     transition: all 0.3s ease;
   }
-  .btn-primary:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 15px rgba(201, 168, 124, 0.4);
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 4px 15px rgba(201, 168, 124, 0.4); }
+  .btn-primary:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+  .btn-secondary:hover { background: #e8e8e8; }
+  input:focus, textarea:focus {
+    outline: none;
+    border-color: #C9A87C;
+    box-shadow: 0 0 0 3px rgba(201, 168, 124, 0.15);
   }
-  .btn-secondary {
-    padding: 0.8rem 2rem;
-    background: #f8f9fa;
-    color: #333;
-    border: 2px solid #ddd;
-    border-radius: 8px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    text-decoration: none;
-    display: inline-block;
-    text-align: center;
-  }
-  .btn-secondary:hover {
-    background: #e8e8e8;
-  }
-  .alert {
-    padding: 1rem;
-    border-radius: 8px;
-    margin-bottom: 1rem;
-    display: none;
-  }
-  .alert-success {
-    background: #d4edda;
-    color: #155724;
-    border: 1px solid #c3e6cb;
-    display: block;
-  }
-  .alert-error {
-    background: #f8d7da;
-    color: #721c24;
-    border: 1px solid #f5c6cb;
-    display: block;
-  }
-  .slug-preview {
-    color: #C9A87C;
-    font-size: 0.9rem;
-    margin-top: 0.3rem;
-  }
-  .checkbox-group {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-  }
-  .checkbox-group input[type="checkbox"] {
-    width: auto;
-    width: 1.2rem;
-    height: 1.2rem;
-  }
+  #notification.success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+  #notification.error { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+  #notification { padding: 1rem; border-radius: 8px; margin-bottom: 1rem; display: none; }
 </style>
-{% endblock %}
-
-{% block content %}
-<div class="admin-container">
-  <h1>?? Create New Resource</h1>
-  <p class="subtitle">Share knowledge and insights with your audience</p>
-
-  <div id="alert" class="alert"></div>
-
-  <form id="createForm">
-    <div class="form-group">
-      <label for="title">Title</label>
-      <input type="text" id="title" name="title" placeholder="Enter resource title" required>
-      <div class="hint">The title of your resource</div>
-    </div>
-
-    <div class="form-group">
-      <label for="slug">Slug (URL)</label>
-      <input type="text" id="slug" name="slug" placeholder="enter-url-friendly-slug" required>
-      <div class="hint">URL-friendly version of the title (e.g., understanding-anxiety)</div>
-      <div class="slug-preview">?? Preview: /blog/<span id="slugPreview">your-slug</span></div>
-    </div>
-
-    <div class="form-group">
-      <label for="excerpt">Excerpt</label>
-      <textarea id="excerpt" name="excerpt" rows="2" placeholder="A brief summary of the resource"></textarea>
-      <div class="hint">A short description shown in the resource listing</div>
-    </div>
-
-    <div class="form-group">
-      <label for="content">Content</label>
-      <textarea id="content" name="content" rows="10" placeholder="Write your resource content here..." required></textarea>
-      <div class="hint">HTML formatting is supported</div>
-    </div>
-
-    <div class="form-group">
-      <label for="imageUrl">Featured Image URL</label>
-      <input type="url" id="imageUrl" name="imageUrl" placeholder="https://example.com/image.jpg">
-      <div class="hint">URL to a featured image for this resource</div>
-    </div>
-
-    <div class="form-group">
-      <label for="metaDescription">Meta Description</label>
-      <input type="text" id="metaDescription" name="metaDescription" placeholder="SEO description for search engines">
-      <div class="hint">A brief description for search engines (max 200 characters)</div>
-    </div>
-
-    <div class="form-group">
-      <label for="metaKeywords">Meta Keywords</label>
-      <input type="text" id="metaKeywords" name="metaKeywords" placeholder="keyword1, keyword2, keyword3">
-      <div class="hint">Comma-separated keywords for SEO</div>
-    </div>
-
-    <div class="form-group checkbox-group">
-      <input type="checkbox" id="isPublished" name="isPublished" checked>
-      <label for="isPublished">Publish immediately</label>
-    </div>
-
-    <div class="form-actions">
-      <button type="submit" class="btn-primary">?? Create Resource</button>
-      <a href="/admin/blog" class="btn-secondary">Cancel</a>
-    </div>
-  </form>
-</div>
 
 <script>
+let slugTimeout;
+
 document.addEventListener('DOMContentLoaded', function() {
-  const form = document.getElementById('createForm');
-  const alert = document.getElementById('alert');
   const titleInput = document.getElementById('title');
   const slugInput = document.getElementById('slug');
   const slugPreview = document.getElementById('slugPreview');
+  const imageUrlInput = document.getElementById('imageUrl');
+  const imagePreview = document.getElementById('imagePreview');
+  const previewImg = document.getElementById('previewImg');
 
-  // Auto-generate slug from title
+  // Title counter
   titleInput.addEventListener('input', function() {
-    if (!slugInput.value || slugInput.dataset.autoGenerated !== 'false') {
-      const slug = this.value
-        .toLowerCase()
-        .replace(/[^a-z0-9]+/g, '-')
-        .replace(/^-+|-+$/g, '');
-      slugInput.value = slug;
-      slugInput.dataset.autoGenerated = 'true';
-      slugPreview.textContent = slug || 'your-slug';
-    }
+    document.getElementById('titleCount').textContent = this.value.length + ' / 200 characters';
+    
+    // Auto-generate slug
+    clearTimeout(slugTimeout);
+    slugTimeout = setTimeout(() => {
+      if (!slugInput.value || slugInput.dataset.autoGenerated !== 'false') {
+        const slug = this.value
+          .toLowerCase()
+          .replace(/[^a-z0-9]+/g, '-')
+          .replace(/^-+|-+$/g, '');
+        slugInput.value = slug;
+        slugInput.dataset.autoGenerated = 'true';
+        slugPreview.textContent = slug || 'your-slug';
+      }
+    }, 300);
   });
 
+  // Slug manual edit
   slugInput.addEventListener('input', function() {
     this.dataset.autoGenerated = 'false';
     slugPreview.textContent = this.value || 'your-slug';
   });
 
-  form.addEventListener('submit', async function(e) {
-    e.preventDefault();
+  // Excerpt counter
+  document.getElementById('excerpt').addEventListener('input', function() {
+    document.getElementById('excerptCount').textContent = this.value.length + ' / 500 characters';
+  });
 
-    const formData = new FormData(form);
-    const data = {
-      title: formData.get('title'),
-      slug: formData.get('slug'),
-      excerpt: formData.get('excerpt'),
-      content: formData.get('content'),
-      imageUrl: formData.get('imageUrl') || null,
-      metaDescription: formData.get('metaDescription') || null,
-      metaKeywords: formData.get('metaKeywords') || null,
-      isPublished: formData.get('isPublished') === 'on',
-    };
+  // Content counter
+  document.getElementById('content').addEventListener('input', function() {
+    document.getElementById('contentCount').textContent = this.value.length + ' characters';
+  });
 
-    // Show loading
-    const submitBtn = form.querySelector('.btn-primary');
-    submitBtn.textContent = '? Creating...';
-    submitBtn.disabled = true;
+  // Meta description counter
+  document.getElementById('metaDescription').addEventListener('input', function() {
+    document.getElementById('metaDescCount').textContent = this.value.length + ' / 200 characters';
+  });
 
-    try {
-      const response = await fetch('/api/admin/blog', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data),
-        credentials: 'include',
-      });
-
-      const result = await response.json();
-
-      if (result.success) {
-        alert.className = 'alert alert-success';
-        alert.textContent = '? Resource created successfully!';
-        alert.style.display = 'block';
-        
-        setTimeout(() => {
-          window.location.href = '/admin/blog';
-        }, 1500);
-      } else {
-        alert.className = 'alert alert-error';
-        alert.textContent = '? Error: ' + (result.error || 'Failed to create resource');
-        alert.style.display = 'block';
-        submitBtn.textContent = '?? Create Resource';
-        submitBtn.disabled = false;
-      }
-    } catch (error) {
-      alert.className = 'alert alert-error';
-      alert.textContent = '? Network error: ' + error.message;
-      alert.style.display = 'block';
-      submitBtn.textContent = '?? Create Resource';
-      submitBtn.disabled = false;
+  // Image preview
+  imageUrlInput.addEventListener('input', function() {
+    const url = this.value.trim();
+    if (url && (url.startsWith('http://') || url.startsWith('https://'))) {
+      previewImg.src = url;
+      imagePreview.style.display = 'block';
+    } else {
+      imagePreview.style.display = 'none';
     }
   });
 });
+
+async function handleSubmit(e) {
+  e.preventDefault();
+  
+  const form = document.getElementById('createForm');
+  const submitBtn = document.getElementById('submitBtn');
+  const notification = document.getElementById('notification');
+  
+  const formData = new FormData(form);
+  const data = {
+    title: formData.get('title').trim(),
+    slug: formData.get('slug').trim(),
+    excerpt: formData.get('excerpt') || null,
+    content: formData.get('content').trim(),
+    imageUrl: formData.get('imageUrl') || null,
+    metaDescription: formData.get('metaDescription') || null,
+    metaKeywords: formData.get('metaKeywords') || null,
+    isPublished: formData.get('isPublished') === 'on',
+  };
+
+  // Validation
+  if (!data.title) {
+    showNotification('❌ Title is required', 'error');
+    return;
+  }
+  if (!data.slug) {
+    showNotification('❌ Slug is required', 'error');
+    return;
+  }
+  if (!data.content) {
+    showNotification('❌ Content is required', 'error');
+    return;
+  }
+
+  submitBtn.textContent = '⏳ Creating...';
+  submitBtn.disabled = true;
+  notification.style.display = 'none';
+
+  try {
+    const response = await fetch('/api/admin/blog', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+      credentials: 'include',
+    });
+
+    const result = await response.json();
+
+    if (result.success) {
+      showNotification('✅ Resource created successfully!', 'success');
+      setTimeout(() => {
+        window.location.href = '/admin/blog';
+      }, 1500);
+    } else {
+      showNotification('❌ Error: ' + (result.error || 'Failed to create resource'), 'error');
+      submitBtn.textContent = '📝 Create Resource';
+      submitBtn.disabled = false;
+    }
+  } catch (error) {
+    showNotification('❌ Network error: ' + error.message, 'error');
+    submitBtn.textContent = '📝 Create Resource';
+    submitBtn.disabled = false;
+  }
+}
+
+function showNotification(message, type) {
+  const el = document.getElementById('notification');
+  el.className = type;
+  el.textContent = message;
+  el.style.display = 'block';
+}
 </script>
 {% endblock %}
-

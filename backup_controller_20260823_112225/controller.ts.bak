@@ -2,36 +2,18 @@
 import { BlogService } from './service.js';
 import { z } from 'zod';
 
-// ============================================
-// ZOD VALIDATION SCHEMAS
-// ============================================
-
+// Validation schemas
 const createBlogSchema = z.object({
-  title: z.string()
-    .min(3, 'Title must be at least 3 characters')
-    .max(200, 'Title cannot exceed 200 characters'),
+  title: z.string().min(3, 'Title must be at least 3 characters').max(200, 'Title too long'),
   slug: z.string()
     .min(3, 'Slug must be at least 3 characters')
-    .max(100, 'Slug cannot exceed 100 characters')
+    .max(100, 'Slug too long')
     .regex(/^[a-z0-9-]+$/, 'Slug can only contain lowercase letters, numbers, and hyphens'),
-  excerpt: z.string()
-    .max(500, 'Excerpt cannot exceed 500 characters')
-    .optional()
-    .nullable(),
-  content: z.string()
-    .min(10, 'Content must be at least 10 characters'),
-  imageUrl: z.string()
-    .url('Must be a valid URL')
-    .optional()
-    .nullable(),
-  metaDescription: z.string()
-    .max(200, 'Meta description cannot exceed 200 characters')
-    .optional()
-    .nullable(),
-  metaKeywords: z.string()
-    .max(200, 'Meta keywords cannot exceed 200 characters')
-    .optional()
-    .nullable(),
+  excerpt: z.string().max(500, 'Excerpt too long').optional().nullable(),
+  content: z.string().min(10, 'Content must be at least 10 characters'),
+  imageUrl: z.string().url('Invalid image URL').optional().nullable(),
+  metaDescription: z.string().max(200, 'Meta description too long').optional().nullable(),
+  metaKeywords: z.string().max(200, 'Meta keywords too long').optional().nullable(),
   isPublished: z.boolean().default(false),
 });
 
@@ -116,12 +98,11 @@ export class BlogController {
   }
 
   // ============================================
-  // ADMIN METHODS - With Zod Validation
+  // ADMIN METHODS - With Validation
   // ============================================
   
   async createPost(request: FastifyRequest, reply: FastifyReply) {
     try {
-      // ✅ Validate request body with Zod
       const body = createBlogSchema.parse(request.body);
       
       // Check if slug already exists
@@ -133,16 +114,12 @@ export class BlogController {
         });
       }
       
-      // ✅ Create post with validated data
       const post = await this.blogService.createPost({
-        title: body.title,
-        slug: body.slug,
-        content: body.content,
-        excerpt: body.excerpt ?? null,
-        imageUrl: body.imageUrl ?? null,
-        metaDescription: body.metaDescription ?? null,
-        metaKeywords: body.metaKeywords ?? null,
-        isPublished: body.isPublished ?? false,
+        ...body,
+        imageUrl: body.imageUrl || null,
+        excerpt: body.excerpt || null,
+        metaDescription: body.metaDescription || null,
+        metaKeywords: body.metaKeywords || null,
       });
       
       return reply.status(201).send({
@@ -151,15 +128,11 @@ export class BlogController {
         message: 'Resource created successfully',
       });
     } catch (error) {
-      // ✅ Handle Zod validation errors
       if (error instanceof z.ZodError) {
         return reply.status(400).send({
           success: false,
           error: 'Validation failed',
-          details: error.errors.map(err => ({
-            field: err.path.join('.'),
-            message: err.message,
-          })),
+          details: error.errors,
         });
       }
       console.error('Error creating post:', error);
@@ -173,8 +146,6 @@ export class BlogController {
   async updatePost(request: FastifyRequest, reply: FastifyReply) {
     try {
       const { id } = request.params as { id: string };
-      
-      // ✅ Validate request body with Zod (partial)
       const body = updateBlogSchema.parse(request.body);
       
       // Check if post exists
@@ -197,28 +168,13 @@ export class BlogController {
         }
       }
       
-      // ✅ Build update object with only provided fields
-      const updateData: {
-        title?: string;
-        slug?: string;
-        content?: string;
-        excerpt?: string | null;
-        imageUrl?: string | null;
-        metaDescription?: string | null;
-        metaKeywords?: string | null;
-        isPublished?: boolean;
-      } = {};
-      
-      if (body.title !== undefined) updateData.title = body.title;
-      if (body.slug !== undefined) updateData.slug = body.slug;
-      if (body.content !== undefined) updateData.content = body.content;
-      if (body.excerpt !== undefined) updateData.excerpt = body.excerpt ?? null;
-      if (body.imageUrl !== undefined) updateData.imageUrl = body.imageUrl ?? null;
-      if (body.metaDescription !== undefined) updateData.metaDescription = body.metaDescription ?? null;
-      if (body.metaKeywords !== undefined) updateData.metaKeywords = body.metaKeywords ?? null;
-      if (body.isPublished !== undefined) updateData.isPublished = body.isPublished;
-      
-      const post = await this.blogService.updatePost(id, updateData);
+      const post = await this.blogService.updatePost(id, {
+        ...body,
+        imageUrl: body.imageUrl !== undefined ? body.imageUrl || null : undefined,
+        excerpt: body.excerpt !== undefined ? body.excerpt || null : undefined,
+        metaDescription: body.metaDescription !== undefined ? body.metaDescription || null : undefined,
+        metaKeywords: body.metaKeywords !== undefined ? body.metaKeywords || null : undefined,
+      });
       
       return reply.send({
         success: true,
@@ -226,15 +182,11 @@ export class BlogController {
         message: 'Resource updated successfully',
       });
     } catch (error) {
-      // ✅ Handle Zod validation errors
       if (error instanceof z.ZodError) {
         return reply.status(400).send({
           success: false,
           error: 'Validation failed',
-          details: error.errors.map(err => ({
-            field: err.path.join('.'),
-            message: err.message,
-          })),
+          details: error.errors,
         });
       }
       console.error('Error updating post:', error);

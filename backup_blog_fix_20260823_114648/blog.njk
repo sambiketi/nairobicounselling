@@ -15,24 +15,14 @@
     {% if posts and posts.length > 0 %}
       {% for post in posts %}
         <div class="blog-card">
-          {% if post.imageUrl %}
-            <div class="blog-card-image-wrapper">
-              <img src="{{ post.imageUrl }}" alt="{{ post.title }}" class="blog-card-image" loading="lazy" onerror="this.style.display='none'">
-            </div>
+          <h3>{{ post.title }}</h3>
+          {% if post.excerpt %}
+            <p style="color: #666;">{{ post.excerpt }}</p>
+          {% else %}
+            <p style="color: #666;">{{ post.content | truncate(120) if post.content else "Read this resource to learn more." }}</p>
           {% endif %}
-          <div class="blog-card-content">
-            <div class="blog-card-meta">
-              <span><i class="far fa-calendar-alt"></i> {{ post.publishedAt or "August 2026" }}</span>
-            </div>
-            <h3>{{ post.title }}</h3>
-            {% if post.excerpt %}
-              <p class="blog-card-excerpt">{{ post.excerpt }}</p>
-            {% else %}
-              <p class="blog-card-excerpt">{{ post.content | truncate(120) if post.content else "Read this resource to learn more." }}</p>
-            {% endif %}
-            <div class="hope-tag">"Knowledge is power"</div>
-            <a href="/blog/{{ post.slug }}" class="blog-read-more">Read More <i class="fas fa-arrow-right"></i></a>
-          </div>
+          <div class="hope-tag">"Knowledge is power"</div>
+          <a href="/blog/{{ post.slug }}" style="color: #D4AF37; text-decoration: none;">Read More →</a>
         </div>
       {% endfor %}
     {% else %}

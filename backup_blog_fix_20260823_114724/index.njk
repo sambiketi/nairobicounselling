@@ -499,32 +499,6 @@
   </div>
 </section>
 {% endif %}
-        <div class="blog-slide-content">
-          <div class="blog-meta">
-            <i class="far fa-calendar-alt"></i> {{ post.publishedAt or "August 2026" }}
-          </div>
-          <h3>{{ post.title }}</h3>
-          <p class="blog-excerpt">{{ post.excerpt or post.content|truncate(120) }}</p>
-          <a href="/blog/{{ post.slug }}" class="read-more">
-            Read More <i class="fas fa-arrow-right"></i>
-          </a>
-        </div>
-      </div>
-      {% endfor %}
-    </div>
-    
-    <button class="carousel-btn next" id="nextBtn" aria-label="Next">
-      <i class="fas fa-chevron-right"></i>
-    </button>
-  </div>
-  
-  <div class="carousel-dots" id="carouselDots"></div>
-  
-  <div class="view-all-blog">
-    <a href="/blog">View All Resources →</a>
-  </div>
-</section>
-{% endif %}
 
 <!-- Contact & Map Section on Homepage -->
 <section class="contact-section-home">
@@ -761,6 +735,5 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 </script>
 {% endblock %}
-
 
 

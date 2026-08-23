@@ -1,0 +1,26 @@
+﻿{% extends "base.njk" %}
+
+{% block title %}{{ post.title }} - Nairobi Counseling Center{% endblock %}
+
+{% block content %}
+<section class="blog-post-page">
+  <article class="blog-post">
+  <h1>{{ post.title }}</h1>
+  <div class="post-meta">
+    <span>Published: {{ post.publishedAt or "August 2026" }}</span>
+    <span style="margin-left: 1rem;">📚 Mental Health Resource</span>
+  </div>
+  <div class="post-content">
+    {% if post.content %}
+      {{ post.content | safe }}
+    {% else %}
+      <p>This is a mental health resource article from Nairobi Counseling Center.</p>
+      <p>Our counselors provide evidence-based information to support your mental wellness journey.</p>
+      <p>For personalized support, <a href="/contact" style="color: #D4AF37;">contact us</a> to schedule a session.</p>
+    {% endif %}
+  </div>
+  <a href="/blog" style="color: #D4AF37; text-decoration: none;">← Back to Resources</a>
+</article>
+</section>
+{% endblock %}
+

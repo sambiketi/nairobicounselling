@@ -1,4 +1,4 @@
-﻿// Main JavaScript file for Nairobi Counseling Center
+// Main JavaScript file for Nairobi Counseling Center
 
 document.addEventListener('DOMContentLoaded', function() {
   const modal = document.getElementById('bookingModal');
@@ -124,20 +124,6 @@ document.addEventListener('DOMContentLoaded', function() {
           block: 'start'
         });
       }
-    });
-  });
-});
-
-
-// Image error handling for blog images
-document.addEventListener('DOMContentLoaded', function() {
-  // Handle broken images
-  document.querySelectorAll('img').forEach(function(img) {
-    img.addEventListener('error', function() {
-      // If image fails to load, hide it
-      this.style.display = 'none';
-      // Log error for debugging
-      console.log('Image failed to load:', this.src);
     });
   });
 });

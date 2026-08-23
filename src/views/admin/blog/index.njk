@@ -1,50 +1,83 @@
-{% extends "../admin-base.njk" %}
-
-
-
-
+﻿{% extends "../admin-base.njk" %}
 
 {% block adminTitle %}Manage Resources{% endblock %}
 
 {% block adminContent %}
-<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
-  <p style="color: #666;">Manage your blog posts and resources</p>
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
+  <div>
+    <p style="color: #666; margin: 0;">Manage your blog posts and resources</p>
+  </div>
   <a href="/admin/blog/create" class="btn-primary">
     <i class="fas fa-plus"></i> Create Resource
   </a>
 </div>
 
+<!-- Notification -->
+<div id="notification" style="display: none; padding: 1rem; border-radius: 8px; margin-bottom: 1rem;"></div>
+
+<!-- Filter Bar -->
+<div style="display: flex; gap: 0.5rem; margin-bottom: 1.5rem; flex-wrap: wrap; align-items: center;">
+  <button class="filter-btn active" data-filter="all" onclick="filterPosts('all')">📋 All</button>
+  <button class="filter-btn" data-filter="published" onclick="filterPosts('published')">✅ Published</button>
+  <button class="filter-btn" data-filter="draft" onclick="filterPosts('draft')">📝 Draft</button>
+  <span style="margin-left: auto; color: #666; font-size: 0.9rem;" id="postCount">0 posts</span>
+</div>
+
+<!-- Posts Table -->
 <div style="background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 10px rgba(0,0,0,0.05);">
-  <div id="loading" style="text-align: center; padding: 2rem; color: #666;">
-    <i class="fas fa-spinner fa-spin"></i> Loading resources...
+  <div id="loading" style="text-align: center; padding: 3rem; color: #666;">
+    <i class="fas fa-spinner fa-spin" style="font-size: 2rem; display: block; margin-bottom: 1rem;"></i>
+    Loading resources...
   </div>
-  <div id="postsList" style="display: none;">
-    <table style="width: 100%; border-collapse: collapse;">
+
+  <div id="postsList" style="display: none; overflow-x: auto;">
+    <table style="width: 100%; border-collapse: collapse; min-width: 500px;">
       <thead>
-        <tr style="background: #f8f9fa;">
-          <th style="padding: 1rem; text-align: left; color: #4A3528;">Title</th>
-          <th style="padding: 1rem; text-align: left; color: #4A3528;">Status</th>
-          <th style="padding: 1rem; text-align: left; color: #4A3528;">Created</th>
-          <th style="padding: 1rem; text-align: left; color: #4A3528;">Actions</th>
+        <tr style="background: #f8f9fa; border-bottom: 2px solid #E8D5B8;">
+          <th style="padding: 1rem; text-align: left; color: #4A3528; font-weight: 600;">Title</th>
+          <th style="padding: 1rem; text-align: left; color: #4A3528; font-weight: 600;">Status</th>
+          <th style="padding: 1rem; text-align: left; color: #4A3528; font-weight: 600;">Created</th>
+          <th style="padding: 1rem; text-align: center; color: #4A3528; font-weight: 600;">Actions</th>
         </tr>
       </thead>
       <tbody id="postsTableBody"></tbody>
     </table>
   </div>
+
   <div id="emptyState" style="display: none; text-align: center; padding: 3rem; color: #999;">
-    <i class="fas fa-file-alt" style="font-size: 3rem; display: block; margin-bottom: 1rem; color: #C9A87C;"></i>
-    <h3>No Resources Yet</h3>
-    <p>Create your first resource to share with your audience.</p>
-    <a href="/admin/blog/create" class="btn-primary" style="display: inline-block; margin-top: 1rem; padding: 0.6rem 1.5rem; background: linear-gradient(145deg, #C9A87C, #B8966A); color: #4A3528; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; text-decoration: none;">
+    <i class="fas fa-file-alt" style="font-size: 4rem; display: block; margin-bottom: 1rem; color: #C9A87C;"></i>
+    <h3 style="color: #4A3528;">No Resources Yet</h3>
+    <p style="color: #666;">Create your first resource to share with your audience.</p>
+    <a href="/admin/blog/create" class="btn-primary" style="display: inline-block; margin-top: 1rem;">
       <i class="fas fa-plus"></i> Create Resource
     </a>
   </div>
 </div>
 
 <style>
-  .btn-primary { padding: 0.6rem 1.5rem; background: linear-gradient(145deg, #C9A87C, #B8966A); color: #4A3528; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; text-decoration: none; display: inline-block; }
+  .btn-primary {
+    padding: 0.6rem 1.5rem;
+    background: linear-gradient(145deg, #C9A87C, #B8966A);
+    color: #4A3528;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    text-decoration: none;
+    display: inline-block;
+    transition: all 0.3s ease;
+  }
   .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 4px 15px rgba(201, 168, 124, 0.4); }
-  .btn-sm { padding: 0.3rem 0.8rem; border: none; border-radius: 4px; cursor: pointer; font-size: 0.85rem; }
+  
+  .btn-sm {
+    padding: 0.3rem 0.8rem;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    transition: all 0.2s ease;
+  }
+  .btn-sm:hover { transform: translateY(-1px); }
   .btn-sm.btn-primary { background: #C9A87C; color: #4A3528; }
   .btn-sm.btn-primary:hover { background: #B8966A; }
   .btn-sm.btn-danger { background: #dc3545; color: white; }
@@ -52,99 +85,193 @@
   .btn-sm.btn-success { background: #28a745; color: white; }
   .btn-sm.btn-success:hover { background: #218838; }
   .btn-sm.btn-warning { background: #ffc107; color: #212529; }
-  .status-badge { padding: 0.2rem 0.6rem; border-radius: 20px; font-size: 0.8rem; font-weight: bold; }
+  .btn-sm.btn-warning:hover { background: #e0a800; }
+  
+  .filter-btn {
+    padding: 0.4rem 1.2rem;
+    border: 2px solid #E8D5B8;
+    background: white;
+    border-radius: 20px;
+    cursor: pointer;
+    color: #666;
+    font-weight: 500;
+    transition: all 0.3s ease;
+  }
+  .filter-btn:hover { border-color: #C9A87C; color: #4A3528; }
+  .filter-btn.active { background: #C9A87C; border-color: #C9A87C; color: #4A3528; }
+  
+  .status-badge {
+    padding: 0.2rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    display: inline-block;
+  }
   .status-published { background: #d4edda; color: #155724; }
   .status-draft { background: #fff3cd; color: #856404; }
+  
+  .action-group { display: flex; gap: 0.3rem; justify-content: center; flex-wrap: wrap; }
+  
+  #notification.success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+  #notification.error { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+  #notification.info { background: #d1ecf1; color: #0c5460; border: 1px solid #bee5eb; }
+  #notification { padding: 1rem; border-radius: 8px; margin-bottom: 1rem; display: none; }
+  
+  .table-row { border-bottom: 1px solid #f0f0f0; }
+  .table-row:hover { background: #faf8f6; }
 </style>
 
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-  loadPosts();
+let allPosts = [];
+let currentFilter = 'all';
 
-  async function loadPosts() {
-    try {
-      const response = await fetch('/api/blog');
-      const result = await response.json();
+function showNotification(message, type = 'success') {
+  const el = document.getElementById('notification');
+  el.className = type;
+  el.textContent = message;
+  el.style.display = 'block';
+  setTimeout(() => { el.style.display = 'none'; }, 3000);
+}
 
-      const loading = document.getElementById('loading');
-      const postsList = document.getElementById('postsList');
-      const emptyState = document.getElementById('emptyState');
-      const tableBody = document.getElementById('postsTableBody');
+function filterPosts(filter) {
+  currentFilter = filter;
+  document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.filter === filter);
+  });
+  renderPosts();
+}
 
-      loading.style.display = 'none';
+function renderPosts() {
+  const filtered = allPosts.filter(post => {
+    if (currentFilter === 'published') return post.isPublished;
+    if (currentFilter === 'draft') return !post.isPublished;
+    return true;
+  });
 
-      if (result.success && result.data && result.data.length > 0) {
-        postsList.style.display = 'block';
-        tableBody.innerHTML = result.data.map(post => `
-          <tr style="border-bottom: 1px solid #f0f0f0;">
-            <td style="padding: 1rem;"><strong>${post.title}</strong></td>
-            <td style="padding: 1rem;">
-              <span class="status-badge ${post.isPublished ? 'status-published' : 'status-draft'}">
-                ${post.isPublished ? '? Published' : '?? Draft'}
-              </span>
-            </td>
-            <td style="padding: 1rem; color: #666;">${new Date(post.createdAt).toLocaleDateString()}</td>
-            <td style="padding: 1rem;">
-              ${post.isPublished 
-                ? `<button onclick="togglePublish('${post.id}', false)" class="btn-sm btn-warning">Unpublish</button>`
-                : `<button onclick="togglePublish('${post.id}', true)" class="btn-sm btn-success">Publish</button>`
-              }
-              <a href="/admin/blog/edit/${post.id}" class="btn-sm btn-primary" style="text-decoration: none; display: inline-block; padding: 0.3rem 0.8rem; border-radius: 4px;">Edit</a>
-              <button onclick="deletePost('${post.id}')" class="btn-sm btn-danger">Delete</button>
-            </td>
-          </tr>
-        `).join('');
-      } else {
-        emptyState.style.display = 'block';
-      }
-    } catch (error) {
-      console.error('Error loading posts:', error);
-      document.getElementById('loading').textContent = '? Error loading resources';
-    }
+  const tableBody = document.getElementById('postsTableBody');
+  document.getElementById('postCount').textContent = filtered.length + ' posts';
+
+  if (filtered.length === 0) {
+    tableBody.innerHTML = `
+      <tr><td colspan="4" style="padding: 2rem; text-align: center; color: #999;">
+        ${currentFilter === 'all' ? 'No posts found.' : 'No ' + currentFilter + ' posts found.'}
+      </td></tr>
+    `;
+    return;
   }
 
-  window.togglePublish = async function(id, publish) {
-    if (!confirm(`Are you sure you want to ${publish ? 'publish' : 'unpublish'} this resource?`)) return;
+  tableBody.innerHTML = filtered.map(post => `
+    <tr class="table-row">
+      <td style="padding: 1rem;">
+        <strong style="color: #4A3528;">${escapeHtml(post.title)}</strong>
+      </td>
+      <td style="padding: 1rem;">
+        <span class="status-badge ${post.isPublished ? 'status-published' : 'status-draft'}">
+          ${post.isPublished ? '✅ Published' : '📝 Draft'}
+        </span>
+      </td>
+      <td style="padding: 1rem; color: #666; font-size: 0.9rem;">
+        ${formatDate(post.createdAt)}
+      </td>
+      <td style="padding: 0.5rem;">
+        <div class="action-group">
+          ${post.isPublished 
+            ? `<button onclick="togglePublish('${post.id}', false)" class="btn-sm btn-warning" title="Unpublish">📤 Unpublish</button>`
+            : `<button onclick="togglePublish('${post.id}', true)" class="btn-sm btn-success" title="Publish">📢 Publish</button>`
+          }
+          <a href="/admin/blog/edit/${post.id}" class="btn-sm btn-primary" style="text-decoration: none;">✏️ Edit</a>
+          <button onclick="deletePost('${post.id}')" class="btn-sm btn-danger">🗑️ Delete</button>
+        </div>
+      </td>
+    </tr>
+  `).join('');
+}
 
-    try {
-      const response = await fetch(`/api/admin/blog/${id}/${publish ? 'publish' : 'unpublish'}`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        credentials: 'include',
-      });
-      const result = await response.json();
-      if (result.success) {
-        alert(result.message);
-        loadPosts();
-      } else {
-        alert('Failed to update resource');
-      }
-    } catch (error) {
-      alert('Error updating resource');
+function escapeHtml(text) {
+  if (!text) return '';
+  const div = document.createElement('div');
+  div.textContent = text;
+  return div.innerHTML;
+}
+
+function formatDate(dateStr) {
+  if (!dateStr) return 'N/A';
+  const d = new Date(dateStr);
+  return d.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+}
+
+async function loadPosts() {
+  const loading = document.getElementById('loading');
+  const postsList = document.getElementById('postsList');
+  const emptyState = document.getElementById('emptyState');
+
+  loading.style.display = 'block';
+  postsList.style.display = 'none';
+  emptyState.style.display = 'none';
+
+  try {
+    const response = await fetch('/api/blog');
+    const result = await response.json();
+
+    loading.style.display = 'none';
+
+    if (result.success && result.data && result.data.length > 0) {
+      allPosts = result.data;
+      postsList.style.display = 'block';
+      renderPosts();
+    } else {
+      emptyState.style.display = 'block';
     }
-  };
+  } catch (error) {
+    loading.style.display = 'none';
+    showNotification('Error loading resources: ' + error.message, 'error');
+  }
+}
 
-  window.deletePost = async function(id) {
-    if (!confirm('Are you sure you want to delete this resource permanently?')) return;
+window.togglePublish = async function(id, publish) {
+  const action = publish ? 'publish' : 'unpublish';
+  if (!confirm(`Are you sure you want to ${action} this resource?`)) return;
 
-    try {
-      const response = await fetch(`/api/admin/blog/${id}`, {
-        method: 'DELETE',
-        credentials: 'include',
-      });
-      const result = await response.json();
-      if (result.success) {
-        alert('Resource deleted successfully');
-        loadPosts();
-      } else {
-        alert('Failed to delete resource');
-      }
-    } catch (error) {
-      alert('Error deleting resource');
+  try {
+    const response = await fetch(`/api/admin/blog/${id}/${action}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+    });
+    const result = await response.json();
+    
+    if (result.success) {
+      showNotification(result.message || `Resource ${action}ed successfully!`, 'success');
+      loadPosts();
+    } else {
+      showNotification('Failed to ' + action + ' resource: ' + (result.error || 'Unknown error'), 'error');
     }
-  };
-});
+  } catch (error) {
+    showNotification('Error: ' + error.message, 'error');
+  }
+};
+
+window.deletePost = async function(id) {
+  if (!confirm('⚠️ Are you sure you want to delete this resource permanently? This cannot be undone.')) return;
+
+  try {
+    const response = await fetch(`/api/admin/blog/${id}`, {
+      method: 'DELETE',
+      credentials: 'include',
+    });
+    const result = await response.json();
+    
+    if (result.success) {
+      showNotification('Resource deleted successfully!', 'success');
+      loadPosts();
+    } else {
+      showNotification('Failed to delete: ' + (result.error || 'Unknown error'), 'error');
+    }
+  } catch (error) {
+    showNotification('Error: ' + error.message, 'error');
+  }
+};
+
+document.addEventListener('DOMContentLoaded', loadPosts);
 </script>
 {% endblock %}
-
-

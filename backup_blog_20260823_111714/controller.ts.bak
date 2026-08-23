@@ -9,10 +9,7 @@ const loginSchema = z.object({
 });
 
 export class AuthController {
-  constructor(
-    private authService = new AuthService(), 
-    private adminUserRepo = new AdminUserRepository()
-  ) {}
+  constructor(private authService = new AuthService(), private adminUserRepo = new AdminUserRepository()) {}
 
   async login(request: FastifyRequest, reply: FastifyReply) {
     try {
@@ -37,13 +34,13 @@ export class AuthController {
       }
       console.log("✅ Password VALID");
 
-      // ✅ CORRECT: Direct property assignment for @fastify/session
-      request.session.user = {
+      // ✅ Use session.set() as documented
+      request.session.set("user", {
         id: user.id,
         username: user.username,
         fullName: user.fullName,
         role: user.role,
-      };
+      });
       
       console.log("✅ Session SET with data");
       console.log("🆔 Session ID:", request.session.sessionId);
@@ -53,7 +50,8 @@ export class AuthController {
       console.log("✅ Session saved explicitly");
       
       // Verify the session was set
-      console.log("🔍 Verification - Session user after set:", request.session.user);
+      const verifyUser = request.session.get("user");
+      console.log("🔍 Verification - Session user after set:", verifyUser);
       
       await this.adminUserRepo.updateLastLogin(user.id);
       
@@ -68,11 +66,7 @@ export class AuthController {
     } catch (error) {
       console.error("❌ Login ERROR:", error);
       if (error instanceof z.ZodError) {
-        return reply.status(400).send({ 
-          success: false, 
-          error: "Invalid input", 
-          details: error.errors 
-        });
+        return reply.status(400).send({ success: false, error: "Invalid input", details: error.errors });
       }
       return reply.status(500).send({ success: false, error: "Login failed" });
     }
@@ -96,8 +90,7 @@ export class AuthController {
 
   async getCurrentUser(request: FastifyRequest, reply: FastifyReply) {
     try {
-      // ✅ CORRECT: Direct property access
-      const user = request.session.user;
+      const user = request.session.get("user");
       console.log("🔍 Current user request, session user:", user);
       if (!user) {
         return reply.status(401).send({ success: false, error: "Not authenticated" });
