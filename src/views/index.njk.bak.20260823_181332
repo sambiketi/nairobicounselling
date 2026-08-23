@@ -95,6 +95,7 @@
     box-shadow: 0 4px 15px rgba(201, 168, 124, 0.4);
   }
 
+  /* Blog Carousel Styles */
   .blog-carousel-section {
     padding: 3rem 2rem;
     background: white;
@@ -150,23 +151,6 @@
     box-shadow: 0 8px 30px rgba(0,0,0,0.15);
   }
   
-  .blog-slide-image {
-    height: 180px;
-    overflow: hidden;
-    background: #f8f9fa;
-  }
-  
-  .blog-slide-image img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: transform 0.5s ease;
-  }
-  
-  .blog-carousel-slide:hover .blog-slide-image img {
-    transform: scale(1.05);
-  }
-  
   .blog-slide-content {
     padding: 1.5rem;
   }
@@ -210,6 +194,7 @@
   
   .blog-slide-content .read-more:hover {
     color: #B8966A;
+    text-decoration: underline;
   }
   
   .blog-slide-content .read-more i {
@@ -221,6 +206,7 @@
     transform: translateX(5px);
   }
   
+  /* Carousel Navigation */
   .carousel-btn {
     position: absolute;
     top: 50%;
@@ -320,6 +306,7 @@
     box-shadow: 0 8px 30px rgba(201, 168, 124, 0.5);
   }
 
+  /* View All Blog Link */
   .view-all-blog {
     text-align: center;
     margin-top: 2rem;
@@ -512,6 +499,32 @@
   </div>
 </section>
 {% endif %}
+        <div class="blog-slide-content">
+          <div class="blog-meta">
+            <i class="far fa-calendar-alt"></i> {{ post.publishedAt or "August 2026" }}
+          </div>
+          <h3>{{ post.title }}</h3>
+          <p class="blog-excerpt">{{ post.excerpt or post.content|truncate(120) }}</p>
+          <a href="/blog/{{ post.slug }}" class="read-more">
+            Read More <i class="fas fa-arrow-right"></i>
+          </a>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    
+    <button class="carousel-btn next" id="nextBtn" aria-label="Next">
+      <i class="fas fa-chevron-right"></i>
+    </button>
+  </div>
+  
+  <div class="carousel-dots" id="carouselDots"></div>
+  
+  <div class="view-all-blog">
+    <a href="/blog">View All Resources →</a>
+  </div>
+</section>
+{% endif %}
 
 <!-- Contact & Map Section on Homepage -->
 <section class="contact-section-home">
@@ -592,6 +605,11 @@
   <button class="book-now" onclick="openBooking()">Start Your Healing Journey Today</button>
 </section>
 
+<!-- Booking Modal -->
+
+  </div>
+</div>
+
 <script>
 function openBooking() {
   document.getElementById('bookingModal').style.display = 'flex';
@@ -603,14 +621,12 @@ function closeBooking() {
 // Blog Carousel Logic
 document.addEventListener('DOMContentLoaded', function() {
   const track = document.getElementById('blogTrack');
-  if (!track) return;
-  
   const slides = track.querySelectorAll('.blog-carousel-slide');
-  if (slides.length === 0) return;
-  
   const prevBtn = document.getElementById('prevBtn');
   const nextBtn = document.getElementById('nextBtn');
   const dotsContainer = document.getElementById('carouselDots');
+  
+  if (!track || slides.length === 0) return;
   
   let currentIndex = 0;
   let slidesPerView = getSlidesPerView();
@@ -619,17 +635,14 @@ document.addEventListener('DOMContentLoaded', function() {
   
   // Create dots
   const totalDots = Math.ceil(totalSlides / slidesPerView);
-  if (dotsContainer) {
-    dotsContainer.innerHTML = '';
-    for (let i = 0; i < totalDots; i++) {
-      const dot = document.createElement('button');
-      dot.className = 'dot' + (i === 0 ? ' active' : '');
-      dot.setAttribute('data-index', i);
-      dot.addEventListener('click', function() {
-        goToSlide(i * slidesPerView);
-      });
-      dotsContainer.appendChild(dot);
-    }
+  for (let i = 0; i < totalDots; i++) {
+    const dot = document.createElement('button');
+    dot.className = 'dot' + (i === 0 ? ' active' : '');
+    dot.setAttribute('data-index', i);
+    dot.addEventListener('click', function() {
+      goToSlide(i * slidesPerView);
+    });
+    dotsContainer.appendChild(dot);
   }
   
   function getSlidesPerView() {
@@ -639,19 +652,19 @@ document.addEventListener('DOMContentLoaded', function() {
   }
   
   function updateCarousel() {
-    const slideWidth = slides[0].offsetWidth + 32;
+    const slideWidth = slides[0].offsetWidth + 32; // width + gap
     const offset = currentIndex * slideWidth;
     track.style.transform = 'translateX(-' + offset + 'px)';
     
+    // Update dots
     const dotIndex = Math.floor(currentIndex / slidesPerView);
-    if (dotsContainer) {
-      dotsContainer.querySelectorAll('.dot').forEach(function(dot, i) {
-        dot.classList.toggle('active', i === dotIndex);
-      });
-    }
+    document.querySelectorAll('.dot').forEach((dot, i) => {
+      dot.classList.toggle('active', i === dotIndex);
+    });
     
-    if (prevBtn) prevBtn.disabled = currentIndex === 0;
-    if (nextBtn) nextBtn.disabled = currentIndex >= maxIndex;
+    // Update buttons
+    prevBtn.disabled = currentIndex === 0;
+    nextBtn.disabled = currentIndex >= maxIndex;
   }
   
   function goToSlide(index) {
@@ -671,8 +684,15 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   }
   
-  if (nextBtn) nextBtn.addEventListener('click', nextSlide);
-  if (prevBtn) prevBtn.addEventListener('click', prevSlide);
+  // Event listeners
+  nextBtn.addEventListener('click', nextSlide);
+  prevBtn.addEventListener('click', prevSlide);
+  
+  // Keyboard navigation
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'ArrowRight') nextSlide();
+    if (e.key === 'ArrowLeft') prevSlide();
+  });
   
   // Handle window resize
   let resizeTimeout;
@@ -691,8 +711,56 @@ document.addEventListener('DOMContentLoaded', function() {
     }, 200);
   });
   
+  // Touch support for mobile
+  let touchStartX = 0;
+  let touchEndX = 0;
+  
+  track.addEventListener('touchstart', function(e) {
+    touchStartX = e.changedTouches[0].screenX;
+  }, { passive: true });
+  
+  track.addEventListener('touchend', function(e) {
+    touchEndX = e.changedTouches[0].screenX;
+    const diff = touchStartX - touchEndX;
+    if (Math.abs(diff) > 50) {
+      if (diff > 0) nextSlide();
+      else prevSlide();
+    }
+  }, { passive: true });
+  
+  // Auto-play (pause on hover)
+  let autoplayInterval;
+  
+  function startAutoplay() {
+    if (autoplayInterval) clearInterval(autoplayInterval);
+    autoplayInterval = setInterval(() => {
+      if (currentIndex < maxIndex) {
+        nextSlide();
+      } else {
+        goToSlide(0);
+      }
+    }, 5000);
+  }
+  
+  function stopAutoplay() {
+    if (autoplayInterval) {
+      clearInterval(autoplayInterval);
+      autoplayInterval = null;
+    }
+  }
+  
+  const container = document.querySelector('.blog-carousel-container');
+  container.addEventListener('mouseenter', stopAutoplay);
+  container.addEventListener('mouseleave', startAutoplay);
+  
+  // Start autoplay
+  startAutoplay();
+  
   // Initial update
   updateCarousel();
 });
 </script>
 {% endblock %}
+
+
+
