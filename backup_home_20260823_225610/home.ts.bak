@@ -1,16 +1,14 @@
 ﻿import { FastifyInstance } from 'fastify';
 import { SettingsService } from '../modules/settings/service.js';
 import { BlogRepository } from '../db/repositories/blog-repository.js';
-import { TherapistService } from '../modules/therapists/service.js';
-import { ServiceManagementService } from '../modules/services/service.js';
+import { ServiceManagementService } from "../modules/services/service.js";`nimport { TherapistService } from '../modules/therapists/service.js';
 
 export async function homeRoutes(fastify: FastifyInstance) {
   const settingsService = new SettingsService();
 
-  // Home page with services, location, and blog posts
+  // Home page with location and blog posts
   fastify.get('/', async (request, reply) => {
     try {
-      // Get location settings
       let location = {
         address: 'Nairobi, Kenya',
         googleMapsEmbed: null,
@@ -23,7 +21,6 @@ export async function homeRoutes(fastify: FastifyInstance) {
         console.error('Error loading location:', err);
       }
 
-      // Get blog posts
       let blogPosts = [];
       try {
         const blogRepository = new BlogRepository();
@@ -33,22 +30,11 @@ export async function homeRoutes(fastify: FastifyInstance) {
         blogPosts = [];
       }
 
-      // Get services
-      let services = [];
-      try {
-        const serviceService = new ServiceManagementService();
-        services = await serviceService.getActiveServices() || [];
-      } catch (err) {
-        console.error('Error loading services:', err);
-        services = [];
-      }
-
       return reply.view('index.njk', {
         title: 'Nairobi Counseling Center - Professional Counseling Services',
         location: location,
         content: {},
-        blogPosts: blogPosts,
-        services: services
+        blogPosts: blogPosts
       });
     } catch (error) {
       console.error('Error loading home page:', error);
@@ -59,8 +45,7 @@ export async function homeRoutes(fastify: FastifyInstance) {
           googleMapsEmbed: null,
           googleMapsLink: null
         },
-        blogPosts: [],
-        services: []
+        blogPosts: []
       });
     }
   });
@@ -83,7 +68,7 @@ export async function homeRoutes(fastify: FastifyInstance) {
     }
   });
 
-  // Support old /therapists route
+  // Support old /therapists route for backward compatibility
   fastify.get('/therapists', async (request, reply) => {
     try {
       const therapistService = new TherapistService();
@@ -114,7 +99,7 @@ export async function homeRoutes(fastify: FastifyInstance) {
     }
   });
 
-  // Blog page
+  // Blog page (Resources)
   fastify.get('/blog', async (request, reply) => {
     try {
       let posts = [];
@@ -193,7 +178,7 @@ export async function homeRoutes(fastify: FastifyInstance) {
     }
   });
 
-  // Contact page
+  // Contact page with location
   fastify.get('/contact', async (request, reply) => {
     try {
       let location = {
@@ -225,3 +210,4 @@ export async function homeRoutes(fastify: FastifyInstance) {
     }
   });
 }
+
