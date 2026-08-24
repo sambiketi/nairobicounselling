@@ -43,57 +43,12 @@ export async function homeRoutes(fastify: FastifyInstance) {
         services = [];
       }
 
-      // Get counselors
-      let counselors = [];
-      try {
-        const therapistService = new TherapistService();
-        counselors = await therapistService.getActiveTherapists() || [];
-      } catch (err) {
-        console.error('Error loading counselors:', err);
-        counselors = [];
-      }
-
-      // GET SITE SETTINGS AND CONTACT SETTINGS
-      let siteSettings: any = {};
-      let contactSettings: any = {};
-      try {
-        const allSettings: any = await settingsService.getAllSettings();
-        siteSettings = {
-          businessName: allSettings.business_name,
-          tagline: allSettings.tagline,
-          heroTitle: allSettings.hero_title,
-          heroSubtitle: allSettings.hero_subtitle,
-          footerText: allSettings.footer_text,
-          copyrightText: allSettings.copyright_text
-        };
-        contactSettings = {
-          phone: allSettings.phone,
-          email: allSettings.email,
-          supportEmail: allSettings.support_email,
-          crisisHotline: allSettings.crisis_hotline,
-          whatsappNumber: allSettings.whatsapp_number,
-          hoursWeekday: allSettings.hours_weekday,
-          hoursSaturday: allSettings.hours_saturday,
-          hoursSunday: allSettings.hours_sunday,
-          address: location.address,
-          googleMapsEmbed: location.googleMapsEmbed,
-          googleMapsLink: location.googleMapsLink
-        };
-      } catch (err) {
-        console.error('Error loading settings:', err);
-        siteSettings = {};
-        contactSettings = {};
-      }
-
       return reply.view('index.njk', {
         title: 'Nairobi Counseling Center - Professional Counseling Services',
         location: location,
         content: {},
         blogPosts: blogPosts,
-        services: services,
-        counselors: counselors,
-        siteSettings: siteSettings,
-        contactSettings: contactSettings
+        services: services
       });
     } catch (error) {
       console.error('Error loading home page:', error);
@@ -105,14 +60,26 @@ export async function homeRoutes(fastify: FastifyInstance) {
           googleMapsLink: null
         },
         blogPosts: [],
-        services: [],
-        counselors: [],
-        siteSettings: {},
-        contactSettings: {}
+        services: []
       });
     }
   });
-
+  // Get counsellors
+  let counsellors = [];
+  try {
+    const therapistService = new TherapistService();
+    counsellors = await therapistService.getActiveTherapists() || [];
+  } catch (err) {
+    console.error('Error loading counselors:', err);
+    counsellors = [];
+  }
+  // GET SITE SETTINGS AND CONTACT SETTINGS
+  let siteSettings = {};
+  try {
+    siteSettings = await settingsService.getAllSettings() || {};
+  } catch (err) {
+    console.error('Error loading site settings:', err);
+  }
   // Counselors page
   fastify.get('/counselors', async (request, reply) => {
     try {
@@ -256,31 +223,9 @@ export async function homeRoutes(fastify: FastifyInstance) {
         console.error('Error loading location:', err);
       }
       
-      let contactSettings: any = {};
-      try {
-        const allSettings: any = await settingsService.getAllSettings();
-        contactSettings = {
-          phone: allSettings.phone,
-          email: allSettings.email,
-          supportEmail: allSettings.support_email,
-          crisisHotline: allSettings.crisis_hotline,
-          whatsappNumber: allSettings.whatsapp_number,
-          hoursWeekday: allSettings.hours_weekday,
-          hoursSaturday: allSettings.hours_saturday,
-          hoursSunday: allSettings.hours_sunday,
-          address: location.address,
-          googleMapsEmbed: location.googleMapsEmbed,
-          googleMapsLink: location.googleMapsLink
-        };
-      } catch (err) {
-        console.error('Error loading contact settings:', err);
-        contactSettings = {};
-      }
-      
       return reply.view('contact.njk', {
         title: 'Contact Us - Nairobi Counseling Center',
-        location: location,
-        contactSettings: contactSettings
+        location: location
       });
     } catch (error) {
       console.error('Error loading contact page:', error);
@@ -290,9 +235,10 @@ export async function homeRoutes(fastify: FastifyInstance) {
           address: 'Nairobi, Kenya',
           googleMapsEmbed: null,
           googleMapsLink: null
-        },
-        contactSettings: {}
+        }
       });
     }
   });
 }
+
+
